@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Ladder
+  - Feet
   layers:
   - Default
   - TransparentFX
@@ -14,12 +16,12 @@ TagManager:
   - UI
   - Ground
   - Lower Ground
-  - 
+  - BG
   - 
   - 
   - Body
   - Player
-  - 
+  - Feet
   - 
   - 
   - 
