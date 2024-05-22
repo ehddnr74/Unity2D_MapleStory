@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
 
     public PlayerState mPlayerState;
 
+    Collider2D col;
     Rigidbody2D mRigidBody;
     Animator mAnimator;
 
@@ -39,17 +40,19 @@ public class Player : MonoBehaviour
     bool proneAttack = true;
 
     private float raycastDistance = 50f; // 레이캐스트 거리
-    private float fallThroughDuration = 0.5f; // 내려가는 동안 충돌 비활성화 시간
+    private float fallThroughDuration = 0.2f; // 내려가는 동안 충돌 비활성화 시간
 
     //private Collider2D feetCollider;
 
     // Start is called before the first frame update
     void Start()
     {
+        col = GetComponent<Collider2D>();
         mRigidBody = GetComponent<Rigidbody2D>();
         mAnimator = GetComponent<Animator>();
         mPlayerState = PlayerState.Idle;
 
+        feetScript = GetComponentInChildren<FeetScript>();
         //feetCollider = transform.Find("FeetCollider").GetComponent<Collider2D>(); // 발 콜라이더를 찾음
     }
 
@@ -315,20 +318,24 @@ public class Player : MonoBehaviour
 
     private bool IsGroundBelow()
     {
+        float offset = 5f; // 예시로 0.1f로 설정
+
+        // 레이캐스트의 시작 위치 계산
+        Vector2 raycastStartPosition = (Vector2)transform.position - Vector2.up * offset;
         // Ground 레이어만 감지하도록 설정
-        RaycastHit2D rayHit = Physics2D.Raycast(mRigidBody.position, Vector2.down, raycastDistance, LayerMask.GetMask("Lower Ground"));
+        RaycastHit2D rayHit = Physics2D.Raycast(raycastStartPosition, Vector2.down, raycastDistance, LayerMask.GetMask("Ground"));
         return rayHit.collider != null;
     }
 
     private IEnumerator FallThroughPlatform()
     {
-        feetScript = GameObject.Find("FeetCollider").GetComponent<FeetScript>();
         // 플레이어와 Ground 레이어 간의 충돌 무시 설정
-        feetScript.GroundIgnoreTrue();
-        //Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("Ground"), true);
+        
+        feetScript.DisableCollider();
+        //Physics2D.IgnoreLayerCollision(13, LayerMask.NameToLayer("Ground"), true);
         yield return new WaitForSeconds(fallThroughDuration);
-        feetScript.GroundIgnoreFalse();
-        //Physics2D.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("Ground"), false);
+        feetScript.EnableCollider();
+       // Physics2D.IgnoreLayerCollision(13, LayerMask.NameToLayer("Ground"), false);
 
         mAnimator.SetBool("IsProne", false);
         mPlayerState = PlayerState.Jump;

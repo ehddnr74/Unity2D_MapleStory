@@ -16,8 +16,5 @@ DirectX11 2D 게임으로 만들어 본 Maple Story를 Unity2D로 재구성
           3.Player Prone(엎드리기) Prone Attack(엎드려 공격) 구현 
           4.사다리 타기 구현 
           5.Attack 애니메이션 구현
- 
-          
-내일 해야할 일 
-하향점프 보완, 발바닥 콜라이더 플레이어의 자식 X
+   
  

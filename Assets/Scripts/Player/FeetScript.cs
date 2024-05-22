@@ -9,28 +9,34 @@ public class FeetScript : MonoBehaviour
     Rigidbody2D playerRigid;
     private Player player;
 
+    private Collider2D col;
+
     private bool lowerGroundCol;
 
     private void Start()
     {
+        col = GetComponent<Collider2D>();
         player = FindObjectOfType<Player>();
         playerRigid = GameObject.Find("Player").GetComponent<Rigidbody2D>();
     }
     private void Update()
     {
-        //if (lowerGroundCol)
-        //{
-        //    if (playerRigid.velocity.y > 0)
-        //        GroundIgnoreTrue();
-        //    else
-        //        GroundIgnoreFalse();
-        //}
-               
+        if(!player.isGround)
+        {
+            if (playerRigid.velocity.y > 0)
+            {
+               IgnoreGroundCollision(true);
+            }
+            else
+            {
+               IgnoreGroundCollision(false);
+            }
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //if(collision.gameObject.layer == 7) //Lower Ground
+        //if (collision.gameObject.layer == 7) //Lower Ground
         //{
         //    lowerGroundCol = true;
         //}
@@ -59,13 +65,27 @@ public class FeetScript : MonoBehaviour
         }
     }
 
-    public void GroundIgnoreTrue()
+    public void DisableCollider()
     {
-        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Ground"), true);
+        col.enabled = false;
     }
-    public void GroundIgnoreFalse()
+
+    public void EnableCollider()
     {
-        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Ground"), false);
+        col.enabled = true;
     }
+
+    public void IgnoreGroundCollision(bool ignore)
+    {
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Feet"), LayerMask.NameToLayer("Ground"), ignore);
+    }
+    //public void GroundIgnoreTrue()
+    //{
+    //    Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Feet"), LayerMask.NameToLayer("Ground"), true);
+    //}
+    //public void GroundIgnoreFalse()
+    //{
+    //    Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Feet"), LayerMask.NameToLayer("Ground"), false);
+    //}
 
 }
