@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4f2c0e5fb69226741bd098116e5c894f
+guid: f06dce69dd3f070438e1646e233bc4ac
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Walk_0
+      name: Attack_0
       rect:
         serializedVersion: 2
         x: 0
@@ -124,14 +124,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fa55a04b3aeac334a8abe771d11708a2
-      internalID: 1282024159
+      spriteID: c9dda84d9364564428d7abeb22b70f2a
+      internalID: 1280949525
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walk_1
+      name: Attack_1
       rect:
         serializedVersion: 2
         x: 64
@@ -145,14 +145,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 917b3133c0150fa43ae3f0cc975cf37a
-      internalID: 89207399
+      spriteID: 5ad52863546f71945965adbb3fd3efb4
+      internalID: -215099202
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walk_2
+      name: Attack_2
       rect:
         serializedVersion: 2
         x: 128
@@ -166,29 +166,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7df5e02bdca6f924c96fccd5514fa2ef
-      internalID: 1495260255
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Walk_3
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 30d9f64723d93c2468826d39aa73d812
-      internalID: 1038170753
+      spriteID: 788c1716b5d631e41a3876b3df7d5e11
+      internalID: -1751121072
       vertices: []
       indices: 
       edges: []
@@ -204,10 +183,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Walk_0: 1282024159
-      Walk_1: 89207399
-      Walk_2: 1495260255
-      Walk_3: 1038170753
+      Attack_0: 1280949525
+      Attack_1: -215099202
+      Attack_2: -1751121072
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
