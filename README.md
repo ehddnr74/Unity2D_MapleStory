@@ -17,4 +17,10 @@ DirectX11 2D 게임으로 만들어 본 Maple Story를 Unity2D로 재구성
           4.사다리 타기 구현 
           5.Attack 애니메이션 구현
    
+
+05-23 : 1.Json파일과 Unity상에서 직렬화와 역직렬화를 통해 토대 구현 (닉네임 , 경험치 , UI 갱신)
+          2.현재까지 저장해야 할 데이터 저장 불러오기 기능 구현 
+          2.Dictionary 자료형은 JsonUtility로 역직렬화가 안돼서 Json.Net을 이용 JsonConvert 사용
+          2.경험치 상승 과정에서 레벨업을 해도 UI가 갱신되지 않는 버그 디버깅 중 (내일 이어서 작업할 것) 
+
  

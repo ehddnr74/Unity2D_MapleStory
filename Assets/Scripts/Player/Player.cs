@@ -347,7 +347,7 @@ public class Player : MonoBehaviour
     private void ExitLadder()
     {
         LadderPosition = false;
-        mRigidBody.gravityScale = 6f;
+        mRigidBody.gravityScale = 8f;
         isLaddering = false;
         mAnimator.SetBool("IsLadder", false);
         mPlayerState = PlayerState.Idle;
