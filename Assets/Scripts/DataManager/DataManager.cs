@@ -95,13 +95,12 @@ public class DataManager : MonoBehaviour
         if (nowPlayer.experience >= nowPlayer.experienceTable[nowPlayer.level])
         {
             nowPlayer.level++;
-            playerManager.UpdateLevelUI();
-            //UpdateLevelUI();
+            playerManager.UpdateLevelUI(nowPlayer.level);
             nowPlayer.experience = 0; // 레벨업 후 경험치 초기화 (또는 남은 경험치 계산)
         }
 
-        //// 경험치바 업데이트
-        //FindObjectOfType<ExperienceBar>().UpdateExperienceBar();
+        // 경험치바 업데이트
+        FindObjectOfType<ExperienceBar>().UpdateExperienceBar(nowPlayer.level,nowPlayer.experience);
 
         SaveData();
     }

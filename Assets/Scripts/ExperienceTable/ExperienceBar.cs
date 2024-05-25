@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ExperienceBar : MonoBehaviour
 {
     private PlayerData playerData;
-    public Scrollbar experienceBar;
+    public Slider experienceSlider;
 
     private void Start()
     {
@@ -16,23 +16,25 @@ public class ExperienceBar : MonoBehaviour
             DataManager.instance.LoadData();
             playerData = DataManager.instance.nowPlayer;
         }
+
+        UpdateExperienceBar(playerData.level, playerData.experience);
     }
 
     private void Update()
     {
-        UpdateExperienceBar();
+       //UpdateExperienceBar();
     }
 
-    public void UpdateExperienceBar()
+    public void UpdateExperienceBar(int currentlevel,int experience)
     {
         // 현재 레벨과 다음 
-        int currentLevel = playerData.level;
-        int currentExperience = playerData.experience;
-        int experienceForNextLevel = playerData.experienceTable[currentLevel];
+        playerData.level = currentlevel;
+        playerData.experience = experience;
+        int experienceForNextLevel = playerData.experienceTable[playerData.level];
 
         // 경험치 비율 계산 (0 ~ 1 사이 값)
-        float experienceRatio = (float)currentExperience / experienceForNextLevel;
-        experienceBar.size = experienceRatio;
+        float experienceRatio = (float)playerData.experience / experienceForNextLevel;
+        experienceSlider.value = experienceRatio;
     }
 }
 

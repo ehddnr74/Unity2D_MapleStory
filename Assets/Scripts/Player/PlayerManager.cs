@@ -18,6 +18,10 @@ public class PlayerManager : MonoBehaviour
 
     private Sprite[] numberSprites; //0부터 9까지 숫자 스프라이트 배열 
 
+
+    private void Awake()
+    {
+    }
     private void Start()
     {
         // 데이터 매니저를 통해 플레이어 데이터 로드
@@ -32,7 +36,7 @@ public class PlayerManager : MonoBehaviour
             levelUnitsImage = GameObject.Find("MainBar/Panel/Units").GetComponentInChildren<Image>();
             nameText = GameObject.Find("MainBar").GetComponentInChildren<TextMeshProUGUI>();
 
-            UpdateLevelUI();
+            UpdateLevelUI(playerData.level);
             UpdateNameUI();
         }
         else
@@ -48,23 +52,23 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void UpdateLevelUI()
+    public void UpdateLevelUI(int nowLevel)
     {
         if (levelTensImage != null && levelUnitsImage != null && playerData != null)
         {
-            int level = playerData.level;
-            if (level < 10)
+            playerData.level = nowLevel;
+            if (nowLevel < 10)
             {
                 // 레벨이 10 미만인 경우, 오른쪽 이미지에만 숫자 표기
                 levelTensImage.enabled = false;
                 levelTensImage.sprite = null;
-                levelUnitsImage.sprite = numberSprites[level];
+                levelUnitsImage.sprite = numberSprites[nowLevel];
             }
-            else if (level >= 10 && level < 100)
+            else if (nowLevel >= 10 && nowLevel < 100)
             {
                 // 레벨이 10 이상 100 미만인 경우, 왼쪽 이미지에 십의 자리 숫자, 오른쪽 이미지에 일의 자리 숫자 표기
-                int tensDigit = level / 10; // 십의 자리 숫자
-                int unitsDigit = level % 10; // 일의 자리 숫자
+                int tensDigit = nowLevel / 10; // 십의 자리 숫자
+                int unitsDigit = nowLevel % 10; // 일의 자리 숫자
 
                 levelTensImage.enabled = true;
                 levelTensImage.sprite = numberSprites[tensDigit];
