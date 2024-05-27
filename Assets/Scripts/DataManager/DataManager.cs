@@ -12,10 +12,13 @@ public class DataManager : MonoBehaviour
     public static DataManager instance;
 
     public PlayerData nowPlayer;
+    public ItemData itemData; // ItemData 변수 추가
+
     private PlayerManager playerManager;
 
     string path;
     string filename = "save";
+    string itemDataFilename = "Item"; // 아이템 데이터 파일명
 
     private void Awake()
     {
@@ -40,6 +43,7 @@ public class DataManager : MonoBehaviour
     {
         playerManager = FindObjectOfType<PlayerManager>();
         LoadData();
+        LoadItemData(); // 아이템 데이터 로드
     }
 
     public void SaveData()
@@ -86,6 +90,18 @@ public class DataManager : MonoBehaviour
         else
         {
             Debug.LogWarning("Level experience data file not found");
+        }
+    }
+
+    public void LoadItemData()
+    {
+        string itemDataPath = path + itemDataFilename + ".json";
+
+        if (File.Exists(itemDataPath))
+        {
+            string itemDataJson = File.ReadAllText(itemDataPath);
+            itemData = JsonConvert.DeserializeObject<ItemData>(itemDataJson);
+            Debug.Log("Item data loaded successfully");
         }
     }
 

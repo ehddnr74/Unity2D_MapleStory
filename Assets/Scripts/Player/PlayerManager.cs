@@ -10,6 +10,7 @@ using System;
 
 public class PlayerManager : MonoBehaviour
 {
+    private Inventory inv;
     private PlayerData playerData;
     private TextMeshProUGUI nameText;
 
@@ -24,6 +25,8 @@ public class PlayerManager : MonoBehaviour
     }
     private void Start()
     {
+        inv = GameObject.Find("Inventory").GetComponent<Inventory>();
+
         // 데이터 매니저를 통해 플레이어 데이터 로드
         if (DataManager.instance != null)
         {
