@@ -175,4 +175,5 @@ public class Inventory : MonoBehaviour
             itemsChanged = false; // 플래그 초기화
         }
     }
+
 }

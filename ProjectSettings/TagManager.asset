@@ -8,6 +8,7 @@ TagManager:
   - Ladder
   - Feet
   - Slot
+  - QuickSlot
   layers:
   - Default
   - TransparentFX

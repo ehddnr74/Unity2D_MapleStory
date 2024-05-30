@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,11 +11,13 @@ public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     public int slot;
 
     private Inventory inv;
+    private QuickSlot qSlot;
     private Vector2 offset;
 
     void Start()
     {
         inv = GameObject.Find("Inventory").GetComponent<Inventory>();
+        qSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -38,6 +41,24 @@ public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        // Raycast를 사용하여 포인터가 어떤 UI 요소 위에 있는지 확인
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        foreach (RaycastResult result in results)
+        {
+            if (result.gameObject.CompareTag("QuickSlot"))
+            {
+                QuickSlotDT quickSlot = result.gameObject.GetComponent<QuickSlotDT>();
+                if (quickSlot != null)
+                {
+                    quickSlot.itemIcon = item.Icon; 
+                    // 해당 퀵슬롯에 아이템 추가
+                    qSlot.AddItemToQuickSlot(item.Icon, quickSlot.slotNum);
+                    break;
+                }
+            }
+        }
         this.transform.SetParent(inv.slots[slot].transform); // 원래의 부모로 되돌림
         this.transform.position = inv.slots[slot].transform.position; // 원래의 위치로 이동  
         GetComponent<CanvasGroup>().blocksRaycasts = true;
