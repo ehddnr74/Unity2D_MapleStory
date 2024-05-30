@@ -1,12 +1,17 @@
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Search;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+using static UnityEditor.Progress;
 
 public class QuickSlot : MonoBehaviour
 {
+    
+
     int slotAmount;
     GameObject quickSlotPanel;
 
@@ -41,10 +46,54 @@ public class QuickSlot : MonoBehaviour
 
         }
 
-        Sprite luckySevenSprite = Resources.Load<Sprite>("SkillIcons/LuckySeven");
-        Sprite heistSprite = Resources.Load<Sprite>("SkillIcons/Heist");
+        LoadQuickSlot();
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            SaveQuickSlot();
+        }
+    }
+
+    public void SaveQuickSlot()
+    {
+        List<QuickSlotItem> quickSlotItems = new List<QuickSlotItem>();
+
+        foreach (var slot in slots)
+        {
+            QuickSlotDT quickSlotDT = slot.GetComponentInChildren<QuickSlotDT>();
+
+            if (quickSlotDT != null && quickSlotDT.itemIcon != null)
+            {
+                quickSlotItems.Add(new QuickSlotItem(quickSlotDT.slotNum, quickSlotDT.iconPath));
+            }
+        }
+
+        string quickSlotDataJson = JsonConvert.SerializeObject(quickSlotItems, Formatting.Indented);
+        File.WriteAllText(Application.persistentDataPath + "/QuickSlot.json", quickSlotDataJson);
+    }
+
+    public void LoadQuickSlot()
+    {
+        string quickSlotDataPath = Application.persistentDataPath + "/QuickSlot.json";
+        if (File.Exists(quickSlotDataPath))
+        {
+            string quickSlotDataJson = File.ReadAllText(quickSlotDataPath);
+            List<QuickSlotItem> quickSlotItem = JsonConvert.DeserializeObject<List<QuickSlotItem>>(quickSlotDataJson);
+
+            // 인벤토리 정보를 기반으로 슬롯에 아이템 배치
+            foreach (QuickSlotItem item in quickSlotItem)
+            {
+                if (!string.IsNullOrEmpty(item.iconPath))
+                {
+                    Sprite icon = Resources.Load<Sprite>("QuickSlotIcons/" + item.iconPath);
+                    AddItemToQuickSlot(icon, item.slotNum);
+                }
+            }
+        }
+    }
 
     //인벤토리 아이템(ItemDT)로 부터 퀵슬롯에 Icon이 옮겨지는 과정 
     // 추후 icon이 표창일 경우 return 필요
@@ -56,7 +105,7 @@ public class QuickSlot : MonoBehaviour
             if (quickSlotDT != null)
             {
                 Image slotImage = quickSlotDT.GetComponent<Image>();
-                if (slotImage != null && slotImage.sprite == icon)
+                if (slotImage != null && slotImage.sprite != null && slotImage.sprite.name == icon.name)
                 {
                     // 이미 해당 아이콘이 있는 경우 리턴
                     return;
@@ -78,6 +127,11 @@ public class QuickSlot : MonoBehaviour
                         Color tempColor = slotImage.color;
                         tempColor.a = 1f; // 불투명하게 설정
                         slotImage.color = tempColor;
+                        quickSlotDT.itemIcon = icon;
+                        quickSlotDT.iconPath = icon.name; // 아이콘의 경로를 저장
+
+                        // 아이템 추가가 완료된 후 데이터 저장
+                        SaveQuickSlot();
                     }
                 }
             }
@@ -113,6 +167,8 @@ public class QuickSlot : MonoBehaviour
                     Color tempColor2 = slot2Image.color;
                     tempColor2.a = slot2.itemIcon != null ? 1f : 0f;
                     slot2Image.color = tempColor2;
+
+                    //SaveQuickSlot();
                 }
             }
         }

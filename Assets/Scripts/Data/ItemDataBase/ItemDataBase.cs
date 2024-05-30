@@ -64,6 +64,7 @@ public class Item
         this.Description = description;
         this.Price = price;
         this.Icon = Resources.Load<Sprite>("Items/" + iconPath);
+        this.IconPath = iconPath;
         this.Stackable = stackable;
 
     }

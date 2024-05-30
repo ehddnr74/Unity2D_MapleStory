@@ -52,7 +52,8 @@ public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
                 QuickSlotDT quickSlot = result.gameObject.GetComponent<QuickSlotDT>();
                 if (quickSlot != null)
                 {
-                    quickSlot.itemIcon = item.Icon; 
+                    quickSlot.itemIcon = item.Icon;
+                    quickSlot.iconPath = item.IconPath;
                     // 해당 퀵슬롯에 아이템 추가
                     qSlot.AddItemToQuickSlot(item.Icon, quickSlot.slotNum);
                     break;

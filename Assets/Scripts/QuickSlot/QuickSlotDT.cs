@@ -8,6 +8,7 @@ public class QuickSlotDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 {
     public int slotNum;
     public Sprite itemIcon;
+    public string iconPath;
 
     private QuickSlot quickSlot;
     private Vector2 offset;
@@ -64,5 +65,6 @@ public class QuickSlotDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             GetComponent<Image>().sprite = null;
             GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f); // 투명하게 설정
         }
+        quickSlot.SaveQuickSlot();
     }
 }
