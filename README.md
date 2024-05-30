@@ -54,6 +54,11 @@ DirectX11 2D 게임으로 만들어 본 Maple Story를 Unity2D로 재구성
           6. 퀵슬롯 (QuickSlot) Save / Loading 기능 구현 (Json파일로 저장, 불러오기 가능)
           
           * 특이사항 : 퀵슬롯의 SwapItems 함수의 퀵슬롯 저장에서 오류 발생 (디버깅 중)
+
+05-31 : * 퀵슬롯의 SwapItems 함수의 퀵슬롯 저장 버그 수정 완료
+              (교환 할 때 아이콘의 경로를 교환하지 않았었기 때문이었음...) 
+          1.상점(Shop) UI 구현 
+          
                            
           
           

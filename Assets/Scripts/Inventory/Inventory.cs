@@ -38,7 +38,7 @@ public class Inventory : MonoBehaviour
     }
     #endregion
     private void Start()
-    {
+    {    
         itemdataBase = GetComponent<ItemDataBase>();
 
         slotAmount = 24;

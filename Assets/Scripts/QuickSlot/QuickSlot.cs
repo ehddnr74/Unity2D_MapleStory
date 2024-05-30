@@ -17,7 +17,7 @@ public class QuickSlot : MonoBehaviour
 
     public GameObject quickSlot;
     public GameObject quickSlotItem;
-
+    public bool itemsChanged = false;
 
     public List<GameObject> slots = new List<GameObject>();
 
@@ -53,6 +53,11 @@ public class QuickSlot : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.U))
         {
+            SaveQuickSlot();
+        }
+        if(itemsChanged)
+        {
+            itemsChanged = false;
             SaveQuickSlot();
         }
     }
@@ -131,7 +136,7 @@ public class QuickSlot : MonoBehaviour
                         quickSlotDT.iconPath = icon.name; // 아이콘의 경로를 저장
 
                         // 아이템 추가가 완료된 후 데이터 저장
-                        SaveQuickSlot();
+                        itemsChanged = true;
                     }
                 }
             }
@@ -152,6 +157,11 @@ public class QuickSlot : MonoBehaviour
                 slot1.itemIcon = slot2.itemIcon;
                 slot2.itemIcon = tempIcon;
 
+                // 아이콘 경로 교환
+                string tempIconPath = slot1.iconPath;
+                slot1.iconPath = slot2.iconPath;
+                slot2.iconPath = tempIconPath;
+
                 Image slot1Image = slot1.GetComponent<Image>();
                 Image slot2Image = slot2.GetComponent<Image>();
 
@@ -166,9 +176,7 @@ public class QuickSlot : MonoBehaviour
 
                     Color tempColor2 = slot2Image.color;
                     tempColor2.a = slot2.itemIcon != null ? 1f : 0f;
-                    slot2Image.color = tempColor2;
-
-                    //SaveQuickSlot();
+                    slot2Image.color = tempColor2;            
                 }
             }
         }

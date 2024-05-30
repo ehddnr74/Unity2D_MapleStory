@@ -49,11 +49,13 @@ public class QuickSlotDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             if (targetSlotDT != null)
             {
                 quickSlot.SwapItems(slotNum, targetSlotDT.slotNum);
+                GetComponent<CanvasGroup>().blocksRaycasts = true;
             }
         }
-        this.transform.SetParent(originalParent);
-        this.transform.position = originalParent.position;
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
+            this.transform.SetParent(originalParent);
+            this.transform.position = originalParent.position;
+            GetComponent<CanvasGroup>().blocksRaycasts = true;
+            quickSlot.itemsChanged = true;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -65,6 +67,6 @@ public class QuickSlotDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             GetComponent<Image>().sprite = null;
             GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f); // 투명하게 설정
         }
-        quickSlot.SaveQuickSlot();
+        quickSlot.itemsChanged = true;
     }
 }
