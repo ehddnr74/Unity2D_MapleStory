@@ -18,9 +18,11 @@ public class DataManager : MonoBehaviour
     public StatData playerStat;
     public ItemData itemData; // ItemData 변수 추가
 
+    private Inventory inv;
     private PlayerManager playerManager;
     private SkillManager skillManager;
     private StatManager statManager;
+
 
     string path;
     string filename = "save"; // 플레이어 데이터 파일명 
@@ -51,6 +53,7 @@ public class DataManager : MonoBehaviour
         playerManager = FindObjectOfType<PlayerManager>();
         skillManager = FindObjectOfType<SkillManager>();
         statManager = FindObjectOfType<StatManager>();
+        inv = GameObject.Find("Inventory").GetComponent<Inventory>();
         //SaveSkill();
         LoadData();
         LoadStatData();
@@ -155,5 +158,14 @@ public class DataManager : MonoBehaviour
         statManager.UpdateStatUI(nowPlayer, playerStat);
         SaveStat();
     }
+
+    public void AddMeso()
+    {
+        nowPlayer.meso++;
+        inv.UpdateMesoUI(nowPlayer);
+        SaveData();
+    }
+
+   
 
 }

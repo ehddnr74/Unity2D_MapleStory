@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using static UnityEditor.Progress;
+using UnityEditor.U2D.Aseprite;
+using Unity.VisualScripting;
 
 
 public class Inventory : MonoBehaviour
@@ -15,6 +17,10 @@ public class Inventory : MonoBehaviour
     ItemDataBase itemdataBase;
     public GameObject inventorySlot;
     public GameObject inventoryItem;
+
+    private PlayerData playerData;
+
+    private TextMeshProUGUI mesoText;
 
     bool activeInventory = false;
 
@@ -29,7 +35,7 @@ public class Inventory : MonoBehaviour
     public static Inventory instance;
     private void Awake()
     {
-        if(instance != null)
+        if (instance != null)
         {
             Destroy(gameObject);
             return;
@@ -38,9 +44,16 @@ public class Inventory : MonoBehaviour
     }
     #endregion
     private void Start()
-    {    
-        itemdataBase = GetComponent<ItemDataBase>();
+    {
+        // 데이터 매니저를 통해 플레이어 데이터 로드
+        if (DataManager.instance != null)
+        {
+            DataManager.instance.LoadData();
+            playerData = DataManager.instance.nowPlayer;
+        }
 
+        mesoText = GameObject.Find("InventoryUI/Inventory Panel/Slot Panel/MesoText").GetComponentInChildren<TextMeshProUGUI>();
+        itemdataBase = GetComponent<ItemDataBase>();
         slotAmount = 24;
         inventoryPanel = GameObject.Find("Inventory Panel");
         inventoryPanel.SetActive(activeInventory);
@@ -57,11 +70,7 @@ public class Inventory : MonoBehaviour
             slots[i].GetComponent<Slot>().id = i;
             slots[i].transform.SetParent(Content.transform);
         }
-
-        //AddItem(1);
-        //AddItem(2);
-        //AddItem(3);
-        //AddItem(4);
+        UpdateMesoUI(playerData);
         LoadInventory();
     }
 
@@ -159,6 +168,16 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void UpdateMesoUI(PlayerData pd)
+    {
+        playerData = pd;
+
+        if (mesoText != null)
+        {
+            mesoText.text = playerData.meso.ToString();
+        }
+    }
+
 
     void Update()
     {
@@ -174,6 +193,12 @@ public class Inventory : MonoBehaviour
             SaveInventory();
             itemsChanged = false; // 플래그 초기화
         }
-    }
 
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            DataManager.instance.AddMeso();
+        }
+
+    }
 }

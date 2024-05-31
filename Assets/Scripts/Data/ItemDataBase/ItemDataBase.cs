@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ItemDataBase : MonoBehaviour
 {
-    private List<Item> dataBase = new List<Item>();
+    public List<Item> dataBase = new List<Item>();
     private ItemData itemData;
 
     void Start()
