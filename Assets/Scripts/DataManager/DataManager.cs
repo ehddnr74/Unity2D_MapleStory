@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Data;
 using static Player;
+using Unity.VisualScripting;
 
 
 public class DataManager : MonoBehaviour
@@ -18,6 +19,7 @@ public class DataManager : MonoBehaviour
     public StatData playerStat;
     public ItemData itemData; // ItemData 변수 추가
 
+    private Shop shop;
     private Inventory inv;
     private PlayerManager playerManager;
     private SkillManager skillManager;
@@ -50,6 +52,7 @@ public class DataManager : MonoBehaviour
 
     void Start()
     {
+        shop = GameObject.Find("Shop").GetComponent<Shop>();
         playerManager = FindObjectOfType<PlayerManager>();
         skillManager = FindObjectOfType<SkillManager>();
         statManager = FindObjectOfType<StatManager>();
@@ -159,13 +162,26 @@ public class DataManager : MonoBehaviour
         SaveStat();
     }
 
-    public void AddMeso()
+    public void AddMeso(int meso)
     {
-        nowPlayer.meso++;
+        nowPlayer.meso += meso;
         inv.UpdateMesoUI(nowPlayer);
+        shop.UpdateShopMesoText(nowPlayer);
+        SaveData();
+    }
+    public void LoseMeso(int meso)
+    {
+        if(nowPlayer.meso - meso < 0)
+        {
+            return;
+        }
+        nowPlayer.meso -= meso;
+        inv.UpdateMesoUI(nowPlayer);
+        shop.UpdateShopMesoText(nowPlayer);
         SaveData();
     }
 
-   
+
+
 
 }

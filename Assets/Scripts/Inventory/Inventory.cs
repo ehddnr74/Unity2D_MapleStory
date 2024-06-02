@@ -193,12 +193,5 @@ public class Inventory : MonoBehaviour
             SaveInventory();
             itemsChanged = false; // 플래그 초기화
         }
-
-
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            DataManager.instance.AddMeso();
-        }
-
     }
 }

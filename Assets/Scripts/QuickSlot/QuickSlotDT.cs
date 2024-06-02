@@ -62,7 +62,7 @@ public class QuickSlotDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         if (eventData.button == PointerEventData.InputButton.Right)
         {
-            // 마우스 오른쪽 클릭 시 아이템 아이콘을 지우고, 해당 슬롯의 정보를 초기화합니다.
+            // 마우스 오른쪽 클릭 시 아이템 아이콘을 지우고, 해당 슬롯의 정보를 초기화
             itemIcon = null;
             GetComponent<Image>().sprite = null;
             GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f); // 투명하게 설정
