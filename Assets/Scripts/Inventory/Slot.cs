@@ -32,7 +32,7 @@ public class Slot : MonoBehaviour, IDropHandler
             itemDT.amount = amount;
             itemDT.slot = id;
             itemDT.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = itemDT.amount.ToString();
-            itemDT.transform.SetParent(transform);
+            itemDT.transform.SetParent(transform, false);
             itemObj.GetComponent<Image>().sprite = newItem.Icon;
             itemObj.name = newItem.Name;
             itemObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;

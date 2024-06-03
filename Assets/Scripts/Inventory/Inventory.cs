@@ -30,6 +30,7 @@ public class Inventory : MonoBehaviour
 
     // 아이템 변경 플래그
     public bool itemsChanged = false;
+    private Shop shop;
 
     #region 싱글톤
     public static Inventory instance;
@@ -52,6 +53,8 @@ public class Inventory : MonoBehaviour
             playerData = DataManager.instance.nowPlayer;
         }
 
+        shop = GameObject.Find("Shop").GetComponent<Shop>();
+
         mesoText = GameObject.Find("InventoryUI/Inventory Panel/Slot Panel/MesoText").GetComponentInChildren<TextMeshProUGUI>();
         itemdataBase = GetComponent<ItemDataBase>();
         slotAmount = 24;
@@ -68,7 +71,7 @@ public class Inventory : MonoBehaviour
             items.Add(new Item());
             slots.Add(Instantiate(inventorySlot));
             slots[i].GetComponent<Slot>().id = i;
-            slots[i].transform.SetParent(Content.transform);
+            slots[i].transform.SetParent(Content.transform, false);
         }
         UpdateMesoUI(playerData);
         LoadInventory();
@@ -103,7 +106,7 @@ public class Inventory : MonoBehaviour
                     itemDT.amount = 1; // 새로운 아이템의 개수는 1로 설정
                     itemDT.slot = i; // 추가된 아이템의 슬롯 인덱스를 설정
                     itemDT.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = itemDT.amount.ToString();
-                    itemDT.transform.SetParent(slots[i].transform);
+                    itemDT.transform.SetParent(slots[i].transform, false);
                     itemObj.GetComponent<Image>().sprite = itemToAdd.Icon;
                     itemObj.name = itemToAdd.Name;
                     itemObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero; // 슬롯 중앙에 배치
@@ -113,6 +116,34 @@ public class Inventory : MonoBehaviour
         }
         itemsChanged = true; // 아이템이 추가되었을 때 플래그 설정
     }
+
+    public void RemoveItem(int id)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].ID == id)
+            {
+                ItemDT data = slots[i].transform.GetChild(0).GetComponent<ItemDT>();
+
+                if (data.amount > 1)
+                {
+                    // 스택 가능한 아이템의 경우 수량을 감소시킴
+                    data.amount--;
+                    data.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = data.amount.ToString();
+                }
+                else
+                {
+                    // 수량이 1인 경우 아이템을 제거
+                    items[i] = new Item();
+                    Destroy(slots[i].transform.GetChild(0).gameObject);
+                }
+
+                itemsChanged = true; // 아이템이 제거되었을 때 플래그 설정
+                break;
+            }
+        }
+    }
+
     bool CheckIfItemIsInInventory(Item item)
     {
         for (int i = 0; i < items.Count; i++)
@@ -129,7 +160,7 @@ public class Inventory : MonoBehaviour
         List<InventoryItem> inventoryItems = new List<InventoryItem>();
         for (int i = 0; i < slots.Count; i++)
         {
-            if (slots[i].transform.childCount > 0)
+            if (slots[i].transform.childCount > 0 && items[i].ID != -1) 
             {
                 ItemDT data = slots[i].transform.GetChild(0).GetComponent<ItemDT>();
                 inventoryItems.Add(new InventoryItem(items[i].ID, data.amount, data.slot));
@@ -191,6 +222,10 @@ public class Inventory : MonoBehaviour
         if (itemsChanged)
         {
             SaveInventory();
+            if (shop.visibleShop == true)
+            {
+                shop.UpdateShopInventory();
+            }
             itemsChanged = false; // 플래그 초기화
         }
     }
