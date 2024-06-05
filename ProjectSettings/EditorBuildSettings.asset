@@ -6,7 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/LogoScene.unity
+    guid: 434e6b7b3e45d0342aa19686df86ae24
+  - enabled: 1
+    path: Assets/Scenes/Henesis.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Henesys Hunting Grounds1.unity
+    guid: e3a9c01c853f93c4098c49f8e46fe624
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 9217f3d8c7158394396f5fcb8f6c1891, type: 2}

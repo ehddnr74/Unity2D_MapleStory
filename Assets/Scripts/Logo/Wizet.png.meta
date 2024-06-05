@@ -1,0 +1,1183 @@
+fileFormatVersion: 2
+guid: 6f1a95bbd902db54292a2eb083213f64
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 70
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Wizet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fb8b88be9e262f4f9acabdc3f5fdf1e
+      internalID: 1769032971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_1
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c3a5cc0a0fe7d145a4b1ac698e8c6cf
+      internalID: -1058788680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_2
+      rect:
+        serializedVersion: 2
+        x: 912
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59927ff469a735247b2c1f156ebc69bf
+      internalID: 1098509594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_3
+      rect:
+        serializedVersion: 2
+        x: 1368
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82605212d4e88bf4c9165caee45b604d
+      internalID: -961793481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_4
+      rect:
+        serializedVersion: 2
+        x: 1824
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25265c0bf838b074d98a97473c016833
+      internalID: 1448383887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_5
+      rect:
+        serializedVersion: 2
+        x: 2280
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2751077abd4814046bb80df87cfc2912
+      internalID: -651824216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_6
+      rect:
+        serializedVersion: 2
+        x: 2736
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b5bdf4b3664ae14cadc98eafe7bb84e
+      internalID: 2080551227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_7
+      rect:
+        serializedVersion: 2
+        x: 3192
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 647d2535875d74740b4900337457fc18
+      internalID: -383347919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_8
+      rect:
+        serializedVersion: 2
+        x: 3648
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1a9194bd9ae64247b7ac9a295951465
+      internalID: 599930452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_9
+      rect:
+        serializedVersion: 2
+        x: 4104
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96f444b3a4bd85749b581960e2b4c520
+      internalID: -64877300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_10
+      rect:
+        serializedVersion: 2
+        x: 4560
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84b6ade03691db549925de2aa0904fa5
+      internalID: -684693164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_11
+      rect:
+        serializedVersion: 2
+        x: 5016
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9f65a62bbba3374b9844c043137b6a4
+      internalID: 1648267492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_12
+      rect:
+        serializedVersion: 2
+        x: 5472
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b2dd6928d048cd4ebc38b1a3fae2d77
+      internalID: 1337564365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_13
+      rect:
+        serializedVersion: 2
+        x: 5928
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc4be86e9be8f00418c2b0facf208b84
+      internalID: 1447247147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_14
+      rect:
+        serializedVersion: 2
+        x: 6384
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5be08a442df59844cbc52e1da115c197
+      internalID: -288674715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_15
+      rect:
+        serializedVersion: 2
+        x: 6840
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 348de4f1e02a0f64f87253c5c1f071bb
+      internalID: 1924168718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_16
+      rect:
+        serializedVersion: 2
+        x: 7296
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cebf8bcf8d9c42c43b3162618d77677a
+      internalID: -1846208157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_17
+      rect:
+        serializedVersion: 2
+        x: 7752
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90d2d5debe80e344c83b24d05626b1d5
+      internalID: -27408153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_18
+      rect:
+        serializedVersion: 2
+        x: 8208
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7fa1b67d81203e647be67ae32c786bd7
+      internalID: -885089278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_19
+      rect:
+        serializedVersion: 2
+        x: 8664
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5b67b4bc49bd344c894ec7587aa5e0d
+      internalID: 651536647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_20
+      rect:
+        serializedVersion: 2
+        x: 9120
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a9fc42aca7aae9428d4ea435548365e
+      internalID: 1653679930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_21
+      rect:
+        serializedVersion: 2
+        x: 9576
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f08927aee4fb8a44f95e7e1b6711cf57
+      internalID: -1879222712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_22
+      rect:
+        serializedVersion: 2
+        x: 10032
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb3ab6cdda7406848b64efe164c85b2a
+      internalID: -962975264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_23
+      rect:
+        serializedVersion: 2
+        x: 10488
+        y: 286
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2004076ede040c4e9b1b66eca6ccfd7
+      internalID: 529248134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b72e71caa1467e24caf51c5987fd1737
+      internalID: -124910575
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_25
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b4a50b809fec7a49915b31caa00241c
+      internalID: -1052343025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_26
+      rect:
+        serializedVersion: 2
+        x: 912
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b567fb1324e99247b3557d92cdccba1
+      internalID: 2000158773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_27
+      rect:
+        serializedVersion: 2
+        x: 1368
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32442ce97ed9f65459767286cf93667e
+      internalID: -577776307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_28
+      rect:
+        serializedVersion: 2
+        x: 1824
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d66d7913539e9d54bb8222e8ba5805de
+      internalID: 1826504544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_29
+      rect:
+        serializedVersion: 2
+        x: 2280
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46687bcaad0a7764f959931423a57140
+      internalID: -1126724505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_30
+      rect:
+        serializedVersion: 2
+        x: 2736
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a942d8381b8e1542b9820794ae7139e
+      internalID: -2115813154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_31
+      rect:
+        serializedVersion: 2
+        x: 3192
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4abf3613274d1c4285179d6e2233f58
+      internalID: -1154274925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_32
+      rect:
+        serializedVersion: 2
+        x: 3648
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e1da597bf1b3ef419aafd7e1544fb02
+      internalID: 1229295963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_33
+      rect:
+        serializedVersion: 2
+        x: 4104
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8567de3c165e51c48bbe41405cd41d22
+      internalID: -603848164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_34
+      rect:
+        serializedVersion: 2
+        x: 4560
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 369c9e3b86bf42e448a88fec586e8762
+      internalID: -469125122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_35
+      rect:
+        serializedVersion: 2
+        x: 5016
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b953915d9fa2a44b826b547d80e79b6
+      internalID: 1719646022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_36
+      rect:
+        serializedVersion: 2
+        x: 5472
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb7de7e71635ded4fbf75bafb1eaf624
+      internalID: -1239379803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_37
+      rect:
+        serializedVersion: 2
+        x: 5928
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 547abfa19285a1c42afbd64c7d74a948
+      internalID: -962600587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_38
+      rect:
+        serializedVersion: 2
+        x: 6384
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d4ab3feed8820a4ea1773ed580c3cd1
+      internalID: -964391939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_39
+      rect:
+        serializedVersion: 2
+        x: 6840
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8698a8cf278c26468cc7ac45554c1ec
+      internalID: 901180263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_40
+      rect:
+        serializedVersion: 2
+        x: 7296
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fc1e8d7227a2b04b8bbea7f2613495f
+      internalID: -2055270897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_41
+      rect:
+        serializedVersion: 2
+        x: 7752
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16ce70ccfb64951409de5e52de9e1c31
+      internalID: -1659567073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_42
+      rect:
+        serializedVersion: 2
+        x: 8208
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42124fdeacb683547901081ebd321666
+      internalID: -1238784890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_43
+      rect:
+        serializedVersion: 2
+        x: 8664
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c98ed9934548b7449e967d01e2cfef5
+      internalID: -983127651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_44
+      rect:
+        serializedVersion: 2
+        x: 9120
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f8d52ecc1b34b042ac0dcbf5f9b8b7a
+      internalID: 1428527194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_45
+      rect:
+        serializedVersion: 2
+        x: 9576
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c3f6008ed401b544872b9e72b8058b1
+      internalID: 107002591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_46
+      rect:
+        serializedVersion: 2
+        x: 10032
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 833a5ad63996edb468672417268175e8
+      internalID: -1567517225
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wizet_47
+      rect:
+        serializedVersion: 2
+        x: 10488
+        y: 2
+        width: 456
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79e3d0b8df1c2294981e2fda6481e397
+      internalID: 1572463533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Wizet_0: 1769032971
+      Wizet_1: -1058788680
+      Wizet_10: -684693164
+      Wizet_11: 1648267492
+      Wizet_12: 1337564365
+      Wizet_13: 1447247147
+      Wizet_14: -288674715
+      Wizet_15: 1924168718
+      Wizet_16: -1846208157
+      Wizet_17: -27408153
+      Wizet_18: -885089278
+      Wizet_19: 651536647
+      Wizet_2: 1098509594
+      Wizet_20: 1653679930
+      Wizet_21: -1879222712
+      Wizet_22: -962975264
+      Wizet_23: 529248134
+      Wizet_24: -124910575
+      Wizet_25: -1052343025
+      Wizet_26: 2000158773
+      Wizet_27: -577776307
+      Wizet_28: 1826504544
+      Wizet_29: -1126724505
+      Wizet_3: -961793481
+      Wizet_30: -2115813154
+      Wizet_31: -1154274925
+      Wizet_32: 1229295963
+      Wizet_33: -603848164
+      Wizet_34: -469125122
+      Wizet_35: 1719646022
+      Wizet_36: -1239379803
+      Wizet_37: -962600587
+      Wizet_38: -964391939
+      Wizet_39: 901180263
+      Wizet_4: 1448383887
+      Wizet_40: -2055270897
+      Wizet_41: -1659567073
+      Wizet_42: -1238784890
+      Wizet_43: -983127651
+      Wizet_44: 1428527194
+      Wizet_45: 107002591
+      Wizet_46: -1567517225
+      Wizet_47: 1572463533
+      Wizet_5: -651824216
+      Wizet_6: 2080551227
+      Wizet_7: -383347919
+      Wizet_8: 599930452
+      Wizet_9: -64877300
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

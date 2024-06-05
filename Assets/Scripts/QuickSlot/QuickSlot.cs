@@ -10,7 +10,7 @@ using static UnityEditor.Progress;
 
 public class QuickSlot : MonoBehaviour
 {
-    
+    private static QuickSlot instance;
 
     int slotAmount;
     GameObject quickSlotPanel;
@@ -22,6 +22,18 @@ public class QuickSlot : MonoBehaviour
     public List<GameObject> slots = new List<GameObject>();
 
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     private void Start()
     {
         slotAmount = 32;

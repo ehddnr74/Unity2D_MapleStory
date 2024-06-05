@@ -34,18 +34,15 @@ public class DataManager : MonoBehaviour
 
     private void Awake()
     {
-        #region ΩÃ±€≈Ê
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-        else if (instance != this)
+        else
         {
-            Destroy(instance.gameObject);
-            return;
+            Destroy(gameObject);
         }
-        DontDestroyOnLoad(this.gameObject);
-        #endregion
 
         path = Application.persistentDataPath + "/";
     }

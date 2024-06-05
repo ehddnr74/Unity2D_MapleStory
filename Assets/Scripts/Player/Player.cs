@@ -6,7 +6,9 @@ using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Player : MonoBehaviour
-{    public enum PlayerState
+{
+    private static Player instance;
+    public enum PlayerState
     {
         Idle,
         Walk,
@@ -44,6 +46,20 @@ public class Player : MonoBehaviour
     //private Collider2D feetCollider;
 
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         col = GetComponent<Collider2D>();

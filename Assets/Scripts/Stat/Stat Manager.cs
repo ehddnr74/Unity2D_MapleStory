@@ -37,7 +37,6 @@ public class StatManager : MonoBehaviour
     GameObject StatUIPanel;
     bool activeUI = false;
 
-
     private void Start()
     {
         // 데이터 매니저를 통해 플레이어 데이터 로드

@@ -16,6 +16,8 @@ public class CameraManager : MonoBehaviour
 
     void Start()
     {
+       target = FindObjectOfType<Player>().gameObject;
+
        height = Camera.main.orthographicSize;
        width = height * Screen.width / Screen.height;
     }
