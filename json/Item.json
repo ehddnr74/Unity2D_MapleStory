@@ -1,0 +1,84 @@
+{
+  "items": [
+    {
+      "id": 0,
+      "name": "빨간 포션",
+      "type": "consumable",
+      "description": "HP 50 회복",
+      "price": 50,
+      "sellPrice": 35,
+      "iconPath": "Red Potion",
+      "stackable": true
+    },
+    {
+      "id": 1,
+      "name": "주황 포션",
+      "type": "consumable",
+      "description": "HP 150 회복",
+      "price": 150,
+      "sellPrice": 105,
+      "iconPath": "Orange Potion",
+      "stackable": true
+    },
+    {
+      "id": 2,
+      "name": "하얀 포션",
+      "type": "consumable",
+      "description": "HP 300 회복",
+      "price": 300,
+      "sellPrice": 210,
+      "iconPath": "White Potion",
+      "stackable": true
+    },
+    {
+      "id": 3,
+      "name": "마나 엘릭서",
+      "type": "consumable",
+      "description": "MP 300 회복",
+      "price": 300,
+      "sellPrice": 210,
+      "iconPath": "Mana Elixir",
+      "stackable": true
+    },
+    {
+      "id": 4,
+      "name": "엘릭서",
+      "type": "consumable",
+      "description": "HP와 MP 50% 회복",
+      "price": 1000,
+      "sellPrice": 700,
+      "iconPath": "Elixir",
+      "stackable": true
+    },
+    {
+      "id": 5,
+      "name": "파워 엘릭서",
+      "type": "consumable",
+      "description": "HP와 MP 100% 회복",
+      "price": 3000,
+      "sellPrice": 2100,
+      "iconPath": "Power Elixir",
+      "stackable": true
+    },
+    {
+      "id": 6,
+      "name": "일비 표창",
+      "type": "consumable",
+      "description": "공격력 : + 27",
+      "price": 10000,
+      "sellPrice": 7000,
+      "iconPath": "Ilbe Ninja Stars",
+      "stackable": false
+    },
+    {
+      "id": 7,
+      "name": "플레임 표창",
+      "type": "consumable",
+      "description": "공격력 : + 29",
+      "price": 50000,
+      "sellPrice": 35000,
+      "iconPath": "Flame Ninja Stars",
+      "stackable": false
+    }
+  ]
+}

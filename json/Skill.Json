@@ -1,0 +1,13 @@
+{
+    "skills": [
+        {
+            "skillName": "럭키 세븐",
+            "skillLevel": 1
+        },
+        {
+            "skillName": "헤이스트",
+            "skillLevel": 1
+        }
+    ],
+    "skillPoint": 0
+}

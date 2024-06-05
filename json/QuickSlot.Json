@@ -1,0 +1,26 @@
+[
+  {
+    "slotNum": 0,
+    "iconPath": "LuckySeven"
+  },
+  {
+    "slotNum": 2,
+    "iconPath": "Elixir"
+  },
+  {
+    "slotNum": 4,
+    "iconPath": "Mana Elixir"
+  },
+  {
+    "slotNum": 5,
+    "iconPath": "Orange Potion"
+  },
+  {
+    "slotNum": 16,
+    "iconPath": "Heist"
+  },
+  {
+    "slotNum": 18,
+    "iconPath": "Red Potion"
+  }
+]
