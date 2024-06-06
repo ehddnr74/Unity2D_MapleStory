@@ -4703,6 +4703,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783589518}
   m_CullTransparentMesh: 1
+--- !u!1 &787068673
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 787068675}
+  - component: {fileID: 787068674}
+  m_Layer: 0
+  m_Name: SurikenManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &787068674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787068673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 048e29a0244e8834599cbc2d2e2e28a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  surikenPrefab: {fileID: 1091212704813351742, guid: 517a790558161b942859368ff098612b, type: 3}
+  poolSize: 10
+--- !u!4 &787068675
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787068673}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20.21158, y: 12.458443, z: 0.12718704}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &842947721
 GameObject:
   m_ObjectHideFlags: 0
@@ -11073,6 +11119,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3140268703821560632, guid: 96acfac0828452d41adba82f6eb870d8, type: 3}
+      propertyPath: surikenManagerObject
+      value: 
+      objectReference: {fileID: 787068673}
     - target: {fileID: 7183620098307079217, guid: 96acfac0828452d41adba82f6eb870d8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.79
@@ -11152,3 +11202,4 @@ SceneRoots:
   - {fileID: 171132635}
   - {fileID: 1561176020}
   - {fileID: 1007796067}
+  - {fileID: 787068675}

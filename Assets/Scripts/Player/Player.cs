@@ -8,6 +8,9 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class Player : MonoBehaviour
 {
     private static Player instance;
+
+    public GameObject surikenManagerObject;
+    private ShurikenManager surikenManager;
     public enum PlayerState
     {
         Idle,
@@ -16,7 +19,7 @@ public class Player : MonoBehaviour
         Attack,
         ProneStab,
         Ladder,
-
+        JumpAttack,
     }
 
     FeetScript feetScript;
@@ -37,15 +40,18 @@ public class Player : MonoBehaviour
     public bool isLaddering;
     private bool LadderPosition; // 캐릭터가 사다리 탈 때 Ladder기준 포지션 정렬
 
+    float AttackTime = 0f;
+    float JumpAttackTime = 0f;
+    bool isAttacking;
+
     float proneAttackTime = 0f;
     bool proneAttack = true;
 
     private float raycastDistance = 50f; // 레이캐스트 거리
     private float fallThroughDuration = 0.2f; // 내려가는 동안 충돌 비활성화 시간
 
-    //private Collider2D feetCollider;
-
-    // Start is called before the first frame update
+    private bool canAttack = true;
+    private float attackCoolDown = 0.6f;
 
     private void Awake()
     {
@@ -68,13 +74,13 @@ public class Player : MonoBehaviour
         mPlayerState = PlayerState.Idle;
 
         feetScript = GetComponentInChildren<FeetScript>();
+        surikenManager = surikenManagerObject.GetComponent<ShurikenManager>();
         //feetCollider = transform.Find("FeetCollider").GetComponent<Collider2D>(); // 발 콜라이더를 찾음
     }
 
     // Update is called once per frame
     void Update()
     {
-
         SetSpriteDir(dir); // dir에 따른 스프라이트 반전 함수
 
         switch (mPlayerState)
@@ -102,6 +108,21 @@ public class Player : MonoBehaviour
             case PlayerState.Ladder:
                 ladder();
                 break;
+
+            case PlayerState.JumpAttack:
+                jumpAttack();
+                break;
+        }
+
+        if(isAttacking)
+        {
+            if (AttackTime > 0.5f)
+            {
+                isAttacking = false;
+                AttackTime = 0f;
+            }
+
+            AttackTime += Time.deltaTime;
         }
     }
 
@@ -119,6 +140,9 @@ public class Player : MonoBehaviour
             return;
         }
 
+        if (mPlayerState == PlayerState.Attack)
+            return;
+
         if (isGround)
         {
             if (mPlayerState != PlayerState.ProneStab) // ProneStab 중에는 연산하지 않을거임
@@ -127,6 +151,8 @@ public class Player : MonoBehaviour
                 mRigidBody.velocity = new Vector2(dir * moveSpeed, mRigidBody.velocity.y);
             }
         }
+
+
     }
 
     private void SetSpriteDir(float dir)
@@ -208,9 +234,13 @@ public class Player : MonoBehaviour
             mAnimator.SetBool("IsProne", true);
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl)) // To Attack
+        if (Input.GetKeyDown(KeyCode.LeftControl) && canAttack) // To Attack
         {
+            StartCoroutine(AttackSurken());
+            isAttacking = true;
             mAnimator.SetTrigger("IsAttack");
+            mPlayerState = PlayerState.Attack;
+            StartCoroutine(AttackCooldown());
         }
 
         if(isLadder) // 아래에서 위로 올라가기
@@ -248,11 +278,13 @@ public class Player : MonoBehaviour
             mPlayerState = PlayerState.Jump;
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow)) // To Prone
+        if (Input.GetKeyDown(KeyCode.LeftControl) && canAttack) // To Attack
         {
-            mRigidBody.velocity = new Vector2(0f, 0f); // FixedUpdate에서 한 프레임 돌아서 미끄러지듯이 엎드림 방지
-            mPlayerState = PlayerState.ProneStab;
-            mAnimator.SetBool("IsProne", true);
+            StartCoroutine(AttackSurken());
+            isAttacking = true;
+            mAnimator.SetTrigger("IsAttack");
+            mPlayerState = PlayerState.Attack;
+            StartCoroutine(AttackCooldown());
         }
     }
 
@@ -266,12 +298,52 @@ public class Player : MonoBehaviour
                 mPlayerState = PlayerState.Idle;
 
             mAnimator.SetBool("IsJumping", false);
+
+            JumpAttackTime = 0f;
+        }
+        
+
+        if (JumpAttackTime < 0.15f && Input.GetKeyDown(KeyCode.LeftControl)) // To Attack
+        {
+            StartCoroutine(AttackSurken());
+            isAttacking = true;
+            mAnimator.SetTrigger("IsAttack");
+            mPlayerState = PlayerState.JumpAttack;
+            JumpAttackTime = 0f;
+        }
+
+        JumpAttackTime += Time.deltaTime;
+    }
+
+    private void jumpAttack()
+    {
+        if (isGround)
+        {
+            mPlayerState = PlayerState.Idle;
+            mAnimator.SetBool("IsJumping", false);
         }
     }
 
     private void attack()
     {
+        if (!isAttacking)
+            mPlayerState = PlayerState.Idle;
 
+    }
+
+    private IEnumerator AttackSurken()
+    {
+        yield return new WaitForSeconds(0.3f); // Wait for 1 second
+        GameObject suriken = surikenManager.GetSurikenFromPool(transform.position + Vector3.right * (GetComponent<SpriteRenderer>().flipX ? -4 : 4));
+        suriken.SetActive(true); // 수리검 활성화
+    }
+
+
+    private IEnumerator AttackCooldown()
+    {
+        canAttack = false; // Disable attacking
+        yield return new WaitForSeconds(attackCoolDown); // Wait for 1 second
+        canAttack = true; // Enable attacking again
     }
 
     private void prone()

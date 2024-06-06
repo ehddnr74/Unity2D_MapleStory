@@ -509,7 +509,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28b49271754dbcf4fa2845dc4d2ae519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MonsterPrefabs: []
+  MonsterPrefabs:
+  - {fileID: 4810021364715310524, guid: 1fe34eda15a326a449d54f46de79bb68, type: 3}
   poolSize: 10
 --- !u!4 &734859928
 Transform:
