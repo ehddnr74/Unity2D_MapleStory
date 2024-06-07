@@ -11119,6 +11119,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 1805266525255279487, guid: 96acfac0828452d41adba82f6eb870d8, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3140268703821560632, guid: 96acfac0828452d41adba82f6eb870d8, type: 3}
+      propertyPath: nvincibilityPeriod
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3140268703821560632, guid: 96acfac0828452d41adba82f6eb870d8, type: 3}
       propertyPath: surikenManagerObject
       value: 

@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
         ProneStab,
         Ladder,
         JumpAttack,
+        Hit,
     }
 
     FeetScript feetScript;
@@ -52,6 +53,15 @@ public class Player : MonoBehaviour
 
     private bool canAttack = true;
     private float attackCoolDown = 0.6f;
+
+    public bool flipX = false;
+
+    public float knockbackForce = 5f;
+    public float knockbackDuration = 0.2f;
+    public bool invincibel = false; // 무적
+    public float invincibilityPeriod = 2f; // 무적시간
+
+    private float hitTime;
 
     private void Awake()
     {
@@ -112,9 +122,13 @@ public class Player : MonoBehaviour
             case PlayerState.JumpAttack:
                 jumpAttack();
                 break;
+
+            case PlayerState.Hit:
+                hit();
+                break;
         }
 
-        if(isAttacking)
+        if (isAttacking)
         {
             if (AttackTime > 0.5f)
             {
@@ -161,28 +175,41 @@ public class Player : MonoBehaviour
         if (dir < 0) // 왼쪽 이동
         {
             spriteRenderer.flipX = false;
+            flipX = false;
         }
         else if (dir > 0) // 오른쪽 이동
         {
             spriteRenderer.flipX = true;
+            flipX = true;
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //if (collision.gameObject.CompareTag("Ground"))
-        //{
-        //    isGround = true;
-        //}
-
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Ladder"))
         {
             isLadder = true;
+        }
+    }
+    private IEnumerator Hitting()
+    {
+        yield return new WaitForSeconds(invincibilityPeriod);
+        invincibel = false;
+    }
+
+    private IEnumerator ApplyKnockback(Vector2 direction)
+    {
+        float timer = 0f;
+
+        while (timer < knockbackDuration)
+        {
+            timer += Time.deltaTime;
+            mRigidBody.velocity = direction * knockbackForce;
+            yield return null;
         }
     }
 
@@ -196,6 +223,15 @@ public class Player : MonoBehaviour
             }
         }
 
+        if (!invincibel && collision.gameObject.CompareTag("Enemy"))
+        {
+            mPlayerState = PlayerState.Hit;
+            mAnimator.SetBool("IsHitting",true);
+            invincibel = true;
+            StartCoroutine(Hitting());
+            Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
+            StartCoroutine(ApplyKnockback(knockbackDirection));
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -211,6 +247,23 @@ public class Player : MonoBehaviour
         //    }
     }
 
+    private void hit()
+    {
+        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) // HitAnimation 재생중에 Animation을 바꿔서 움직일 수 있도록
+        {
+            mPlayerState = PlayerState.Walk;
+            mAnimator.SetBool("IsHitting", false);
+            hitTime = 0f;
+        }
+
+        if(hitTime >= 2.0f) // 2초 동안 HitAnimation 재생 
+        {
+            mPlayerState = PlayerState.Idle;
+            mAnimator.SetBool("IsHitting", false);
+            hitTime = 0f;
+        }
+        hitTime += Time.deltaTime;
+    }
 
     // Player Fsm Funtion
     private void idle()
@@ -334,7 +387,7 @@ public class Player : MonoBehaviour
     private IEnumerator AttackSurken()
     {
         yield return new WaitForSeconds(0.3f); // Wait for 1 second
-        GameObject suriken = surikenManager.GetSurikenFromPool(transform.position + Vector3.right * (GetComponent<SpriteRenderer>().flipX ? -4 : 4));
+        GameObject suriken = surikenManager.GetSurikenFromPool(transform.position + Vector3.right * (GetComponent<SpriteRenderer>().flipX ? 4 : -4));
         suriken.SetActive(true); // 수리검 활성화
     }
 
@@ -445,6 +498,8 @@ public class Player : MonoBehaviour
 
     public void SetIsOnLadder(Ladder ladder) { this.currentLadder = ladder; }
     public void SetIsGround(bool isground) { isGround = isground; }
+
+    public float GetDir() { return dir; }
 
 
 

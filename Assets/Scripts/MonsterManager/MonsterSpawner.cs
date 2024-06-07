@@ -14,12 +14,15 @@ public class MonsterSpawner : MonoBehaviour
 
     void Start()
     {
-        // 예시로 5초마다 몬스터를 스폰
-        InvokeRepeating("SpawnMonster", 2.0f, 5.0f);
+        // 시작 시에 스폰 포인트에 초기 몬스터 스폰
+        for (int i = 0; i < spawnPoints.Length; i++)
+        {
+            SpawnMonster(spawnPoints[i]);
+        }
     }
 
 
-    void SpawnMonster()
+    void SpawnMonster(Transform spawnPoint)
     {
 
         if (currentMonsterCount >= maxMonsters)
@@ -27,11 +30,8 @@ public class MonsterSpawner : MonoBehaviour
             return; // 최대 마리수에 도달하면 스폰하지 않음
         }
 
-        // 랜덤으로 스폰 포인트 선택
-        int randomIndex = Random.Range(0, spawnPoints.Length);
-        Transform spawnPoint = spawnPoints[randomIndex];
-
         GameObject monster = monsterManager.GetMonsterFromPool(someMonsterPrefab);
+
         if (monster != null)
         {
             monster.transform.position = spawnPoint.position; // 선택된 스폰 포인트에 위치 설정
