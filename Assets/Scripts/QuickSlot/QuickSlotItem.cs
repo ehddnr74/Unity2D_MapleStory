@@ -10,6 +10,7 @@ public class QuickSlotItem
     public int slotNum;
     public string iconPath;
 
+
     public QuickSlotItem(int slotnum, string iconPath)
     {
         this.slotNum = slotnum;

@@ -14,6 +14,8 @@ public class QuickSlotDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private Vector2 offset;
     private Transform originalParent;
 
+    public int itemAmount; // 아이템 수량 
+
     void Start()
     {
         quickSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();

@@ -12,6 +12,7 @@ public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
     private QuickSlot qSlot;
 
     public Sprite skillIcon;
+    public string skillName;
 
     void Start()
     {

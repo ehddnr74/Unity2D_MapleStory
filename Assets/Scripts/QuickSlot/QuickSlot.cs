@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using static UnityEditor.Progress;
+using System;
 
 public class QuickSlot : MonoBehaviour
 {
@@ -14,12 +15,17 @@ public class QuickSlot : MonoBehaviour
 
     int slotAmount;
     GameObject quickSlotPanel;
+    private Inventory inv;
+    ItemDataBase itemdataBase;
 
     public GameObject quickSlot;
     public GameObject quickSlotItem;
     public bool itemsChanged = false;
 
     public List<GameObject> slots = new List<GameObject>();
+
+    // 슬롯과 키 매핑
+    private Dictionary<KeyCode, int> keyToSlotMap = new Dictionary<KeyCode, int>();
 
 
     private void Awake()
@@ -36,6 +42,8 @@ public class QuickSlot : MonoBehaviour
     }
     private void Start()
     {
+        inv = GameObject.Find("Inventory").GetComponent<Inventory>();
+        itemdataBase = inv.GetComponent<ItemDataBase>();
         slotAmount = 32;
         quickSlotPanel = GameObject.Find("QuickSlotPanel");
         for (int i = 0; i < slotAmount; i++)
@@ -58,14 +66,20 @@ public class QuickSlot : MonoBehaviour
 
         }
 
+        // 키 매핑 초기화
+        InitializeKeyMappings();
+
         LoadQuickSlot();
     }
-
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.U))
+        // 매핑된 키를 검사하여 해당 슬롯을 활성화
+        foreach (var kvp in keyToSlotMap)
         {
-            SaveQuickSlot();
+            if (Input.GetKeyDown(kvp.Key))
+            {
+                ActivateSlot(kvp.Value);
+            }
         }
         if(itemsChanged)
         {
@@ -130,11 +144,12 @@ public class QuickSlot : MonoBehaviour
             }
         }
         if (quickSlotID >= 0 && quickSlotID < slots.Count)
-        {
+        { 
             QuickSlotSlot quickSlotSlot = slots[quickSlotID].GetComponent<QuickSlotSlot>();
             if (quickSlotSlot != null)
             {
                 QuickSlotDT quickSlotDT = quickSlotSlot.GetComponentInChildren<QuickSlotDT>();
+                
                 if (quickSlotDT != null)
                 {
                     Image slotImage = quickSlotDT.GetComponent<Image>();
@@ -193,7 +208,97 @@ public class QuickSlot : MonoBehaviour
             }
         }
     }
+
+    private void InitializeKeyMappings()
+    {
+        KeyCode[] keys = { KeyCode.LeftAlt, KeyCode.S, KeyCode.D, KeyCode.F, KeyCode.G, KeyCode.H, KeyCode.J, KeyCode.K, KeyCode.L,
+                           KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.T, KeyCode.Y, KeyCode.U, KeyCode.LeftControl, KeyCode.Z, KeyCode.X,KeyCode.C,
+                           KeyCode.V, KeyCode.B, KeyCode.N,KeyCode.M,KeyCode.Y,KeyCode.U,KeyCode.I,KeyCode.O,KeyCode.P,KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3 };
+
+        for (int i = 0; i < slots.Count && i < keys.Length; i++)
+        {
+            keyToSlotMap[keys[i]] = i;
+        }
+    }
+
+    // 슬롯 활성화
+    private void ActivateSlot(int slotIndex)
+    {
+        if (slotIndex >= 0 && slotIndex < slots.Count)
+        {
+            QuickSlotDT quickSlotDT = slots[slotIndex].GetComponentInChildren<QuickSlotDT>();
+
+
+            // 아이템 사용 로직 
+            if(quickSlotDT.iconPath == "Red Potion")
+            {
+                Item redPotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
+                DataManager.instance.AddHP(50);
+                inv.RemoveItem(redPotion.ID);
+
+                Debug.Log("Use Red Potion");
+
+            }
+
+            if (quickSlotDT.iconPath == "Orange Potion")
+            {
+                Item orangePotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
+                DataManager.instance.AddHP(150);
+                inv.RemoveItem(orangePotion.ID);
+
+                Debug.Log("Use Orange Potion");
+            }
+
+            if (quickSlotDT.iconPath == "White Potion")
+            {
+                Item whitePotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
+                DataManager.instance.AddHP(300);
+                inv.RemoveItem(whitePotion.ID);
+
+                Debug.Log("Use White Potion Potion");
+            }
+
+            if (quickSlotDT.iconPath == "Mana Elixir")
+            {
+                Item manaElixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
+                DataManager.instance.AddMP(300);
+                inv.RemoveItem(manaElixir.ID);
+
+                Debug.Log("Use Mana Elixir Potion");
+            }
+
+            if (quickSlotDT.iconPath == "Elixir")
+            {
+                Item elixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
+                DataManager.instance.UseElixer();
+                inv.RemoveItem(elixir.ID);
+
+                Debug.Log("Use Elixir");
+            }
+
+            if (quickSlotDT.iconPath == "Power Elixir")
+            {
+                Item powerElixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
+                DataManager.instance.UsePowerElixer();
+                inv.RemoveItem(powerElixir.ID);
+
+                Debug.Log("Use Power Elixir");
+            }
+
+            // 스킬 사용 로직 
+            if (quickSlotDT.iconPath == "LuckySeven")
+            {
+                Debug.Log("Use LuckySeven");
+            }
+
+            if (quickSlotDT.iconPath == "Heist")
+            {
+                Debug.Log("Use Heist");
+            }
+        }
+    }
 }
-  
+
+
 
 

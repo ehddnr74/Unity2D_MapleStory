@@ -145,6 +145,65 @@ public class DataManager : MonoBehaviour
         SaveData();
     }
 
+    public void AddHP(int hpamount)
+    {
+        playerStat.hp += hpamount;
+
+        CheckStatus();
+
+        statManager.UpdateStatUI(nowPlayer, playerStat);
+        SaveStat();
+    }
+    public void RemoveHP(int hpamount)
+    {
+        playerStat.hp -= hpamount;
+
+        CheckStatus();
+
+        statManager.UpdateStatUI(nowPlayer, playerStat);
+        SaveStat();
+    }
+
+    public void AddMP(int mpamount)
+    {
+        playerStat.mp += mpamount;
+
+        CheckStatus();
+
+        statManager.UpdateStatUI(nowPlayer, playerStat);
+        SaveStat();
+    }
+    public void RemoveMP(int mpamount)
+    {
+        playerStat.mp -= mpamount;
+
+        CheckStatus();
+
+        statManager.UpdateStatUI(nowPlayer, playerStat);
+        SaveStat();
+    }
+    public void UseElixer()
+    {
+        playerStat.hp += (playerStat.maxHp / 2);
+        playerStat.mp += (playerStat.maxMp / 2);
+
+        CheckStatus();
+
+        statManager.UpdateStatUI(nowPlayer, playerStat);
+        SaveStat();
+    }
+
+    public void UsePowerElixer()
+    {
+        playerStat.hp += playerStat.maxHp;
+        playerStat.mp += playerStat.maxMp;
+
+        CheckStatus();
+
+        statManager.UpdateStatUI(nowPlayer, playerStat);
+        SaveStat();
+    }
+
     public void LevelUpToStat()
     {
         playerStat.AbilityPoint += 5;
@@ -178,7 +237,29 @@ public class DataManager : MonoBehaviour
         SaveData();
     }
 
+    private void CheckStatus() // HP , MP 초과 or 미만 체크 
+    {
+        if (playerStat.hp >= playerStat.maxHp)
+            playerStat.hp = playerStat.maxHp;
 
+        if (playerStat.mp >= playerStat.maxMp)
+            playerStat.mp = playerStat.maxMp;
 
+        if (playerStat.hp <= 0)
+            playerStat.hp = 0;
 
+        if (playerStat.mp <= 0)
+            playerStat.mp = 0;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            RemoveHP(20);
+            RemoveMP(20);
+            statManager.UpdateStatUI(nowPlayer, playerStat);
+            SaveStat();
+        }
+    }
 }

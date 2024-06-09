@@ -138,4 +138,4 @@ MonoBehaviour:
   speed: 40
   lifetime: 0.5
   direction: 0
-  trackingRange: 10
+  trackingRange: 20

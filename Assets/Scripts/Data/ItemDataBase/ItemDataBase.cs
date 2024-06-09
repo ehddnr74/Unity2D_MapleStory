@@ -29,8 +29,18 @@ public class ItemDataBase : MonoBehaviour
         }
         return null;
     }
-    
-  
+    public Item FetchItemByIconPath(string iconPath)
+    {
+        for (int i = 0; i < dataBase.Count; i++)
+        {
+            if (dataBase[i].IconPath == iconPath)
+            {
+                return dataBase[i];
+            }
+        }
+        return null;
+    }
+
 
     void ConstructItemDataBase()
     {
