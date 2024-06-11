@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -62,12 +63,19 @@ public class QuickSlotDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (iconPath == "Key.Item" || iconPath == "Key.Minimap" || iconPath == "Key.PickUp" 
+            || iconPath == "Key.Attack" || iconPath == "Key.Skill" || iconPath == "Key.Stat" || iconPath == "Key.Jump")
+            return;
+        
+
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             // 마우스 오른쪽 클릭 시 아이템 아이콘을 지우고, 해당 슬롯의 정보를 초기화
             itemIcon = null;
             GetComponent<Image>().sprite = null;
             GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f); // 투명하게 설정
+            itemAmount = 0;
+            GetComponentInChildren<TextMeshProUGUI>().text = string.Empty;
         }
         quickSlot.itemsChanged = true;
     }

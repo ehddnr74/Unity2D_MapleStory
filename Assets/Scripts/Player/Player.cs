@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
 
     public GameObject surikenManagerObject;
     private ShurikenManager surikenManager;
+    private QuickSlot quickSlot; 
+
     public enum PlayerState
     {
         Idle,
@@ -51,7 +53,7 @@ public class Player : MonoBehaviour
     private float raycastDistance = 50f; // 레이캐스트 거리
     private float fallThroughDuration = 0.2f; // 내려가는 동안 충돌 비활성화 시간
 
-    private bool canAttack = true;
+    public bool canAttack = true;
     private float attackCoolDown = 0.6f;
 
     public bool flipX = false;
@@ -60,6 +62,9 @@ public class Player : MonoBehaviour
     public float knockbackDuration = 0.2f;
     public bool invincibel = false; // 무적
     public float invincibilityPeriod = 2f; // 무적시간
+
+    public bool toJump;
+    public bool toAttack;
 
     private float hitTime;
 
@@ -85,6 +90,7 @@ public class Player : MonoBehaviour
 
         feetScript = GetComponentInChildren<FeetScript>();
         surikenManager = surikenManagerObject.GetComponent<ShurikenManager>();
+        quickSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
         //feetCollider = transform.Find("FeetCollider").GetComponent<Collider2D>(); // 발 콜라이더를 찾음
     }
 
@@ -273,7 +279,7 @@ public class Player : MonoBehaviour
         else
             mAnimator.SetBool("IsWalking", false);
 
-        if (Input.GetKeyDown(KeyCode.LeftAlt) && isGround) // To Jump
+        if (toJump)
         {
             isGround = false;
             mRigidBody.velocity = Vector2.up * jumpForce;
@@ -287,9 +293,13 @@ public class Player : MonoBehaviour
             mAnimator.SetBool("IsProne", true);
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl) && canAttack) // To Attack
+        if(toAttack)
         {
+            toAttack = false;
+
+            if(quickSlot.ExistSuriken)
             StartCoroutine(AttackSurken());
+
             isAttacking = true;
             mAnimator.SetTrigger("IsAttack");
             mPlayerState = PlayerState.Attack;
@@ -323,7 +333,7 @@ public class Player : MonoBehaviour
         else
             mAnimator.SetBool("IsWalking", true);
 
-        if (Input.GetKeyDown(KeyCode.LeftAlt) && isGround) // To Jump
+        if (toJump) // To Jump
         {
             isGround = false;
             mRigidBody.velocity = new Vector2(mRigidBody.velocity.x, jumpForce);
@@ -331,9 +341,13 @@ public class Player : MonoBehaviour
             mPlayerState = PlayerState.Jump;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftControl) && canAttack) // To Attack
+        if (toAttack) // To Attack
         {
-            StartCoroutine(AttackSurken());
+            toAttack = false;
+
+            if (quickSlot.ExistSuriken)
+                StartCoroutine(AttackSurken());
+
             isAttacking = true;
             mAnimator.SetTrigger("IsAttack");
             mPlayerState = PlayerState.Attack;
@@ -353,12 +367,18 @@ public class Player : MonoBehaviour
             mAnimator.SetBool("IsJumping", false);
 
             JumpAttackTime = 0f;
+
+            toJump = false;
         }
         
 
-        if (JumpAttackTime < 0.15f && Input.GetKeyDown(KeyCode.LeftControl)) // To Attack
+        if (JumpAttackTime < 0.15f && toAttack) // To Attack
         {
-            StartCoroutine(AttackSurken());
+            toAttack = false;
+
+            if (quickSlot.ExistSuriken)
+                StartCoroutine(AttackSurken());
+
             isAttacking = true;
             mAnimator.SetTrigger("IsAttack");
             mPlayerState = PlayerState.JumpAttack;
@@ -374,14 +394,14 @@ public class Player : MonoBehaviour
         {
             mPlayerState = PlayerState.Idle;
             mAnimator.SetBool("IsJumping", false);
+            toJump = false;
         }
     }
 
     private void attack()
     {
-        if (!isAttacking)
+        if (!isAttacking) 
             mPlayerState = PlayerState.Idle;
-
     }
 
     private IEnumerator AttackSurken()
@@ -416,15 +436,16 @@ public class Player : MonoBehaviour
         }
 
 
-        if (Input.GetKeyDown(KeyCode.LeftControl) && proneAttack)
+        if (toAttack && proneAttack)
         {
             proneAttack = false;
             proneAttackTime = 0f;
             mAnimator.SetTrigger("IsProneAttack");
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftAlt) && IsGroundBelow())
+        if (toJump && IsGroundBelow())
         {
+            toJump = false;
             StartCoroutine(FallThroughPlatform());
         }
     }

@@ -47,7 +47,7 @@ public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 {
                     quickSlot.itemIcon = skillIcon;
                     //해당 퀵슬롯에 아이템 추가
-                    qSlot.AddItemToQuickSlot(skillIcon, quickSlot.slotNum);
+                    qSlot.AddItemToQuickSlot(skillIcon, quickSlot.slotNum, 0);
                     //break;
                 }
             }

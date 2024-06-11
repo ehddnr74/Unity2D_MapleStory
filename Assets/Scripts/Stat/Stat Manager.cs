@@ -34,8 +34,8 @@ public class StatManager : MonoBehaviour
     
     private TextMeshProUGUI abilityPointText;
 
-    GameObject StatUIPanel;
-    bool activeUI = false;
+    public GameObject StatUIPanel;
+    public bool activeUI = false;
 
     private void Start()
     {
@@ -80,15 +80,6 @@ public class StatManager : MonoBehaviour
             UpdateStatUI(playerData, statData);
 
             StatUIPanel = GameObject.Find("StatsPanel");
-            StatUIPanel.SetActive(activeUI);
-        }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            activeUI = !activeUI;
             StatUIPanel.SetActive(activeUI);
         }
     }

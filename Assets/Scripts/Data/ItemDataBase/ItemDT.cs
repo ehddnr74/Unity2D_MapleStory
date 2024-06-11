@@ -54,11 +54,11 @@ public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
                 {
                     if (item.ID != 6 && item.ID != 7)
                     {
-                        quickSlot.item = item;
                         quickSlot.itemIcon = item.Icon;
                         quickSlot.iconPath = item.IconPath;
+                        quickSlot.itemAmount = amount;
                         // 해당 퀵슬롯에 아이템 추가
-                        qSlot.AddItemToQuickSlot(item.Icon, quickSlot.slotNum);
+                        qSlot.AddItemToQuickSlot(item.Icon, quickSlot.slotNum, amount);
                         break;
                     }
                 }

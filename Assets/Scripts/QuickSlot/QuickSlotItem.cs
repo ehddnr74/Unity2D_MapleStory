@@ -9,12 +9,14 @@ public class QuickSlotItem
 {
     public int slotNum;
     public string iconPath;
+    public int itemAmount;
 
 
-    public QuickSlotItem(int slotnum, string iconPath)
+    public QuickSlotItem(int slotnum, string iconPath, int itemAmount)
     {
         this.slotNum = slotnum;
         this.iconPath = iconPath;
+        this.itemAmount = itemAmount;
     }
 }
 

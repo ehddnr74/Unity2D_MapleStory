@@ -36,7 +36,17 @@ public class Slot : MonoBehaviour, IDropHandler
             itemObj.GetComponent<Image>().sprite = newItem.Icon;
             itemObj.name = newItem.Name;
             itemObj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+
+            Image img = itemDT.transform.GetChild(1).GetComponent<Image>();
+            if(img != null)
+            {
+                Color tempColor = img.color;
+                tempColor.a = 0f;
+                img.color = tempColor;
+            }
         }
+
+
     }
 
     void Start()

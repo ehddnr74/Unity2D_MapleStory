@@ -8,21 +8,27 @@ using System.IO;
 using static UnityEditor.Progress;
 using UnityEditor.U2D.Aseprite;
 using Unity.VisualScripting;
+using UnityEditor.Search;
 
 
 public class Inventory : MonoBehaviour
 {
-    GameObject inventoryPanel;
+    private QuickSlot quickSlot;
+
+    public GameObject inventoryPanel;
     GameObject Content;
     ItemDataBase itemdataBase;
     public GameObject inventorySlot;
     public GameObject inventoryItem;
 
+    public GameObject firstSurikenEffect; // 인벤토리 가장 앞에 위치한 표창의 테두리 이펙트 프리펩
+    public int currentSurikenSlot;
+
     private PlayerData playerData;
 
     private TextMeshProUGUI mesoText;
 
-    bool activeInventory = false;
+    public bool activeInventory = false;
 
     int slotAmount;
     public List<Item> items = new List<Item>();
@@ -57,6 +63,7 @@ public class Inventory : MonoBehaviour
         }
 
         shop = GameObject.Find("Shop").GetComponent<Shop>();
+        quickSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
 
         mesoText = GameObject.Find("InventoryUI/Inventory Panel/Slot Panel/MesoText").GetComponentInChildren<TextMeshProUGUI>();
         itemdataBase = GetComponent<ItemDataBase>();
@@ -108,7 +115,16 @@ public class Inventory : MonoBehaviour
                     itemDT.item = itemToAdd;
                     itemDT.amount = 1; // 새로운 아이템의 개수는 1로 설정
                     itemDT.slot = i; // 추가된 아이템의 슬롯 인덱스를 설정
-                    itemDT.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = itemDT.amount.ToString();
+
+                    if (items[i].Type == "suriken")
+                    {
+                        itemDT.amount = 1000;
+                        itemDT.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = itemDT.amount.ToString();
+                    }
+                    else
+                    {
+                        itemDT.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = itemDT.amount.ToString();
+                    }
                     itemDT.transform.SetParent(slots[i].transform, false);
                     itemObj.GetComponent<Image>().sprite = itemToAdd.Icon;
                     itemObj.name = itemToAdd.Name;
@@ -128,7 +144,7 @@ public class Inventory : MonoBehaviour
             {
                 ItemDT data = slots[i].transform.GetChild(0).GetComponent<ItemDT>();
 
-                if (data.amount > 1)
+                if (data.amount > 1 && items[i].ID != 6 && items[i].ID != 7) 
                 {
                     // 스택 가능한 아이템의 경우 수량을 감소시킴
                     data.amount--;
@@ -140,6 +156,14 @@ public class Inventory : MonoBehaviour
                     items[i] = new Item();
                     Destroy(slots[i].transform.GetChild(0).gameObject);
                 }
+
+                if(items[i].ID == 6 && items[i].ID == 7)
+                {
+                    // 수량이 1인 경우 아이템을 제거
+                    items[i] = new Item();
+                    Destroy(slots[i].transform.GetChild(0).gameObject);
+                }
+
 
                 itemsChanged = true; // 아이템이 제거되었을 때 플래그 설정
                 break;
@@ -200,6 +224,7 @@ public class Inventory : MonoBehaviour
                 slot.UpdateSlot(item, inventoryItem.amount);
             }
         }
+        UpdateSurikenEffect();
     }
 
     public void UpdateMesoUI(PlayerData pd)
@@ -212,19 +237,71 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void UpdatesurikenAmountText(int amount) // 퀵슬롯의 공격 아이콘에 맵핑된 Key를 누를 시 호출
+    {
+        ItemDT itemDT = slots[currentSurikenSlot].GetComponentInChildren<ItemDT>();
+        itemDT.amount -= amount;
+        itemDT.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = itemDT.amount.ToString();
+
+        itemsChanged = true;
+    }
+
+    public void UpdateSurikenEffect() //  인벤토리의 표창들 중에 가장 우선적으로 위치한 표창의 슬롯을 찾아내 표창의 테두리에 애니메이션 효과
+    {
+        string inventoryDataPath = Application.persistentDataPath + "/Inventory.json";
+        if (File.Exists(inventoryDataPath))
+        {
+            string inventoryDataJson = File.ReadAllText(inventoryDataPath);
+            List<InventoryItem> inventoryItems = JsonConvert.DeserializeObject<List<InventoryItem>>(inventoryDataJson);
+
+            foreach (InventoryItem invItems in inventoryItems)
+            {
+                Slot invSlot = slots[invItems.slotnum].GetComponent<Slot>();
+                ItemDT invDT = invSlot.GetComponentInChildren<ItemDT>();
+                Image img = invDT.transform.GetChild(1).GetComponent<Image>();
+
+                if (img != null)
+                {
+                    Color tempColor = img.color;
+                    tempColor.a = 0f;
+                    img.color = tempColor;
+                }
+            }
+            
+            foreach (InventoryItem invItems in inventoryItems)
+            {
+                if (invItems.ID == 6 || invItems.ID == 7) //표창
+                {
+                    if(invItems.amount <=1) // 표창 개수가 1이하면 다음 인벤토리의 표창으로 사용
+                        continue;
+                    
+                    Slot invSlot = slots[invItems.slotnum].GetComponent<Slot>();
+                    currentSurikenSlot = invItems.slotnum;
+                    ItemDT invDT = invSlot.GetComponentInChildren<ItemDT>();
+                    Image img = invDT.transform.GetChild(1).GetComponent<Image>();
+                    if (img != null)
+                    {
+                        Color tempColor = img.color;
+                        tempColor.a = 1f;
+                        img.color = tempColor;
+                    }
+                    // 표창이 인벤토리에 있는 경우 flag를 줌
+                    quickSlot.ExistSuriken = true;
+                    break;
+                }
+                quickSlot.ExistSuriken = false;
+            }
+        }
+    }
+
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            activeInventory = !activeInventory;
-            inventoryPanel.SetActive(activeInventory);
-        }
-
         // 아이템이 변경된 경우 인벤토리를 저장
         if (itemsChanged)
         {
             SaveInventory();
+            UpdateSurikenEffect();
             if (shop.visibleShop == true)
             {
                 shop.UpdateShopInventory();

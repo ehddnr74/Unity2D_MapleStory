@@ -18,6 +18,7 @@ public class ShopKeeper : MonoBehaviour
         {
             shop.visibleShop = !shop.visibleShop;
             shop.shopParentPanel.SetActive(shop.visibleShop);
+            shop.UpdateShopInventory();
         }
     }
 

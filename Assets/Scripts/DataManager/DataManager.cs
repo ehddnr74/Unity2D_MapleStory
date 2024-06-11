@@ -15,7 +15,7 @@ public class DataManager : MonoBehaviour
     public static DataManager instance;
 
     public PlayerData nowPlayer;
-    public SkillData playerSkill;
+    public SkillCollection playerSkill;
     public StatData playerStat;
     public ItemData itemData; // ItemData 변수 추가
 
@@ -60,11 +60,11 @@ public class DataManager : MonoBehaviour
         LoadItemData(); // 아이템 데이터 로드
     }
 
-    public void SaveSkill()
-    {
-        string data = JsonUtility.ToJson(playerSkill, true);
-        File.WriteAllText(path + "Skill" + ".json", data);
-    }
+    //public void SaveSkill()
+    //{
+    //    string data = JsonUtility.ToJson(playerSkill, true);
+    //    File.WriteAllText(path + "Skill" + ".json", data);
+    //}
     public void SaveStat()
     {
         string data = JsonUtility.ToJson(playerStat, true);
@@ -134,9 +134,12 @@ public class DataManager : MonoBehaviour
         if (nowPlayer.experience >= nowPlayer.experienceTable[nowPlayer.level])
         {
             nowPlayer.level++;
-            LevelUpToStat();
+            LevelUpToStat(); //레벨업 시 스탯 성장
             playerManager.UpdateLevelUI(nowPlayer.level);
             nowPlayer.experience = 0; // 레벨업 후 경험치 초기화 (또는 남은 경험치 계산)
+
+            skillManager.skillCollection.skillPoint += 3;
+            skillManager.itemChanged = true;
         }
 
         // 경험치바 업데이트

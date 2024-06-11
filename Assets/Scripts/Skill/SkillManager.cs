@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using TMPro;
 using UnityEditor.Experimental.GraphView;
 using Unity.Burst.CompilerServices;
+using UnityEngine.UI;
+using System;
 
 public class SkillManager : MonoBehaviour
 {
@@ -18,9 +20,21 @@ public class SkillManager : MonoBehaviour
     private TextMeshProUGUI luckySevenLevel;
     private TextMeshProUGUI heistText;
     private TextMeshProUGUI heistLevel;
+    private TextMeshProUGUI flashJumpText;
+    private TextMeshProUGUI flashJumpLevel;
 
-    GameObject SkillUIPanel;
-    bool activeUI = false;
+
+    private Button luckySevenBtn;
+    private Button heistBtn;
+    private Button flashJumpBtn;
+
+    private Sprite activityBtn;
+    private Sprite deactivityBtn;
+
+    public GameObject SkillUIPanel;
+    public bool activeUI = false;
+
+    public bool itemChanged = false;
 
     private void Start()
     {
@@ -34,16 +48,27 @@ public class SkillManager : MonoBehaviour
             skillCollection = new SkillCollection();
         }
 
-        // 예시 스킬 추가
-        //AddSkill("럭키 세븐", 1);
-        //AddSkill("헤이스트", 1);
+        Sprite activityButton = Resources.Load<Sprite>("StatButton/ActivityButton");
+        activityBtn = activityButton;
+        Sprite deactivityButton = Resources.Load<Sprite>("StatButton/DeActivityButton");
+        deactivityBtn = deactivityButton;
 
+        luckySevenBtn = GameObject.Find("Skill/SkillPanel/Lucky Seven/LuckySevenButton").GetComponentInChildren<Button>();
+        heistBtn = GameObject.Find("Skill/SkillPanel/Heist/HeistButton").GetComponentInChildren<Button>();
+        flashJumpBtn = GameObject.Find("Skill/SkillPanel/FlashJump/FlashJumpButton").GetComponentInChildren<Button>();
+
+        luckySevenBtn.onClick.AddListener(OnLuckySevenButtonClick);
+        heistBtn.onClick.AddListener(OnHeistButtonClick);
+        flashJumpBtn.onClick.AddListener(OnFlashJumpButtonClick);
 
         skillPointText = GameObject.Find("Skill/SkillPanel/Skill Point Text").GetComponentInChildren<TextMeshProUGUI>();
         luckySevenText = GameObject.Find("Skill/SkillPanel/Lucky Seven/LuckySevenText").GetComponentInChildren<TextMeshProUGUI>();
         luckySevenLevel = GameObject.Find("Skill/SkillPanel/Lucky Seven/LuckySevenLevel").GetComponentInChildren<TextMeshProUGUI>();
         heistText = GameObject.Find("Skill/SkillPanel/Heist/HeistText").GetComponentInChildren<TextMeshProUGUI>();
         heistLevel = GameObject.Find("Skill/SkillPanel/Heist/HeistLevel").GetComponentInChildren<TextMeshProUGUI>();
+        flashJumpText = GameObject.Find("Skill/SkillPanel/FlashJump/FlashJumpText").GetComponentInChildren<TextMeshProUGUI>();
+        flashJumpLevel = GameObject.Find("Skill/SkillPanel/FlashJump/FlashJumpLevel").GetComponentInChildren<TextMeshProUGUI>();
+
 
         UpdateSkillUI();
 
@@ -53,12 +78,34 @@ public class SkillManager : MonoBehaviour
         SkillUIPanel.SetActive(activeUI);
     }
 
+
+    private void OnLuckySevenButtonClick()
+    {
+        skillCollection.skillPoint--;
+        skillCollection.skills[0].skillLevel++;
+        itemChanged = true;
+    }
+    private void OnHeistButtonClick()
+    {
+        skillCollection.skillPoint--;
+        skillCollection.skills[1].skillLevel++;
+        itemChanged = true;
+    }
+    private void OnFlashJumpButtonClick()
+    {
+        skillCollection.skillPoint--;
+        skillCollection.skills[2].skillLevel++;
+        itemChanged = true;
+    }
+
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+        if(itemChanged)
         {
-            activeUI = !activeUI;
-            SkillUIPanel.SetActive(activeUI);
+            itemChanged = false;
+            SaveSkillData(skillCollection);
+            UpdateSkillUI();
         }
     }
 
@@ -89,6 +136,32 @@ public class SkillManager : MonoBehaviour
         {
             heistText.text = skillCollection.skills[1].skillName;
             heistLevel.text = skillCollection.skills[1].skillLevel.ToString();
+        }
+
+        if (flashJumpText != null && skillCollection.skills.Count > 0
+            && flashJumpLevel != null)
+        {
+            flashJumpText.text = skillCollection.skills[2].skillName;
+            flashJumpLevel.text = skillCollection.skills[2].skillLevel.ToString();
+        }
+
+        if (skillCollection.skillPoint <= 0)
+        {
+            luckySevenBtn.interactable = false;
+            luckySevenBtn.image.sprite = deactivityBtn;
+            heistBtn.interactable = false;
+            heistBtn.image.sprite = deactivityBtn;
+            flashJumpBtn.interactable = false;
+            flashJumpBtn.image.sprite = deactivityBtn;
+        }
+        else
+        {
+            luckySevenBtn.interactable = true;
+            luckySevenBtn.image.sprite = activityBtn;
+            heistBtn.interactable = true;
+            heistBtn.image.sprite = activityBtn;
+            flashJumpBtn.interactable = true;
+            flashJumpBtn.image.sprite = activityBtn;
         }
     }
 

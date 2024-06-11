@@ -8,10 +8,15 @@ using UnityEngine.UI;
 using System.IO;
 using static UnityEditor.Progress;
 using System;
+using TMPro;
 
 public class QuickSlot : MonoBehaviour
 {
     private static QuickSlot instance;
+
+    private SkillManager skillManager;
+    private StatManager statManager;
+    private Player player;
 
     int slotAmount;
     GameObject quickSlotPanel;
@@ -22,6 +27,9 @@ public class QuickSlot : MonoBehaviour
     public GameObject quickSlotItem;
     public bool itemsChanged = false;
 
+    public bool ExistSuriken; // 표창이 인벤토리 내에 없는경우 표창을 발사 못하게 하기 위한 플래그 
+
+    public List<InventoryItem> iti = new List<InventoryItem>();
     public List<GameObject> slots = new List<GameObject>();
 
     // 슬롯과 키 매핑
@@ -44,6 +52,10 @@ public class QuickSlot : MonoBehaviour
     {
         inv = GameObject.Find("Inventory").GetComponent<Inventory>();
         itemdataBase = inv.GetComponent<ItemDataBase>();
+        skillManager = FindObjectOfType<SkillManager>();
+        statManager = FindObjectOfType<StatManager>();
+        player = FindObjectOfType<Player>();
+
         slotAmount = 32;
         quickSlotPanel = GameObject.Find("QuickSlotPanel");
         for (int i = 0; i < slotAmount; i++)
@@ -54,6 +66,15 @@ public class QuickSlot : MonoBehaviour
             GameObject slotItem = Instantiate(quickSlotItem);
             slotItem.transform.SetParent(slots[i].transform, false);
             slotItem.GetComponent<QuickSlotDT>().slotNum = i;
+
+
+            //Amount가 0이라면 텍스트 투명처리
+            if(slotItem.GetComponent<QuickSlotDT>().itemAmount <=0)
+            {
+                TextMeshProUGUI amountText = slotItem.GetComponent<QuickSlotDT>().GetComponentInChildren<TextMeshProUGUI>();
+                if(amountText != null)
+                    amountText.text = string.Empty;
+            }
 
             //아이템 이미지 투명하게 설정
             Image slotItemImage = slotItem.GetComponent<Image>();
@@ -98,7 +119,7 @@ public class QuickSlot : MonoBehaviour
 
             if (quickSlotDT != null && quickSlotDT.itemIcon != null)
             {
-                quickSlotItems.Add(new QuickSlotItem(quickSlotDT.slotNum, quickSlotDT.iconPath));
+                quickSlotItems.Add(new QuickSlotItem(quickSlotDT.slotNum, quickSlotDT.iconPath, quickSlotDT.itemAmount));
             }
         }
 
@@ -120,7 +141,7 @@ public class QuickSlot : MonoBehaviour
                 if (!string.IsNullOrEmpty(item.iconPath))
                 {
                     Sprite icon = Resources.Load<Sprite>("QuickSlotIcons/" + item.iconPath);
-                    AddItemToQuickSlot(icon, item.slotNum);
+                    AddItemToQuickSlot(icon, item.slotNum, item.itemAmount);
                 }
             }
         }
@@ -128,7 +149,7 @@ public class QuickSlot : MonoBehaviour
 
     //인벤토리 아이템(ItemDT)로 부터 퀵슬롯에 Icon이 옮겨지는 과정 
     // 추후 icon이 표창일 경우 return 필요
-    public void AddItemToQuickSlot(Sprite icon, int quickSlotID)
+    public void AddItemToQuickSlot(Sprite icon, int quickSlotID, int amount)
     {
         foreach(var slot in slots)
         {
@@ -149,10 +170,11 @@ public class QuickSlot : MonoBehaviour
             if (quickSlotSlot != null)
             {
                 QuickSlotDT quickSlotDT = quickSlotSlot.GetComponentInChildren<QuickSlotDT>();
-                
+
                 if (quickSlotDT != null)
                 {
                     Image slotImage = quickSlotDT.GetComponent<Image>();
+
                     if (slotImage != null)
                     {
                         slotImage.sprite = icon;
@@ -161,13 +183,36 @@ public class QuickSlot : MonoBehaviour
                         slotImage.color = tempColor;
                         quickSlotDT.itemIcon = icon;
                         quickSlotDT.iconPath = icon.name; // 아이콘의 경로를 저장
+                        quickSlotDT.itemAmount = amount;
 
+                        if(quickSlotDT.itemAmount > 0)
+                        quickSlotDT.GetComponentInChildren<TextMeshProUGUI>().text = quickSlotDT.itemAmount.ToString();
                         // 아이템 추가가 완료된 후 데이터 저장
                         itemsChanged = true;
                     }
                 }
             }
         }
+    }
+
+    public void RemoveQuicktSlotItem(string iconPath, int slotIndex, int amount)
+    {
+       QuickSlotDT slotDT =  slots[slotIndex].GetComponentInChildren<QuickSlotDT>();
+
+        slotDT.itemAmount -= amount;
+        slotDT.GetComponentInChildren<TextMeshProUGUI>().text = slotDT.itemAmount.ToString();
+
+        if(slotDT.itemAmount <= 0)
+        {
+            // 마우스 오른쪽 클릭 시 아이템 아이콘을 지우고, 해당 슬롯의 정보를 초기화
+            slotDT.itemIcon = null;
+            slotDT.GetComponent<Image>().sprite = null;
+            slotDT.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f); // 투명하게 설정
+            slotDT.itemAmount = 0;
+            slotDT.GetComponentInChildren<TextMeshProUGUI>().text = String.Empty;
+        }
+
+        itemsChanged = true;
     }
 
     // 두 퀵슬롯 간의 아이템 정보를 교환하는 메서드
@@ -180,6 +225,7 @@ public class QuickSlot : MonoBehaviour
 
             if (slot1 != null && slot2 != null)
             {
+                // 아이콘 교환
                 Sprite tempIcon = slot1.itemIcon;
                 slot1.itemIcon = slot2.itemIcon;
                 slot2.itemIcon = tempIcon;
@@ -188,6 +234,11 @@ public class QuickSlot : MonoBehaviour
                 string tempIconPath = slot1.iconPath;
                 slot1.iconPath = slot2.iconPath;
                 slot2.iconPath = tempIconPath;
+
+                // 아이템 수량 교환
+                int tempAmount = slot1.itemAmount;
+                slot1.itemAmount = slot2.itemAmount;
+                slot2.itemAmount = tempAmount;
 
                 Image slot1Image = slot1.GetComponent<Image>();
                 Image slot2Image = slot2.GetComponent<Image>();
@@ -205,14 +256,27 @@ public class QuickSlot : MonoBehaviour
                     tempColor2.a = slot2.itemIcon != null ? 1f : 0f;
                     slot2Image.color = tempColor2;            
                 }
+
+                TextMeshProUGUI slot1Text = slot1.GetComponentInChildren<TextMeshProUGUI>();
+                TextMeshProUGUI slot2Text = slot2.GetComponentInChildren<TextMeshProUGUI>();
+
+                if (slot1Text != null)
+                {
+                    slot1Text.text = slot1.itemAmount > 0 ? slot1.itemAmount.ToString() : string.Empty;
+                }
+
+                if (slot2Text != null)
+                {
+                    slot2Text.text = slot2.itemAmount > 0 ? slot2.itemAmount.ToString() : string.Empty;
+                }
             }
         }
     }
 
     private void InitializeKeyMappings()
     {
-        KeyCode[] keys = { KeyCode.LeftAlt, KeyCode.S, KeyCode.D, KeyCode.F, KeyCode.G, KeyCode.H, KeyCode.J, KeyCode.K, KeyCode.L,
-                           KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.T, KeyCode.Y, KeyCode.U, KeyCode.LeftControl, KeyCode.Z, KeyCode.X,KeyCode.C,
+        KeyCode[] keys = { KeyCode.LeftAlt, KeyCode.LeftShift, KeyCode.A, KeyCode.S, KeyCode.D, KeyCode.F, KeyCode.G, KeyCode.H, KeyCode.J,
+                           KeyCode.K, KeyCode.L, KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.T, KeyCode.LeftControl, KeyCode.Z, KeyCode.X,KeyCode.C,
                            KeyCode.V, KeyCode.B, KeyCode.N,KeyCode.M,KeyCode.Y,KeyCode.U,KeyCode.I,KeyCode.O,KeyCode.P,KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3 };
 
         for (int i = 0; i < slots.Count && i < keys.Length; i++)
@@ -235,6 +299,7 @@ public class QuickSlot : MonoBehaviour
                 Item redPotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
                 DataManager.instance.AddHP(50);
                 inv.RemoveItem(redPotion.ID);
+                RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
 
                 Debug.Log("Use Red Potion");
 
@@ -245,6 +310,7 @@ public class QuickSlot : MonoBehaviour
                 Item orangePotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
                 DataManager.instance.AddHP(150);
                 inv.RemoveItem(orangePotion.ID);
+                RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
 
                 Debug.Log("Use Orange Potion");
             }
@@ -254,6 +320,7 @@ public class QuickSlot : MonoBehaviour
                 Item whitePotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
                 DataManager.instance.AddHP(300);
                 inv.RemoveItem(whitePotion.ID);
+                RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
 
                 Debug.Log("Use White Potion Potion");
             }
@@ -263,6 +330,7 @@ public class QuickSlot : MonoBehaviour
                 Item manaElixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
                 DataManager.instance.AddMP(300);
                 inv.RemoveItem(manaElixir.ID);
+                RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
 
                 Debug.Log("Use Mana Elixir Potion");
             }
@@ -272,6 +340,7 @@ public class QuickSlot : MonoBehaviour
                 Item elixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
                 DataManager.instance.UseElixer();
                 inv.RemoveItem(elixir.ID);
+                RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
 
                 Debug.Log("Use Elixir");
             }
@@ -281,6 +350,7 @@ public class QuickSlot : MonoBehaviour
                 Item powerElixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
                 DataManager.instance.UsePowerElixer();
                 inv.RemoveItem(powerElixir.ID);
+                RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
 
                 Debug.Log("Use Power Elixir");
             }
@@ -288,12 +358,40 @@ public class QuickSlot : MonoBehaviour
             // 스킬 사용 로직 
             if (quickSlotDT.iconPath == "LuckySeven")
             {
-                Debug.Log("Use LuckySeven");
+                Debug.Log("Use Lucky Seven");
             }
 
             if (quickSlotDT.iconPath == "Heist")
             {
                 Debug.Log("Use Heist");
+            }
+
+            // 퀵슬롯 인벤토리,스탯창 등 Icon 사용 로직
+            if(quickSlotDT.iconPath == "Key.Item")
+            {
+                inv.activeInventory = !inv.activeInventory;
+                inv.inventoryPanel.SetActive(inv.activeInventory);
+            }
+            if (quickSlotDT.iconPath == "Key.Stat")
+            {
+                statManager.activeUI = !statManager.activeUI;
+                statManager.StatUIPanel.SetActive(statManager.activeUI);
+            }
+            if (quickSlotDT.iconPath == "Key.Skill")
+            {
+                skillManager.activeUI = !skillManager.activeUI;
+                skillManager.SkillUIPanel.SetActive(skillManager.activeUI);
+            }
+            if (quickSlotDT.iconPath == "Key.Jump" && player.isGround)
+            {
+                player.toJump = true;
+            }
+            if (quickSlotDT.iconPath == "Key.Attack" && player.canAttack )
+            { 
+                player.toAttack = true;
+
+                if(ExistSuriken)
+                inv.UpdatesurikenAmountText(1); //표창 개수 1개 감소 
             }
         }
     }
