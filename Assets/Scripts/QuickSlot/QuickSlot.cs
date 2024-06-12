@@ -356,9 +356,13 @@ public class QuickSlot : MonoBehaviour
             }
 
             // 스킬 사용 로직 
-            if (quickSlotDT.iconPath == "LuckySeven")
+            if (quickSlotDT.iconPath == "LuckySeven" && player.canAttack)
             {
-                Debug.Log("Use Lucky Seven");
+                player.toAttack = true;
+                player.luckySeven = true;
+
+                if (ExistSuriken)
+                    inv.UpdatesurikenAmountText(2); //표창 개수 1개 감소
             }
 
             if (quickSlotDT.iconPath == "Heist")

@@ -10,9 +10,11 @@ public class Shuriken : MonoBehaviour
     public Player player;
     public ShurikenManager shurikenManager;
 
+    public bool secondSuriken;
 
     public float speed = 10f;
     public float lifetime = 0.5f; // 수리검이 발사된 후 풀에 반환되기까지의 시간
+    public string shurikenType; // 수리검 타입 
 
     public bool direction;  // false가 왼쪽으로 나아감
 
@@ -22,6 +24,7 @@ public class Shuriken : MonoBehaviour
     private void OnEnable()
     {
         player = FindObjectOfType<Player>();
+        secondSuriken = player.SecondSuriken;
         shurikenManager = FindObjectOfType<ShurikenManager>();
 
         direction = player.flipX;
@@ -94,7 +97,7 @@ public class Shuriken : MonoBehaviour
         // 수리검을 풀에 반환
         if (shurikenManager != null)
         {
-            shurikenManager.ReturnSurikenToPool(gameObject);
+            shurikenManager.ReturnShurikenToPool(gameObject, shurikenType);
         }
     }
 
@@ -102,8 +105,33 @@ public class Shuriken : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
-            shurikenManager.ReturnSurikenToPool(gameObject);
+            // 데미지 계산 로직 추가
+            int damage = CalculateDamage(); // 예: 데미지를 계산하는 함수
+            bool isCritical = CheckForCriticalHit(); // 예: 크리티컬 히트를 확인하는 함수
+
+            // 충돌한 객체가 RedSnailController를 가지고 있는지 확인하고 데미지를 줍니다.
+            RedSnailController enemy = collision.GetComponent<RedSnailController>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damage, isCritical, secondSuriken);
+                if (secondSuriken)
+                    player.SecondSuriken = false;
+            }
+            // 수리검을 풀에 반환
+            shurikenManager.ReturnShurikenToPool(gameObject, shurikenType);
         }
+    }
+
+    private int CalculateDamage()
+    {
+        // 데미지 계산 로직 (임시로 10으로 설정)
+        return Random.Range(1, 1000);
+    }
+
+    private bool CheckForCriticalHit()
+    {
+        // 크리티컬 히트 확인 로직 (임시로 20% 확률로 크리티컬 히트)
+        return Random.value < 0.2f;
     }
 
     private void OnDrawGizmos()

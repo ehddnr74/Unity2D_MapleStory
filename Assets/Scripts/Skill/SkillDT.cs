@@ -21,15 +21,21 @@ public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        offset = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
-        originalParent = this.transform.parent;
-        this.transform.position = eventData.position - offset;
-        GetComponent<CanvasGroup>().blocksRaycasts = false;
+        if (skillName != "크리티컬 샷")
+        {
+            offset = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
+            originalParent = this.transform.parent;
+            this.transform.position = eventData.position - offset;
+            GetComponent<CanvasGroup>().blocksRaycasts = false;
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        this.transform.position = eventData.position - offset;
+        if (skillName != "크리티컬 샷")
+        {
+            this.transform.position = eventData.position - offset;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -45,15 +51,21 @@ public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
                 QuickSlotDT quickSlot = result.gameObject.GetComponent<QuickSlotDT>();
                 if (quickSlot != null)
                 {
-                    quickSlot.itemIcon = skillIcon;
-                    //해당 퀵슬롯에 아이템 추가
-                    qSlot.AddItemToQuickSlot(skillIcon, quickSlot.slotNum, 0);
-                    //break;
+                    if (skillName != "크리티컬 샷")
+                    {
+                        quickSlot.itemIcon = skillIcon;
+                        //해당 퀵슬롯에 아이템 추가
+                        qSlot.AddItemToQuickSlot(skillIcon, quickSlot.slotNum, 0);
+                        //break;
+                    }
                 }
             }
         }
-        this.transform.SetParent(originalParent);
-        this.transform.position = originalParent.position;
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
+        if (skillName != "크리티컬 샷")
+        {
+            this.transform.SetParent(originalParent);
+            this.transform.position = originalParent.position;
+            GetComponent<CanvasGroup>().blocksRaycasts = true;
+        }
     }
 }

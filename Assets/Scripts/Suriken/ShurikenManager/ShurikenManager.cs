@@ -6,10 +6,13 @@ public class ShurikenManager : MonoBehaviour
 {
     private static ShurikenManager instance;
 
-    public GameObject surikenPrefab; // 수리검 프리팹
+    //public GameObject surikenPrefab; // 수리검 프리팹
+    public GameObject ilbeShurikenPrefab; // 일비 표창 프리팹
+    public GameObject flameShurikenPrefab;   // 플레임 표창 프리팹
     public int poolSize = 20; // 풀 크기
 
-    private Queue<GameObject> surikenPool = new Queue<GameObject>(); // 수리검 오브젝트 풀
+    //private Queue<GameObject> surikenPool = new Queue<GameObject>(); // 수리검 오브젝트 풀
+    private Dictionary<string, Queue<GameObject>> shurikenPools = new Dictionary<string, Queue<GameObject>>(); // 표창 오브젝트 풀
 
     private void Awake()
     {
@@ -17,50 +20,83 @@ public class ShurikenManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-            InitializePool();
+            InitializePool("ilbe", ilbeShurikenPrefab);
+            InitializePool("flame", flameShurikenPrefab);
         }
         else
         {
             Destroy(gameObject);
         }
     }
-
-    //private void Start()
-    //{
-    //    InitializePool();
-    //}
-
-    private void InitializePool()
+    private void InitializePool(string shurikenType, GameObject prefab)
     {
+        Queue<GameObject> pool = new Queue<GameObject>();
         for (int i = 0; i < poolSize; i++)
         {
-            GameObject suriken = Instantiate(surikenPrefab, Vector3.zero, Quaternion.identity);
-            suriken.SetActive(false);
-            surikenPool.Enqueue(suriken);
+            GameObject shuriken = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+            shuriken.SetActive(false);
+            pool.Enqueue(shuriken);
         }
+        shurikenPools[shurikenType] = pool;
     }
 
-    public GameObject GetSurikenFromPool(Vector3 position)
+    public GameObject GetShurikenFromPool(int itemId, Vector3 position)
     {
-        if (surikenPool.Count > 0)
+        string shurikenType = GetShurikenTypeById(itemId);
+
+        if (shurikenPools.ContainsKey(shurikenType) && shurikenPools[shurikenType].Count > 0)
         {
-            GameObject suriken = surikenPool.Dequeue();
-            if (suriken != null)
+            GameObject shuriken = shurikenPools[shurikenType].Dequeue();
+            if (shuriken != null)
             {
-                suriken.SetActive(true);
-                suriken.transform.position = position;
-                return suriken;
+                shuriken.SetActive(true);
+                shuriken.transform.position = position;
+                Shuriken shurikenScript = shuriken.GetComponent<Shuriken>();
+                shurikenScript.shurikenType = shurikenType; // 수리검 타입 설정
+                return shuriken;
             }
         }
+
         // 풀에 남아있는 수리검이 없는 경우 새로 생성
-        GameObject newSuriken = Instantiate(surikenPrefab, position, Quaternion.identity);
-        return newSuriken;
+        GameObject prefab = GetPrefabByType(shurikenType);
+        GameObject newShuriken = Instantiate(prefab, position, Quaternion.identity);
+        Shuriken newShurikenScript = newShuriken.GetComponent<Shuriken>();
+        newShurikenScript.shurikenType = shurikenType; // 수리검 타입 설정
+        return newShuriken;
     }
 
-    public void ReturnSurikenToPool(GameObject suriken)
+    private string GetShurikenTypeById(int itemId)
     {
-        suriken.SetActive(false);
-        surikenPool.Enqueue(suriken);
+        switch (itemId)
+        {
+            case 7:
+                return "flame";
+            case 6:
+            default:
+                return "ilbe";
+        }
+    }
+
+    private GameObject GetPrefabByType(string shurikenType)
+    {
+        switch (shurikenType)
+        {
+            case "flame":
+                return flameShurikenPrefab;
+            case "ilbe":
+            default:
+                return ilbeShurikenPrefab;
+        }
+    }
+
+    public void ReturnShurikenToPool(GameObject shuriken, string shurikenType)
+    {
+        shuriken.SetActive(false);
+        if (!shurikenPools.ContainsKey(shurikenType))
+        {
+            shurikenPools[shurikenType] = new Queue<GameObject>();
+        }
+        shurikenPools[shurikenType].Enqueue(shuriken);
     }
 
 }

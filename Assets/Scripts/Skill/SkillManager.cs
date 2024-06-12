@@ -22,11 +22,17 @@ public class SkillManager : MonoBehaviour
     private TextMeshProUGUI heistLevel;
     private TextMeshProUGUI flashJumpText;
     private TextMeshProUGUI flashJumpLevel;
+    private TextMeshProUGUI windBoosterText;
+    private TextMeshProUGUI windBoosterLevel;
+    private TextMeshProUGUI criticalShotText;
+    private TextMeshProUGUI criticalShotLevel;
 
 
     private Button luckySevenBtn;
     private Button heistBtn;
     private Button flashJumpBtn;
+    private Button windBoosterBtn;
+    private Button criticalShotBtn;
 
     private Sprite activityBtn;
     private Sprite deactivityBtn;
@@ -56,10 +62,14 @@ public class SkillManager : MonoBehaviour
         luckySevenBtn = GameObject.Find("Skill/SkillPanel/Lucky Seven/LuckySevenButton").GetComponentInChildren<Button>();
         heistBtn = GameObject.Find("Skill/SkillPanel/Heist/HeistButton").GetComponentInChildren<Button>();
         flashJumpBtn = GameObject.Find("Skill/SkillPanel/FlashJump/FlashJumpButton").GetComponentInChildren<Button>();
+        windBoosterBtn = GameObject.Find("Skill/SkillPanel/Wind Booster/WindBoosterButton").GetComponentInChildren<Button>();
+        criticalShotBtn = GameObject.Find("Skill/SkillPanel/Critical Shot/CriticalShotButton").GetComponentInChildren<Button>();
 
         luckySevenBtn.onClick.AddListener(OnLuckySevenButtonClick);
         heistBtn.onClick.AddListener(OnHeistButtonClick);
         flashJumpBtn.onClick.AddListener(OnFlashJumpButtonClick);
+        windBoosterBtn.onClick.AddListener(OnWindBoosterButtonClick);
+        criticalShotBtn.onClick.AddListener(OnCriticalShotButtonClick);
 
         skillPointText = GameObject.Find("Skill/SkillPanel/Skill Point Text").GetComponentInChildren<TextMeshProUGUI>();
         luckySevenText = GameObject.Find("Skill/SkillPanel/Lucky Seven/LuckySevenText").GetComponentInChildren<TextMeshProUGUI>();
@@ -68,6 +78,10 @@ public class SkillManager : MonoBehaviour
         heistLevel = GameObject.Find("Skill/SkillPanel/Heist/HeistLevel").GetComponentInChildren<TextMeshProUGUI>();
         flashJumpText = GameObject.Find("Skill/SkillPanel/FlashJump/FlashJumpText").GetComponentInChildren<TextMeshProUGUI>();
         flashJumpLevel = GameObject.Find("Skill/SkillPanel/FlashJump/FlashJumpLevel").GetComponentInChildren<TextMeshProUGUI>();
+        windBoosterText = GameObject.Find("Skill/SkillPanel/Wind Booster/WindBoosterText").GetComponentInChildren<TextMeshProUGUI>();
+        windBoosterLevel = GameObject.Find("Skill/SkillPanel/Wind Booster/WindBoosterLevel").GetComponentInChildren<TextMeshProUGUI>();
+        criticalShotText = GameObject.Find("Skill/SkillPanel/Critical Shot/CriticalShotText").GetComponentInChildren<TextMeshProUGUI>();
+        criticalShotLevel = GameObject.Find("Skill/SkillPanel/Critical Shot/CriticalShotLevel").GetComponentInChildren<TextMeshProUGUI>();
 
 
         UpdateSkillUI();
@@ -77,7 +91,6 @@ public class SkillManager : MonoBehaviour
         SkillUIPanel = GameObject.Find("SkillPanel");
         SkillUIPanel.SetActive(activeUI);
     }
-
 
     private void OnLuckySevenButtonClick()
     {
@@ -97,6 +110,18 @@ public class SkillManager : MonoBehaviour
         skillCollection.skills[2].skillLevel++;
         itemChanged = true;
     }
+    private void OnWindBoosterButtonClick()
+    {
+        skillCollection.skillPoint--;
+        skillCollection.skills[3].skillLevel++;
+        itemChanged = true;
+    }
+    private void OnCriticalShotButtonClick()
+    {
+        skillCollection.skillPoint--;
+        skillCollection.skills[4].skillLevel++;
+        itemChanged = true;
+    }
 
 
     private void Update()
@@ -107,16 +132,6 @@ public class SkillManager : MonoBehaviour
             SaveSkillData(skillCollection);
             UpdateSkillUI();
         }
-    }
-
-    private void AddSkill(string name, int level)
-    {
-        SkillData newSkill = new SkillData
-        {
-            skillName = name,
-            skillLevel = level
-        };
-        skillCollection.skills.Add(newSkill);
     }
 
     public void UpdateSkillUI()
@@ -144,6 +159,18 @@ public class SkillManager : MonoBehaviour
             flashJumpText.text = skillCollection.skills[2].skillName;
             flashJumpLevel.text = skillCollection.skills[2].skillLevel.ToString();
         }
+        if (windBoosterText != null && skillCollection.skills.Count > 0
+            && windBoosterLevel != null)
+        {
+            windBoosterText.text = skillCollection.skills[3].skillName;
+            windBoosterLevel.text = skillCollection.skills[3].skillLevel.ToString();
+        }
+        if (criticalShotText != null && skillCollection.skills.Count > 0
+            && criticalShotLevel != null)
+        {
+            criticalShotText.text = skillCollection.skills[4].skillName;
+            criticalShotLevel.text = skillCollection.skills[4].skillLevel.ToString();
+        }
 
         if (skillCollection.skillPoint <= 0)
         {
@@ -153,6 +180,10 @@ public class SkillManager : MonoBehaviour
             heistBtn.image.sprite = deactivityBtn;
             flashJumpBtn.interactable = false;
             flashJumpBtn.image.sprite = deactivityBtn;
+            windBoosterBtn.interactable = false;
+            windBoosterBtn.image.sprite = deactivityBtn;
+            criticalShotBtn.interactable = false;
+            criticalShotBtn.image.sprite = deactivityBtn;
         }
         else
         {
@@ -162,6 +193,10 @@ public class SkillManager : MonoBehaviour
             heistBtn.image.sprite = activityBtn;
             flashJumpBtn.interactable = true;
             flashJumpBtn.image.sprite = activityBtn;
+            windBoosterBtn.interactable = true;
+            windBoosterBtn.image.sprite = activityBtn;
+            criticalShotBtn.interactable = true;
+            criticalShotBtn.image.sprite = activityBtn;
         }
     }
 

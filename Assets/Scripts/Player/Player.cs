@@ -68,6 +68,12 @@ public class Player : MonoBehaviour
 
     private float hitTime;
 
+    public int currentSuriken = 6;
+
+    public bool luckySeven; // 럭키세븐 사용여부
+
+    public bool SecondSuriken;
+
     private void Awake()
     {
         if (instance == null)
@@ -297,8 +303,15 @@ public class Player : MonoBehaviour
         {
             toAttack = false;
 
-            if(quickSlot.ExistSuriken)
-            StartCoroutine(AttackSurken());
+            if (quickSlot.ExistSuriken && !luckySeven)
+            {
+                AttackSurken();
+            }
+            else if (quickSlot.ExistSuriken && luckySeven)
+            {
+                luckySeven = false;
+                StartCoroutine(LuckySeven());
+            }
 
             isAttacking = true;
             mAnimator.SetTrigger("IsAttack");
@@ -326,6 +339,7 @@ public class Player : MonoBehaviour
         //}
     }
 
+
     private void walk()
     {
         if (dir == 0) // To Walk
@@ -345,8 +359,15 @@ public class Player : MonoBehaviour
         {
             toAttack = false;
 
-            if (quickSlot.ExistSuriken)
-                StartCoroutine(AttackSurken());
+            if (quickSlot.ExistSuriken && !luckySeven)
+            {
+                AttackSurken();
+            }
+            else if (quickSlot.ExistSuriken && luckySeven)
+            {
+                luckySeven = false;
+                StartCoroutine(LuckySeven());
+            }
 
             isAttacking = true;
             mAnimator.SetTrigger("IsAttack");
@@ -376,8 +397,15 @@ public class Player : MonoBehaviour
         {
             toAttack = false;
 
-            if (quickSlot.ExistSuriken)
-                StartCoroutine(AttackSurken());
+            if (quickSlot.ExistSuriken && !luckySeven)
+            {
+                AttackSurken();
+            }
+            else if (quickSlot.ExistSuriken && luckySeven)
+            {
+                luckySeven = false;
+                StartCoroutine(LuckySeven());               
+            }
 
             isAttacking = true;
             mAnimator.SetTrigger("IsAttack");
@@ -404,13 +432,35 @@ public class Player : MonoBehaviour
             mPlayerState = PlayerState.Idle;
     }
 
-    private IEnumerator AttackSurken()
+    private IEnumerator LuckySeven()
+    {
+        AttackSurken();
+        yield return new WaitForSeconds(0.1f);
+        SecondAttackSuriken();
+    }
+
+    public void AttackSurken()
+    {
+        StartCoroutine(AttackSurikenCoroutine(currentSuriken));
+    }
+    private IEnumerator AttackSurikenCoroutine(int itemId)
     {
         yield return new WaitForSeconds(0.3f); // Wait for 1 second
-        GameObject suriken = surikenManager.GetSurikenFromPool(transform.position + Vector3.right * (GetComponent<SpriteRenderer>().flipX ? 4 : -4));
+        GameObject suriken = surikenManager.GetShurikenFromPool(itemId,transform.position + Vector3.right * (GetComponent<SpriteRenderer>().flipX ? 4 : -4));
         suriken.SetActive(true); // 수리검 활성화
     }
 
+    public void SecondAttackSuriken() // 럭키세븐을 쓰기 위한 코루틴 (SecondSuriken)
+    {
+        StartCoroutine(SecondSurikenCoroutine(currentSuriken));
+    }
+    private IEnumerator SecondSurikenCoroutine(int itemId)
+    {
+        yield return new WaitForSeconds(0.00001f);
+        GameObject suriken = surikenManager.GetShurikenFromPool(itemId, transform.position + Vector3.right * (GetComponent<SpriteRenderer>().flipX ? 4 : -4));
+        suriken.SetActive(true); // 수리검 활성화
+        SecondSuriken = true;
+    }
 
     private IEnumerator AttackCooldown()
     {

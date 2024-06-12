@@ -14,31 +14,11 @@ public class ShopKeeper : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (shop != null && !IsPointerOverUIObject())
+        if (shop != null)
         {
             shop.visibleShop = !shop.visibleShop;
             shop.shopParentPanel.SetActive(shop.visibleShop);
             shop.UpdateShopInventory();
         }
-    }
-
-    private bool IsPointerOverUIObject()
-    {
-        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current)
-        {
-            position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)
-        };
-
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-
-        foreach (RaycastResult result in results)
-        {
-            if (result.gameObject == shop.shopParentPanel)
-            {
-                return true;
-            }
-        }
-        return false;
     }
 }

@@ -13,6 +13,7 @@ using UnityEditor.Search;
 
 public class Inventory : MonoBehaviour
 {
+    private Player player;
     private QuickSlot quickSlot;
 
     public GameObject inventoryPanel;
@@ -62,6 +63,7 @@ public class Inventory : MonoBehaviour
             playerData = DataManager.instance.nowPlayer;
         }
 
+        player = GameObject.Find("Player").GetComponent<Player>();
         shop = GameObject.Find("Shop").GetComponent<Shop>();
         quickSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
 
@@ -286,6 +288,9 @@ public class Inventory : MonoBehaviour
                         img.color = tempColor;
                     }
                     // 표창이 인벤토리에 있는 경우 flag를 줌
+                    // 표창이 인벤토리에 있는 경우 flag를 줌
+
+                    player.currentSuriken = invItems.ID;
                     quickSlot.ExistSuriken = true;
                     break;
                 }

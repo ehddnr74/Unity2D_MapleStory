@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8317762076448606479}
   - component: {fileID: 4592397401923419489}
   m_Layer: 14
-  m_Name: Suriken
+  m_Name: IlbeSuriken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

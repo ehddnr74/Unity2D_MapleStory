@@ -17,7 +17,10 @@ public class RedSnailController : MonoBehaviour
         Die,
     }
 
+    private DamageTextManager damageTextManager;
+
     public RedSnailState mRedSnailState;
+
 
     Collider2D col;
     Rigidbody2D mRigidBody;
@@ -38,8 +41,25 @@ public class RedSnailController : MonoBehaviour
         mRigidBody = GetComponent<Rigidbody2D>();
         mAnimator = GetComponent<Animator>();
 
+        damageTextManager = FindObjectOfType<DamageTextManager>();
+
         mRedSnailState = RedSnailState.Stand;
         SetMoveDir();
+    }
+
+    public void TakeDamage(int damage, bool isCritical, bool secondSuriken)
+    {
+        if (!secondSuriken)
+        {
+            Vector3 displayPosition = transform.position + new Vector3(-1.5f, 3.0f, 0); // y축으로 1.0f 만큼 더 높게 설정
+            damageTextManager.ShowDamage(displayPosition, damage, isCritical); 
+        }
+        else
+        {
+            Vector3 secondPoisition = transform.position + new Vector3(-1.5f, 6.0f, 0); 
+            damageTextManager.ShowDamage(secondPoisition, damage, isCritical);
+        }
+        
     }
 
     private void Update()
