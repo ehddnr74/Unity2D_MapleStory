@@ -14,6 +14,7 @@ public class SkillManager : MonoBehaviour
     private string path;
     private string skillDataFilename = "Skill";  // 스킬 데이터 파일명
     public SkillCollection skillCollection;
+    private Player player;
 
     private TextMeshProUGUI skillPointText;
     private TextMeshProUGUI luckySevenText;
@@ -42,6 +43,24 @@ public class SkillManager : MonoBehaviour
 
     public bool itemChanged = false;
 
+    private float playerOriginCriticalProbability;
+
+    public static SkillManager instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+    }
+
     private void Start()
     {
         path = Application.persistentDataPath + "/";
@@ -53,6 +72,9 @@ public class SkillManager : MonoBehaviour
         {
             skillCollection = new SkillCollection();
         }
+
+        player = GameObject.Find("Player").GetComponent<Player>();
+        playerOriginCriticalProbability = player.criticalProbability;
 
         Sprite activityButton = Resources.Load<Sprite>("StatButton/ActivityButton");
         activityBtn = activityButton;
@@ -120,6 +142,7 @@ public class SkillManager : MonoBehaviour
     {
         skillCollection.skillPoint--;
         skillCollection.skills[4].skillLevel++;
+        DataManager.instance.SaveCriticalProbability(playerOriginCriticalProbability + skillCollection.skills[4].levelEffects[skillCollection.skills[4].skillLevel].criticalChanceIncrease);
         itemChanged = true;
     }
 
@@ -187,23 +210,65 @@ public class SkillManager : MonoBehaviour
         }
         else
         {
-            luckySevenBtn.interactable = true;
-            luckySevenBtn.image.sprite = activityBtn;
-            heistBtn.interactable = true;
-            heistBtn.image.sprite = activityBtn;
-            flashJumpBtn.interactable = true;
-            flashJumpBtn.image.sprite = activityBtn;
-            windBoosterBtn.interactable = true;
-            windBoosterBtn.image.sprite = activityBtn;
-            criticalShotBtn.interactable = true;
-            criticalShotBtn.image.sprite = activityBtn;
+            if (skillCollection.skills[0].skillLevel < 15) 
+            {
+                luckySevenBtn.interactable = true;
+                luckySevenBtn.image.sprite = activityBtn;
+            }
+            else
+            {
+                luckySevenBtn.interactable = false;
+                luckySevenBtn.image.sprite = deactivityBtn;
+            }
+
+            if (skillCollection.skills[1].skillLevel < 10)
+            {
+                heistBtn.interactable = true;
+                heistBtn.image.sprite = activityBtn;
+            }
+            else
+            {
+                heistBtn.interactable = false;
+                heistBtn.image.sprite = deactivityBtn;
+            }
+
+            if (skillCollection.skills[2].skillLevel < 1)
+            {
+                flashJumpBtn.interactable = true;
+                flashJumpBtn.image.sprite = activityBtn;
+            }
+            else
+            {
+                flashJumpBtn.interactable = false;
+                flashJumpBtn.image.sprite = deactivityBtn;
+            }
+            if (skillCollection.skills[3].skillLevel < 1)
+            {
+                windBoosterBtn.interactable = true;
+                windBoosterBtn.image.sprite = activityBtn;
+            }
+            else
+            {
+                windBoosterBtn.interactable = false;
+                windBoosterBtn.image.sprite = deactivityBtn;
+            }
+            if (skillCollection.skills[4].skillLevel < 20)
+            {
+                criticalShotBtn.interactable = true;
+                criticalShotBtn.image.sprite = activityBtn;
+            }
+            else
+            {
+                criticalShotBtn.interactable = false;
+                criticalShotBtn.image.sprite = deactivityBtn;
+            }
         }
     }
 
 
     public void SaveSkillData(SkillCollection skillCollection)
     {
-        string json = JsonUtility.ToJson(skillCollection, true);
+        string json = JsonConvert.SerializeObject(skillCollection, Formatting.Indented);
         File.WriteAllText(path + "Skill" + ".json", json);
     }
 
@@ -214,6 +279,7 @@ public class SkillManager : MonoBehaviour
         if (File.Exists(skillDataPath))
         {
             string skillDatajson = File.ReadAllText(skillDataPath);
+
             SkillCollection loadedData = JsonConvert.DeserializeObject<SkillCollection>(skillDatajson);
             return loadedData;
         }

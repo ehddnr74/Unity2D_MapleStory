@@ -46,7 +46,7 @@ public class ItemDataBase : MonoBehaviour
     {
         foreach (Item item in itemData.items)
         {
-            dataBase.Add(new Item(item.ID, item.Name, item.Type, item.Description, item.Price, item.SellPrice, item.IconPath, item.Stackable));
+            dataBase.Add(new Item(item.ID, item.Name, item.Type, item.Description, item.Price, item.SellPrice, item.IconPath,item.Stackable, item.ToolTipPath));
         }
     }
 }
@@ -64,11 +64,15 @@ public class Item
     public int SellPrice { get; set; }
     public string IconPath { get; set; }
 
+    public string ToolTipPath { get; set; }
+
+
 
     [JsonIgnore]
+    public Sprite ToolTip { get; set; }
     public Sprite Icon { get; set; }
     public bool Stackable { get; set; }
-    public Item(int id, string name, string type, string description, int price, int sellPrice, string iconPath, bool stackable)
+    public Item(int id, string name, string type, string description, int price, int sellPrice, string iconPath, bool stackable, string toolTipPath)
     {
         this.ID = id;
 
@@ -81,7 +85,9 @@ public class Item
         this.Icon = Resources.Load<Sprite>("Items/" + iconPath);
         this.IconPath = iconPath;
         this.Stackable = stackable;
-
+        this.ToolTip = Resources.Load<Sprite>("ToolTips/" + toolTipPath);
+        this.ToolTipPath = toolTipPath;
+        ToolTipPath = toolTipPath;
     }
 
     public Item()

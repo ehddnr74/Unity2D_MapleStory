@@ -71,4 +71,23 @@ public class DamageText : MonoBehaviour
             }
         }
     }
+
+    public void SetPlayerDamage(int damage, Sprite[] playerTakeDamageDigits)
+    {
+        string damageStr = damage.ToString();
+
+        // 이미지 배열 크기 조정 및 초기화
+        for (int i = 0; i < digitImages.Length; i++)
+        {
+            if (i < damageStr.Length)
+            {
+                digitImages[i].sprite = playerTakeDamageDigits[int.Parse(damageStr[i].ToString())];
+                digitImages[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                digitImages[i].gameObject.SetActive(false);
+            }
+        }
+    }
 }

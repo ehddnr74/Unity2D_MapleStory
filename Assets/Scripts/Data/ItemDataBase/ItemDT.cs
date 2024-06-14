@@ -4,19 +4,21 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler 
+public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public Item item;
     public int amount;
     public int slot;
 
     private Inventory inv;
+    private InventoryTooltip tooltip;
     private QuickSlot qSlot;
     private Vector2 offset;
 
     void Start()
     {
         inv = GameObject.Find("Inventory").GetComponent<Inventory>();
+        tooltip = inv.GetComponent<InventoryTooltip>();
         qSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
     }
 
@@ -67,6 +69,16 @@ public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         this.transform.SetParent(inv.slots[slot].transform); // 원래의 부모로 되돌림
         this.transform.position = inv.slots[slot].transform.position; // 원래의 위치로 이동  
         GetComponent<CanvasGroup>().blocksRaycasts = true;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        tooltip.Activate(item);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        tooltip.Deactivate();
     }
 }
 

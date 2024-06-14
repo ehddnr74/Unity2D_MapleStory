@@ -4,12 +4,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using static UnityEditor.Progress;
 
-public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private Vector2 offset;
     private Transform originalParent;
 
     private QuickSlot qSlot;
+
+    private SkillToolTip skillTooltip;
 
     public Sprite skillIcon;
     public string skillName;
@@ -17,6 +19,8 @@ public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
     void Start()
     {
         qSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
+        GameObject skill = GameObject.Find("Skill").gameObject;
+        skillTooltip = skill.GetComponent<SkillToolTip>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -67,5 +71,15 @@ public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
             this.transform.position = originalParent.position;
             GetComponent<CanvasGroup>().blocksRaycasts = true;
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        skillTooltip.Activate();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        skillTooltip.Deactivate();
     }
 }

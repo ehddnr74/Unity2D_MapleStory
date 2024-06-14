@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class StatManager : MonoBehaviour
 {
@@ -90,30 +91,38 @@ public class StatManager : MonoBehaviour
         playerData = pd;
         statData = sd;
 
+        statData.maxHp = pd.baseHPTable[pd.level];
+        statData.maxMp = pd.baseMPTable[pd.level];
+
         if (hpBar != null)
-            hpBar.value = (float)statData.hp / statData.maxHp;
+            hpBar.value = (float)statData.hp / pd.baseHPTable[pd.level];
 
         if (mpBar != null)
-            mpBar.value = (float)statData.mp / statData.maxMp;
+            mpBar.value = (float)statData.mp / pd.baseMPTable[pd.level];
         
         if(hpBarText != null)
-            hpBarText.text = $"{statData.hp} / {statData.maxHp}";
+            hpBarText.text = $"{statData.hp} / {pd.baseHPTable[pd.level]}";
 
         if (mpBarText != null)
-            mpBarText.text = $"{statData.mp} / {statData.maxMp}";
+            mpBarText.text = $"{statData.mp} / {pd.baseMPTable[pd.level]}";
 
         //UI ¶ç¿ì±â ÀÛ¾÷
         if (nameText != null)
             nameText.text = pd.name;
 
         if (hpText != null)
-            hpText.text = $"{sd.hp} / {sd.maxHp}";
+            hpText.text = $"{sd.hp} / {pd.baseHPTable[pd.level]}";
 
         if (mpText != null)
-            mpText.text = $"{sd.mp} / {sd.maxMp}";
+            mpText.text = $"{sd.mp} / {pd.baseMPTable[pd.level]}";
 
         if (attackPowerText != null)
+        {
+            sd.minAttackPower = (int)Math.Round(sd.luck * 2.3);
+            sd.maxAttackPower = (int)Math.Round(sd.luck * 3.6);   
             attackPowerText.text = $"{sd.minAttackPower} ~ {sd.maxAttackPower}";
+            DataManager.instance.SaveStat();
+        }
 
         if (strText != null)
             strText.text = sd.strength.ToString();
@@ -183,8 +192,8 @@ public class StatManager : MonoBehaviour
     {
         DataManager.instance.playerStat.AbilityPoint--;
         DataManager.instance.playerStat.luck++;
-        //DataManager.instance.playerStat.minAttackPower += 2;
-        //DataManager.instance.playerStat.maxAttackPower += 3;
+        DataManager.instance.playerStat.minAttackPower = (int)Math.Round(DataManager.instance.playerStat.luck * 2.3);
+        DataManager.instance.playerStat.maxAttackPower = (int)Math.Round(DataManager.instance.playerStat.luck * 3.6);
         UpdateStatUI(playerData, DataManager.instance.playerStat);
         DataManager.instance.SaveStat();
     }

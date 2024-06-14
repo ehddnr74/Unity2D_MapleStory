@@ -35,6 +35,11 @@ public class QuickSlot : MonoBehaviour
     // 슬롯과 키 매핑
     private Dictionary<KeyCode, int> keyToSlotMap = new Dictionary<KeyCode, int>();
 
+    private float playerOriginMoveSpeed;
+    private float playerOriginJumpForce;
+    private float playerOriginAttackSpeed;
+
+    private bool playerJumping; //더블점프를 위함
 
     private void Awake()
     {
@@ -55,6 +60,10 @@ public class QuickSlot : MonoBehaviour
         skillManager = FindObjectOfType<SkillManager>();
         statManager = FindObjectOfType<StatManager>();
         player = FindObjectOfType<Player>();
+
+        playerOriginMoveSpeed = player.moveSpeed;
+        playerOriginJumpForce = player.jumpForce;
+        playerOriginAttackSpeed = player.attackCoolDown;
 
         slotAmount = 32;
         quickSlotPanel = GameObject.Find("QuickSlotPanel");
@@ -358,20 +367,61 @@ public class QuickSlot : MonoBehaviour
             // 스킬 사용 로직 
             if (quickSlotDT.iconPath == "LuckySeven" && player.canAttack)
             {
-                player.toAttack = true;
-                player.luckySeven = true;
+                int level = skillManager.skillCollection.skills[0].skillLevel;
 
-                if (ExistSuriken)
-                    inv.UpdatesurikenAmountText(2); //표창 개수 1개 감소
+                if (level > 0 && DataManager.instance.GetMP() >= skillManager.skillCollection.skills[0].levelEffects[level].mpReduction)
+                {
+                    DataManager.instance.RemoveMP(skillManager.skillCollection.skills[0].levelEffects[level].mpReduction);
+
+                    if (!player.doubleJumping)
+                    {
+                        player.toAttack = true;
+                        player.luckySeven = true;
+                    }
+
+                    if (ExistSuriken)
+                    {
+                        inv.UpdatesurikenAmountText(2);// 표창 개수 감소 (인자 = 감소시킬 수량)   
+                    }
+                }
             }
 
             if (quickSlotDT.iconPath == "Heist")
             {
-                Debug.Log("Use Heist");
+                int level = skillManager.skillCollection.skills[1].skillLevel;
+
+                if (level > 0)
+                {
+                    player.moveSpeed = playerOriginMoveSpeed + skillManager.skillCollection.skills[1].levelEffects[level].speedIncrease;
+                    player.jumpForce = playerOriginJumpForce + skillManager.skillCollection.skills[1].levelEffects[level].jumpDistanceIncrease;
+                }
+            }
+
+            if (quickSlotDT.iconPath == "FlashJump" && !player.isGround) 
+            {
+                int level = skillManager.skillCollection.skills[2].skillLevel;
+                if (level > 0 && DataManager.instance.GetMP() >= skillManager.skillCollection.skills[2].levelEffects[level].mpReduction)
+                {
+                    DataManager.instance.RemoveMP(skillManager.skillCollection.skills[2].levelEffects[level].mpReduction);
+                    player.canDoubleJump = true;
+                }
+            }
+
+            if (quickSlotDT.iconPath == "WindBooster")
+            {
+                int level = skillManager.skillCollection.skills[3].skillLevel;
+
+                if (level > 0 && DataManager.instance.GetMP() >= skillManager.skillCollection.skills[3].levelEffects[level].mpReduction
+                    && level > 0 && DataManager.instance.GetHP() >= skillManager.skillCollection.skills[3].levelEffects[level].mpReduction)
+                {
+                    DataManager.instance.RemoveHP(skillManager.skillCollection.skills[3].levelEffects[level].mpReduction);
+                    DataManager.instance.RemoveMP(skillManager.skillCollection.skills[3].levelEffects[level].mpReduction);
+                    player.attackCoolDown = playerOriginAttackSpeed / skillManager.skillCollection.skills[3].levelEffects[level].attackSpeedIncrease;
+                }
             }
 
             // 퀵슬롯 인벤토리,스탯창 등 Icon 사용 로직
-            if(quickSlotDT.iconPath == "Key.Item")
+            if (quickSlotDT.iconPath == "Key.Item")
             {
                 inv.activeInventory = !inv.activeInventory;
                 inv.inventoryPanel.SetActive(inv.activeInventory);
@@ -386,12 +436,27 @@ public class QuickSlot : MonoBehaviour
                 skillManager.activeUI = !skillManager.activeUI;
                 skillManager.SkillUIPanel.SetActive(skillManager.activeUI);
             }
-            if (quickSlotDT.iconPath == "Key.Jump" && player.isGround)
+            if (!player.isAttacking && quickSlotDT.iconPath == "Key.Jump" && player.isGround)
             {
+                playerJumping = true;
                 player.toJump = true;
             }
+            if(playerJumping && !player.isGround && quickSlotDT.iconPath == "Key.Jump")
+            {
+                int level = skillManager.skillCollection.skills[2].skillLevel;
+                if (level > 0 && DataManager.instance.GetMP() >= skillManager.skillCollection.skills[2].levelEffects[level].mpReduction)
+                {
+                    DataManager.instance.RemoveMP(skillManager.skillCollection.skills[2].levelEffects[level].mpReduction);
+
+                    player.doubleJumping = true;
+                    player.canDoubleJump = true;
+                    playerJumping = false;
+                }
+            }
+
             if (quickSlotDT.iconPath == "Key.Attack" && player.canAttack )
             { 
+                if(!player.doubleJumping)
                 player.toAttack = true;
 
                 if(ExistSuriken)

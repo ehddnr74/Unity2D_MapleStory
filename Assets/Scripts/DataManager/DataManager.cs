@@ -80,7 +80,10 @@ public class DataManager : MonoBehaviour
     public void LoadData()
     {
         string fullPath = path + filename + ".json";
+        string HpLevelPath = path + "BaseHpTable.json";
+        string MpLevelPath = path + "BaseMpTable.json";
         string levelExperiencePath = path + "ExperienceTable.json";
+
 
         if (File.Exists(fullPath))
         {
@@ -96,12 +99,30 @@ public class DataManager : MonoBehaviour
         {
             string levelExperienceJson = File.ReadAllText(levelExperiencePath);
             nowPlayer.experienceTable = JsonConvert.DeserializeObject<Dictionary<int, int>>(levelExperienceJson);
-
-            //nowPlayer.experienceTable = JsonUtility.FromJson<Dictionary<int, int>>(levelExperienceJson);
         }
         else
         {
             Debug.LogWarning("Level experience data file not found");
+        }
+
+        if (File.Exists(HpLevelPath))
+        {
+            string HpLevelJson = File.ReadAllText(HpLevelPath);
+            nowPlayer.baseHPTable = JsonConvert.DeserializeObject<Dictionary<int, int>>(HpLevelJson);
+        }
+        else
+        {
+            Debug.LogWarning("Level baseHPTable data file not found");
+        }
+
+        if (File.Exists(MpLevelPath))
+        {
+            string MpLevelJson = File.ReadAllText(MpLevelPath);
+            nowPlayer.baseMPTable = JsonConvert.DeserializeObject<Dictionary<int, int>>(MpLevelJson);
+        }
+        else
+        {
+            Debug.LogWarning("Level baseHPTable data file not found");
         }
     }
 
@@ -126,6 +147,12 @@ public class DataManager : MonoBehaviour
             itemData = JsonConvert.DeserializeObject<ItemData>(itemDataJson);
             Debug.Log("Item data loaded successfully");
         }
+    }
+
+    public void SaveCriticalProbability(float criticalProbability)
+    {
+        nowPlayer.criticalProbability = criticalProbability;
+        SaveData();
     }
 
     public void AddExperience(int amount)
@@ -212,10 +239,6 @@ public class DataManager : MonoBehaviour
         playerStat.AbilityPoint += 5;
         playerStat.hp = playerStat.maxHp;
         playerStat.mp = playerStat.maxMp;
-        //playerStat.maxHp += 50;
-        //playerStat.hp = playerStat.maxHp;
-        //playerStat.maxMp += 50;
-        //playerStat.mp = playerStat.maxMp;
 
         statManager.UpdateStatUI(nowPlayer, playerStat);
         SaveStat();
@@ -253,6 +276,15 @@ public class DataManager : MonoBehaviour
 
         if (playerStat.mp <= 0)
             playerStat.mp = 0;
+    }
+
+    public int GetHP()
+    {
+        return playerStat.hp;
+    }
+    public int GetMP()
+    {
+        return playerStat.mp;
     }
 
     private void Update()

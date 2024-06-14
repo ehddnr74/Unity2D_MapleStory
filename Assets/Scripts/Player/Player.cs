@@ -8,6 +8,7 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class Player : MonoBehaviour
 {
     private static Player instance;
+    private DamageTextManager damageTextManager;
 
     public GameObject surikenManagerObject;
     private ShurikenManager surikenManager;
@@ -34,9 +35,10 @@ public class Player : MonoBehaviour
     Animator mAnimator;
 
     public float dir;
-    public float moveSpeed = 3f;
+    public float moveSpeed = 10f;
     public float ladderMoveSpeed = 4f;
-    public float jumpForce = 7f;
+    public float jumpForce = 25f;
+    public float criticalProbability = 0f; //크리티컬 확률
     public bool isGround;
     private Ladder currentLadder;
     public bool isLadder;
@@ -45,7 +47,7 @@ public class Player : MonoBehaviour
 
     float AttackTime = 0f;
     float JumpAttackTime = 0f;
-    bool isAttacking;
+    public bool isAttacking;
 
     float proneAttackTime = 0f;
     bool proneAttack = true;
@@ -54,7 +56,7 @@ public class Player : MonoBehaviour
     private float fallThroughDuration = 0.2f; // 내려가는 동안 충돌 비활성화 시간
 
     public bool canAttack = true;
-    private float attackCoolDown = 0.6f;
+    public float attackCoolDown = 0.6f;
 
     public bool flipX = false;
 
@@ -66,6 +68,14 @@ public class Player : MonoBehaviour
     public bool toJump;
     public bool toAttack;
 
+
+    public bool canDoubleJump; // 더블 점프 가능 여부 저장 변수
+    public float doubleJumpForce = 5f;
+    public float jumpTime;
+
+    public bool doubleJumping;
+
+
     private float hitTime;
 
     public int currentSuriken = 6;
@@ -73,6 +83,9 @@ public class Player : MonoBehaviour
     public bool luckySeven; // 럭키세븐 사용여부
 
     public bool SecondSuriken;
+
+
+
 
     private void Awake()
     {
@@ -97,6 +110,7 @@ public class Player : MonoBehaviour
         feetScript = GetComponentInChildren<FeetScript>();
         surikenManager = surikenManagerObject.GetComponent<ShurikenManager>();
         quickSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
+        damageTextManager = FindObjectOfType<DamageTextManager>();
         //feetCollider = transform.Find("FeetCollider").GetComponent<Collider2D>(); // 발 콜라이더를 찾음
     }
 
@@ -151,7 +165,6 @@ public class Player : MonoBehaviour
             AttackTime += Time.deltaTime;
         }
     }
-
     private void FixedUpdate()
     {
         if (mPlayerState == PlayerState.Ladder)
@@ -237,6 +250,9 @@ public class Player : MonoBehaviour
 
         if (!invincibel && collision.gameObject.CompareTag("Enemy"))
         {
+            int damageAmount = CalculateDamageFromEnemy(collision.gameObject); // 적으로부터 입는 데미지 계산
+            ShowPlayerDamage(damageAmount, collision.transform.position); // 데미지 텍스트 표시
+
             mPlayerState = PlayerState.Hit;
             mAnimator.SetBool("IsHitting",true);
             invincibel = true;
@@ -305,7 +321,7 @@ public class Player : MonoBehaviour
 
             if (quickSlot.ExistSuriken && !luckySeven)
             {
-                AttackSurken();
+                NormalAttack();
             }
             else if (quickSlot.ExistSuriken && luckySeven)
             {
@@ -361,7 +377,7 @@ public class Player : MonoBehaviour
 
             if (quickSlot.ExistSuriken && !luckySeven)
             {
-                AttackSurken();
+                NormalAttack();
             }
             else if (quickSlot.ExistSuriken && luckySeven)
             {
@@ -388,10 +404,29 @@ public class Player : MonoBehaviour
             mAnimator.SetBool("IsJumping", false);
 
             JumpAttackTime = 0f;
+            //jumpTime = 0f;
 
             toJump = false;
+            doubleJumping = false;
         }
-        
+
+        //jumpTime += Time.deltaTime;
+
+        if (!isGround && canDoubleJump)
+        {
+            float doubleJumpVelocityX = 25f;
+            float currentYVelocity = mRigidBody.velocity.y;
+            float adjustedDoubleJumpForce = doubleJumpForce;
+            float doubleJumpFallMultiplier = 1.2f; // 더블 점프 시 하강 속도 배율
+
+            if (currentYVelocity < 0)
+            {
+                adjustedDoubleJumpForce += currentYVelocity * doubleJumpFallMultiplier; // 필요에 따라 값을 조정하세요
+            }
+            canDoubleJump = false;
+            mRigidBody.velocity = new Vector2(dir * doubleJumpVelocityX, adjustedDoubleJumpForce);
+        }
+
 
         if (JumpAttackTime < 0.15f && toAttack) // To Attack
         {
@@ -399,13 +434,14 @@ public class Player : MonoBehaviour
 
             if (quickSlot.ExistSuriken && !luckySeven)
             {
-                AttackSurken();
+                NormalAttack();
             }
             else if (quickSlot.ExistSuriken && luckySeven)
             {
                 luckySeven = false;
                 StartCoroutine(LuckySeven());               
             }
+
 
             isAttacking = true;
             mAnimator.SetTrigger("IsAttack");
@@ -439,6 +475,18 @@ public class Player : MonoBehaviour
         SecondAttackSuriken();
     }
 
+    public void NormalAttack()
+    {
+        StartCoroutine(NormalAttackSurikenCoroutine(currentSuriken));
+    }
+
+    private IEnumerator NormalAttackSurikenCoroutine(int itemId)
+    {
+        yield return new WaitForSeconds(0.3f); // Wait for 1 second
+        GameObject suriken = surikenManager.GetShurikenFromPool(itemId, transform.position + Vector3.right * (GetComponent<SpriteRenderer>().flipX ? 4 : -4));
+        suriken.SetActive(true); // 수리검 활성화
+    }
+
     public void AttackSurken()
     {
         StartCoroutine(AttackSurikenCoroutine(currentSuriken));
@@ -448,6 +496,8 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.3f); // Wait for 1 second
         GameObject suriken = surikenManager.GetShurikenFromPool(itemId,transform.position + Vector3.right * (GetComponent<SpriteRenderer>().flipX ? 4 : -4));
         suriken.SetActive(true); // 수리검 활성화
+        Shuriken shurikenScript = suriken.GetComponent<Shuriken>();
+        shurikenScript.luckySeven = true;
     }
 
     public void SecondAttackSuriken() // 럭키세븐을 쓰기 위한 코루틴 (SecondSuriken)
@@ -459,7 +509,9 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.00001f);
         GameObject suriken = surikenManager.GetShurikenFromPool(itemId, transform.position + Vector3.right * (GetComponent<SpriteRenderer>().flipX ? 4 : -4));
         suriken.SetActive(true); // 수리검 활성화
-        SecondSuriken = true;
+        Shuriken shurikenScript = suriken.GetComponent<Shuriken>();
+        shurikenScript.luckySeven = true;
+        shurikenScript.secondSuriken = true;
     }
 
     private IEnumerator AttackCooldown()
@@ -562,6 +614,20 @@ public class Player : MonoBehaviour
         isLaddering = false;
         mAnimator.SetBool("IsLadder", false);
         mPlayerState = PlayerState.Idle;
+    }
+
+    private void ShowPlayerDamage(int damageAmount, Vector3 enemyPosition)
+    {
+        // 플레이어의 현재 위치에 데미지 텍스트 표시
+        Vector3 damageTextPosition = transform.position + new Vector3(-1f, 4.2f, 0); // 플레이어 위에 텍스트 표시
+        damageTextManager.ShowPlayerDamage(damageTextPosition, damageAmount);
+
+        DataManager.instance.RemoveHP(damageAmount);
+    }
+
+    private int CalculateDamageFromEnemy(GameObject enemy)
+    {
+        return UnityEngine.Random.Range(10,99);
     }
 
     // Get Set

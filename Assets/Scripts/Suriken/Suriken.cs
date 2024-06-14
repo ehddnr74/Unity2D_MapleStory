@@ -10,7 +10,11 @@ public class Shuriken : MonoBehaviour
     public Player player;
     public ShurikenManager shurikenManager;
 
+    public bool luckySeven;
+
     public bool secondSuriken;
+
+    public float criticalProbability;
 
     public float speed = 10f;
     public float lifetime = 0.5f; // 수리검이 발사된 후 풀에 반환되기까지의 시간
@@ -21,13 +25,15 @@ public class Shuriken : MonoBehaviour
     private Transform target; // 추적할 몬스터의 위치
     public float trackingRange; // 추적 범위
 
+    private bool isCriticalHit; //크리티컬 여부 
+
     private void OnEnable()
     {
         player = FindObjectOfType<Player>();
-        secondSuriken = player.SecondSuriken;
         shurikenManager = FindObjectOfType<ShurikenManager>();
 
         direction = player.flipX;
+
         // 표창 발사 시 범위 내 적 감지
         CheckForEnemiesInRange();
 
@@ -105,33 +111,92 @@ public class Shuriken : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
+            criticalProbability = DataManager.instance.nowPlayer.criticalProbability;
+            bool isCritical = CheckForCriticalHit(); // 예: 크리티컬 히트를 확인하는 함수
             // 데미지 계산 로직 추가
             int damage = CalculateDamage(); // 예: 데미지를 계산하는 함수
-            bool isCritical = CheckForCriticalHit(); // 예: 크리티컬 히트를 확인하는 함수
 
             // 충돌한 객체가 RedSnailController를 가지고 있는지 확인하고 데미지를 줍니다.
             RedSnailController enemy = collision.GetComponent<RedSnailController>();
             if (enemy != null)
             {
-                enemy.TakeDamage(damage, isCritical, secondSuriken);
+                if (!secondSuriken)
+                {
+                    Vector3 displayPosition = collision.transform.position + new Vector3(-1.5f, 3.0f, 0);
+                    enemy.TakeDamage(displayPosition, damage, isCritical, luckySeven, secondSuriken);
+                }
+                else
+                {
+                    Vector3 secondPoisition = collision.transform.position + new Vector3(-1.5f, 6.0f, 0);
+                    enemy.TakeDamage(secondPoisition, damage, isCritical, luckySeven, secondSuriken);
+                }
+                Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
+
+                if (luckySeven)
+                    luckySeven = false;
                 if (secondSuriken)
-                    player.SecondSuriken = false;
+                    secondSuriken = false;
+
+                Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
             }
             // 수리검을 풀에 반환
             shurikenManager.ReturnShurikenToPool(gameObject, shurikenType);
+            Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
         }
     }
 
     private int CalculateDamage()
     {
-        // 데미지 계산 로직 (임시로 10으로 설정)
-        return Random.Range(1, 1000);
+        if (luckySeven)
+        {
+            if (isCriticalHit)
+            {
+                int minAttack = (int)(DataManager.instance.playerStat.minAttackPower * 1.5f);
+                int maxAttack = (int)(DataManager.instance.playerStat.maxAttackPower * 1.5f);
+                int skillLevel = SkillManager.instance.skillCollection.skills[0].skillLevel;
+
+                float PerDamage = SkillManager.instance.skillCollection.skills[0].levelEffects[skillLevel].damageIncrease;
+
+                int MinDamage = (int)(minAttack * PerDamage);
+                int MaxDamage = (int)(maxAttack * PerDamage);
+
+                return Random.Range(MinDamage * 2, MaxDamage * 2);
+            }
+            else
+            {
+                int minAttack = (int)(DataManager.instance.playerStat.minAttackPower * 1.5f);
+                int maxAttack = (int)(DataManager.instance.playerStat.maxAttackPower * 1.5f);
+                int skillLevel = SkillManager.instance.skillCollection.skills[0].skillLevel;
+
+                float PerDamage = SkillManager.instance.skillCollection.skills[0].levelEffects[skillLevel].damageIncrease;
+
+                int MinDamage = (int)(minAttack * PerDamage);
+                int MaxDamage = (int)(maxAttack * PerDamage);
+
+                return Random.Range(MinDamage, MaxDamage);
+            }
+        }
+        else
+        {
+            if (isCriticalHit)
+            {
+                int minAttack = (int)(DataManager.instance.playerStat.minAttackPower * 1.5f);
+                int maxAttack = (int)(DataManager.instance.playerStat.maxAttackPower * 1.5f);
+                return Random.Range(minAttack * 2, maxAttack * 2);
+            }
+            else
+            {
+                int minAttack = (int)(DataManager.instance.playerStat.minAttackPower * 1.5f);
+                int maxAttack = (int)(DataManager.instance.playerStat.maxAttackPower * 1.5f);
+                return Random.Range(minAttack, maxAttack);
+            }
+        }
     }
 
     private bool CheckForCriticalHit()
     {
-        // 크리티컬 히트 확인 로직 (임시로 20% 확률로 크리티컬 히트)
-        return Random.value < 0.2f;
+        isCriticalHit = Random.value < DataManager.instance.nowPlayer.criticalProbability / 100;
+        return isCriticalHit;
     }
 
     private void OnDrawGizmos()

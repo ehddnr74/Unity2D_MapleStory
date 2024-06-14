@@ -125,6 +125,7 @@ MonoBehaviour:
   moveTime: 3
   idleTime: 1
   moveSpeed: 3
+  maxHealth: 500
 --- !u!50 &3117988261446164208
 Rigidbody2D:
   serializedVersion: 4

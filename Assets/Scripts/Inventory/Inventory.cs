@@ -242,8 +242,23 @@ public class Inventory : MonoBehaviour
     public void UpdatesurikenAmountText(int amount) // 퀵슬롯의 공격 아이콘에 맵핑된 Key를 누를 시 호출
     {
         ItemDT itemDT = slots[currentSurikenSlot].GetComponentInChildren<ItemDT>();
-        itemDT.amount -= amount;
-        itemDT.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = itemDT.amount.ToString();
+        if (itemDT.amount > 2)
+        {
+            itemDT.amount -= amount;
+            itemDT.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = itemDT.amount.ToString();
+        }
+         else // UpdateSurikenEffect()함수를 실행시켜 currentSurikenSlot을 업데이트
+        {
+            int remainingAmount = amount - 1;
+            itemDT.amount--;
+            itemDT.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = itemDT.amount.ToString();
+            SaveInventory();
+            UpdateSurikenEffect();
+            ItemDT NewitemDT = slots[currentSurikenSlot].GetComponentInChildren<ItemDT>();
+            NewitemDT.amount -= remainingAmount;
+            NewitemDT.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = NewitemDT.amount.ToString();
+        }
+
 
         itemsChanged = true;
     }
@@ -274,7 +289,7 @@ public class Inventory : MonoBehaviour
             {
                 if (invItems.ID == 6 || invItems.ID == 7) //표창
                 {
-                    if(invItems.amount <=1) // 표창 개수가 1이하면 다음 인벤토리의 표창으로 사용
+                    if(invItems.amount <= 1) // 표창 개수가 1이하면 다음 인벤토리의 표창으로 사용
                         continue;
                     
                     Slot invSlot = slots[invItems.slotnum].GetComponent<Slot>();

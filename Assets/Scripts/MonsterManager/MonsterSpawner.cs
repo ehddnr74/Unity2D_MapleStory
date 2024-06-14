@@ -24,7 +24,6 @@ public class MonsterSpawner : MonoBehaviour
 
     void SpawnMonster(Transform spawnPoint)
     {
-
         if (currentMonsterCount >= maxMonsters)
         {
             return; // 최대 마리수에 도달하면 스폰하지 않음
@@ -35,14 +34,27 @@ public class MonsterSpawner : MonoBehaviour
         if (monster != null)
         {
             monster.transform.position = spawnPoint.position; // 선택된 스폰 포인트에 위치 설정
+            monster.SetActive(true); // 몬스터 활성화
             currentMonsterCount++;
         }
     }
 
-    void DespawnMonster(GameObject monster)
+    public void DespawnMonster(GameObject monster)
     {
         monsterManager.ReturnMonsterToPool(monster, someMonsterPrefab);
         currentMonsterCount--;
+
+        // 일정 시간 후 다시 스폰
+        StartCoroutine(RespawnAfterDelay(monster, 5f)); // 5초 후 다시 스폰
+    }
+
+    private IEnumerator RespawnAfterDelay(GameObject monster, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // 스폰 위치를 무작위로 선택
+        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+        SpawnMonster(spawnPoint);
     }
 }
 
