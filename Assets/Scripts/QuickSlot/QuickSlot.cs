@@ -35,11 +35,13 @@ public class QuickSlot : MonoBehaviour
     // 슬롯과 키 매핑
     private Dictionary<KeyCode, int> keyToSlotMap = new Dictionary<KeyCode, int>();
 
-    private float playerOriginMoveSpeed;
-    private float playerOriginJumpForce;
-    private float playerOriginAttackSpeed;
+    public float playerOriginMoveSpeed;
+    public float playerOriginJumpForce;
+    public float playerOriginAttackSpeed;
 
     private bool playerJumping; //더블점프를 위함
+
+    public BuffManager buffManager;
 
     private void Awake()
     {
@@ -60,6 +62,8 @@ public class QuickSlot : MonoBehaviour
         skillManager = FindObjectOfType<SkillManager>();
         statManager = FindObjectOfType<StatManager>();
         player = FindObjectOfType<Player>();
+
+        buffManager = FindObjectOfType<BuffManager>(); // BuffManager 인스턴스 찾기
 
         playerOriginMoveSpeed = player.moveSpeed;
         playerOriginJumpForce = player.jumpForce;
@@ -305,63 +309,69 @@ public class QuickSlot : MonoBehaviour
             // 아이템 사용 로직 
             if(quickSlotDT.iconPath == "Red Potion")
             {
-                Item redPotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
-                DataManager.instance.AddHP(50);
-                inv.RemoveItem(redPotion.ID);
-                RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
-
-                Debug.Log("Use Red Potion");
+                if (quickSlotDT.itemAmount > 0)
+                {
+                    Item redPotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
+                    DataManager.instance.AddHP(50);
+                    inv.RemoveItem(redPotion.ID);
+                    RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
+                }
 
             }
 
             if (quickSlotDT.iconPath == "Orange Potion")
             {
-                Item orangePotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
-                DataManager.instance.AddHP(150);
-                inv.RemoveItem(orangePotion.ID);
-                RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
-
-                Debug.Log("Use Orange Potion");
+                if (quickSlotDT.itemAmount > 0)
+                {
+                    Item orangePotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
+                    DataManager.instance.AddHP(150);
+                    inv.RemoveItem(orangePotion.ID);
+                    RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
+                }
             }
 
             if (quickSlotDT.iconPath == "White Potion")
             {
-                Item whitePotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
-                DataManager.instance.AddHP(300);
-                inv.RemoveItem(whitePotion.ID);
-                RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
-
-                Debug.Log("Use White Potion Potion");
+                if (quickSlotDT.itemAmount > 0)
+                {
+                    Item whitePotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
+                    DataManager.instance.AddHP(300);
+                    inv.RemoveItem(whitePotion.ID);
+                    RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
+                }
             }
 
             if (quickSlotDT.iconPath == "Mana Elixir")
             {
-                Item manaElixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
-                DataManager.instance.AddMP(300);
-                inv.RemoveItem(manaElixir.ID);
-                RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
-
-                Debug.Log("Use Mana Elixir Potion");
+                if (quickSlotDT.itemAmount > 0)
+                {
+                    Item manaElixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
+                    DataManager.instance.AddMP(300);
+                    inv.RemoveItem(manaElixir.ID);
+                    RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
+                }
             }
 
             if (quickSlotDT.iconPath == "Elixir")
             {
-                Item elixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
-                DataManager.instance.UseElixer();
-                inv.RemoveItem(elixir.ID);
-                RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
-
-                Debug.Log("Use Elixir");
+                if (quickSlotDT.itemAmount > 0)
+                {
+                    Item elixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
+                    DataManager.instance.UseElixer();
+                    inv.RemoveItem(elixir.ID);
+                    RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
+                }
             }
 
             if (quickSlotDT.iconPath == "Power Elixir")
             {
-                Item powerElixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
-                DataManager.instance.UsePowerElixer();
-                inv.RemoveItem(powerElixir.ID);
-                RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
-
-                Debug.Log("Use Power Elixir");
+                if (quickSlotDT.itemAmount > 0)
+                {
+                    Item powerElixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
+                    DataManager.instance.UsePowerElixer();
+                    inv.RemoveItem(powerElixir.ID);
+                    RemoveQuicktSlotItem(quickSlotDT.iconPath, slotIndex, 1);
+                }
             }
 
             // 스킬 사용 로직 
@@ -394,6 +404,9 @@ public class QuickSlot : MonoBehaviour
                 {
                     player.moveSpeed = playerOriginMoveSpeed + skillManager.skillCollection.skills[1].levelEffects[level].speedIncrease;
                     player.jumpForce = playerOriginJumpForce + skillManager.skillCollection.skills[1].levelEffects[level].jumpDistanceIncrease;
+
+                    // 버프 활성화
+                    buffManager.ActivateBuff("Heist", quickSlotDT.itemIcon, skillManager.skillCollection.skills[1].levelEffects[level].duration);
                 }
             }
 
@@ -417,6 +430,9 @@ public class QuickSlot : MonoBehaviour
                     DataManager.instance.RemoveHP(skillManager.skillCollection.skills[3].levelEffects[level].mpReduction);
                     DataManager.instance.RemoveMP(skillManager.skillCollection.skills[3].levelEffects[level].mpReduction);
                     player.attackCoolDown = playerOriginAttackSpeed / skillManager.skillCollection.skills[3].levelEffects[level].attackSpeedIncrease;
+
+                    // 버프 활성화
+                    buffManager.ActivateBuff("WindBooster", quickSlotDT.itemIcon, skillManager.skillCollection.skills[3].levelEffects[level].duration);
                 }
             }
 

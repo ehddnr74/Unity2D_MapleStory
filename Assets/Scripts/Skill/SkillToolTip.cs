@@ -11,6 +11,8 @@ public class SkillToolTip : MonoBehaviour
 
     private SkillManager skillManager;
 
+    private Sprite toolTipIcon;
+
     private void Start()
     {
         skillTooltip = GameObject.Find("SkillToolTip");
@@ -33,9 +35,10 @@ public class SkillToolTip : MonoBehaviour
         }
 
     }
-    public void Activate()
+    public void Activate(string toolTipPath)
     {
-        //skillImage.sprite = skill.ToolTip;
+        toolTipIcon = Resources.Load<Sprite>("ToolTips/" + toolTipPath);
+        skillImage.sprite = toolTipIcon;
         skillTooltip.SetActive(true);
     }
 

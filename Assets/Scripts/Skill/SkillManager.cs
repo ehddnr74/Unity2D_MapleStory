@@ -35,6 +35,8 @@ public class SkillManager : MonoBehaviour
     private Button windBoosterBtn;
     private Button criticalShotBtn;
 
+    private Image luckySevenImage;
+
     private Sprite activityBtn;
     private Sprite deactivityBtn;
 
@@ -46,6 +48,13 @@ public class SkillManager : MonoBehaviour
     private float playerOriginCriticalProbability;
 
     public static SkillManager instance;
+
+    SkillDT luckySevenSkillDT;
+    SkillDT HeistSkillDT;
+    SkillDT flashJumpDT;
+    SkillDT windBoosterDT;
+    SkillDT criticalShotDT;
+
 
     private void Awake()
     {
@@ -104,6 +113,12 @@ public class SkillManager : MonoBehaviour
         windBoosterLevel = GameObject.Find("Skill/SkillPanel/Wind Booster/WindBoosterLevel").GetComponentInChildren<TextMeshProUGUI>();
         criticalShotText = GameObject.Find("Skill/SkillPanel/Critical Shot/CriticalShotText").GetComponentInChildren<TextMeshProUGUI>();
         criticalShotLevel = GameObject.Find("Skill/SkillPanel/Critical Shot/CriticalShotLevel").GetComponentInChildren<TextMeshProUGUI>();
+
+        luckySevenSkillDT = GameObject.Find("Skill/SkillPanel/Lucky Seven/LuckySevenImage").GetComponent<SkillDT>();
+        HeistSkillDT = GameObject.Find("Skill/SkillPanel/Heist/HeistImage").GetComponent<SkillDT>();
+        flashJumpDT = GameObject.Find("Skill/SkillPanel/FlashJump/FlashJumpImage").GetComponent<SkillDT>();
+        windBoosterDT = GameObject.Find("Skill/SkillPanel/Wind Booster/WindBoosterImage").GetComponent<SkillDT>();
+        criticalShotDT = GameObject.Find("Skill/SkillPanel/Critical Shot/CriticalShotImage").GetComponent<SkillDT>();
 
 
         UpdateSkillUI();
@@ -168,12 +183,29 @@ public class SkillManager : MonoBehaviour
         {
             luckySevenText.text = skillCollection.skills[0].skillName;
             luckySevenLevel.text = skillCollection.skills[0].skillLevel.ToString();
+            if (skillCollection.skills[0].skillLevel > 0)
+            {   
+                if (luckySevenSkillDT != null)
+                {
+                    luckySevenSkillDT.skillLevel = skillCollection.skills[0].skillLevel;
+                    luckySevenSkillDT.skillToolTipPath = skillCollection.skills[0].levelEffects[skillCollection.skills[0].skillLevel].toolTipPath;
+                }
+            }
+
         }
         if (heistText != null && skillCollection.skills.Count > 0
             && heistLevel != null)
         {
             heistText.text = skillCollection.skills[1].skillName;
             heistLevel.text = skillCollection.skills[1].skillLevel.ToString();
+            if (skillCollection.skills[1].skillLevel > 0)
+            {
+                if (HeistSkillDT != null)
+                {
+                    HeistSkillDT.skillLevel = skillCollection.skills[1].skillLevel;
+                    HeistSkillDT.skillToolTipPath = skillCollection.skills[1].levelEffects[skillCollection.skills[1].skillLevel].toolTipPath;
+                }
+            }
         }
 
         if (flashJumpText != null && skillCollection.skills.Count > 0
@@ -181,18 +213,42 @@ public class SkillManager : MonoBehaviour
         {
             flashJumpText.text = skillCollection.skills[2].skillName;
             flashJumpLevel.text = skillCollection.skills[2].skillLevel.ToString();
+            if (skillCollection.skills[2].skillLevel > 0)
+            {
+                if (flashJumpDT != null)
+                {
+                    flashJumpDT.skillLevel = skillCollection.skills[2].skillLevel;
+                    flashJumpDT.skillToolTipPath = skillCollection.skills[2].levelEffects[skillCollection.skills[2].skillLevel].toolTipPath;
+                }
+            }
         }
         if (windBoosterText != null && skillCollection.skills.Count > 0
             && windBoosterLevel != null)
         {
             windBoosterText.text = skillCollection.skills[3].skillName;
             windBoosterLevel.text = skillCollection.skills[3].skillLevel.ToString();
+            if (skillCollection.skills[3].skillLevel > 0)
+            {
+                if (windBoosterDT != null)
+                {
+                    windBoosterDT.skillLevel = skillCollection.skills[3].skillLevel;
+                    windBoosterDT.skillToolTipPath = skillCollection.skills[3].levelEffects[skillCollection.skills[3].skillLevel].toolTipPath;
+                }
+            }
         }
         if (criticalShotText != null && skillCollection.skills.Count > 0
             && criticalShotLevel != null)
         {
             criticalShotText.text = skillCollection.skills[4].skillName;
             criticalShotLevel.text = skillCollection.skills[4].skillLevel.ToString();
+            if (skillCollection.skills[4].skillLevel > 0)
+            {
+                if (criticalShotDT != null)
+                {
+                    criticalShotDT.skillLevel = skillCollection.skills[4].skillLevel;
+                    criticalShotDT.skillToolTipPath = skillCollection.skills[4].levelEffects[skillCollection.skills[4].skillLevel].toolTipPath;
+                }
+            }
         }
 
         if (skillCollection.skillPoint <= 0)

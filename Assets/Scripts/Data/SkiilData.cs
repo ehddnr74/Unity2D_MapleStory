@@ -30,4 +30,5 @@ public class SkillEffect
     public float jumpDistanceIncrease; // 점프 증가량
     public float attackSpeedIncrease; // 공격 속도 증가량
     public float criticalChanceIncrease; // 크리티컬 확률 증가량
+    public string toolTipPath;
 }

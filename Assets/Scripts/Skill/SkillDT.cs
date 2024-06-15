@@ -15,6 +15,8 @@ public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
 
     public Sprite skillIcon;
     public string skillName;
+    public int skillLevel;
+    public string skillToolTipPath;
 
     void Start()
     {
@@ -75,11 +77,13 @@ public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        skillTooltip.Activate();
+        if(skillLevel > 0)
+        skillTooltip.Activate(skillToolTipPath);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        skillTooltip.Deactivate();
+        if (skillLevel > 0)
+            skillTooltip.Deactivate();
     }
 }

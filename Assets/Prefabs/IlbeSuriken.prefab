@@ -135,7 +135,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   shurikenManager: {fileID: 0}
+  luckySeven: 0
+  secondSuriken: 0
+  criticalProbability: 0
   speed: 40
   lifetime: 0.5
+  shurikenType: 
   direction: 0
-  trackingRange: 20
+  trackingRange: 30
