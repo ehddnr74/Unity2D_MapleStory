@@ -26,6 +26,7 @@ public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     {
         if(item != null)
         {
+            inv.items[slot] = new Item();
             offset = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
             this.transform.SetParent(this.transform.parent.parent.parent.parent);
             this.transform.position = eventData.position - offset;

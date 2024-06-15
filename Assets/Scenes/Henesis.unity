@@ -2910,14 +2910,14 @@ RectTransform:
   m_GameObject: {fileID: 302305241}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.554508, y: 2.773584, z: 1}
+  m_LocalScale: {x: 3.554508, y: 3.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1118742712}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 781.6, y: 495}
+  m_AnchoredPosition: {x: 782, y: 487.5}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &302305243
@@ -8889,7 +8889,6 @@ MonoBehaviour:
   playerOriginJumpForce: 0
   playerOriginAttackSpeed: 0
   buffManager: {fileID: 0}
-  buffDuration: 180
 --- !u!114 &1045361725
 MonoBehaviour:
   m_ObjectHideFlags: 0

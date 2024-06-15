@@ -9,6 +9,7 @@ public class BuffManager : MonoBehaviour
     public GameObject buffPanel;
     public GameObject buffIconPrefab; // 버프 아이콘 프리팹
     private Dictionary<string, GameObject> activeBuffs = new Dictionary<string, GameObject>(); // 활성화된 버프 관리
+    private Dictionary<string, Coroutine> activeBuffCoroutines = new Dictionary<string, Coroutine>(); // Coroutine 인스턴스 저장
 
     private Player player; 
     private QuickSlot quickSlot;
@@ -34,7 +35,19 @@ public class BuffManager : MonoBehaviour
             durationText.text = Mathf.CeilToInt(duration).ToString();
 
             activeBuffs[buffName] = newBuffIcon;
-            StartCoroutine(UpdateText(buffName, durationText, duration));
+            Coroutine buffCoroutine = StartCoroutine(UpdateText(buffName, durationText, duration));
+            activeBuffCoroutines[buffName] = buffCoroutine;
+        }
+        else
+        {
+            // 버프가 이미 활성화된 경우 기존 코루틴을 멈추고 새로운 코루틴 시작 
+            if (activeBuffCoroutines.ContainsKey(buffName))
+            {
+                StopCoroutine(activeBuffCoroutines[buffName]);
+            }
+            TextMeshProUGUI durationText = activeBuffs[buffName].GetComponentInChildren<TextMeshProUGUI>();
+            Coroutine buffCoroutine = StartCoroutine(UpdateText(buffName, durationText, duration));
+            activeBuffCoroutines[buffName] = buffCoroutine;
         }
     }
 
@@ -54,6 +67,7 @@ public class BuffManager : MonoBehaviour
         {
             Destroy(activeBuffs[buffName]);
             activeBuffs.Remove(buffName);
+            activeBuffCoroutines.Remove(buffName);
             if (buffName == "Heist")
             {
                 player.moveSpeed = quickSlot.playerOriginMoveSpeed;
