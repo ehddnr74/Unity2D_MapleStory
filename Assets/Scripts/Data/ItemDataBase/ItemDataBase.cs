@@ -72,6 +72,7 @@ public class Item
     public Sprite ToolTip { get; set; }
     public Sprite Icon { get; set; }
     public bool Stackable { get; set; }
+
     public Item(int id, string name, string type, string description, int price, int sellPrice, string iconPath, bool stackable, string toolTipPath)
     {
         this.ID = id;
@@ -87,12 +88,18 @@ public class Item
         this.Stackable = stackable;
         this.ToolTip = Resources.Load<Sprite>("ToolTips/" + toolTipPath);
         this.ToolTipPath = toolTipPath;
-        ToolTipPath = toolTipPath;
     }
 
     public Item()
     {
         this.ID = -1;
     }
+}
+
+[System.Serializable]
+public class DropItem
+{
+    public int itemId;
+    public float dropChance;
 }
 

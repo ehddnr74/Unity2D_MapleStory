@@ -21,6 +21,7 @@ public class RedSnailController : MonoBehaviour
 
     public RedSnailState mRedSnailState;
     private MonsterSpawner monsterSpawner; // 몬스터 스포너 참조
+    private ItemDataBase itemDataBase; // 아이템 데이터베이스 참조
 
 
     Collider2D col;
@@ -41,6 +42,9 @@ public class RedSnailController : MonoBehaviour
     private bool hitCheck;
     private bool dieCheck;
 
+    public List<DropItem> dropTable; // 드랍 테이블 추가
+    public GameObject itemPrefab; // 아이템 프리팹
+
     private void OnEnable()
     {
         col = GetComponent<Collider2D>();
@@ -49,6 +53,7 @@ public class RedSnailController : MonoBehaviour
 
         damageTextManager = FindObjectOfType<DamageTextManager>();
         monsterSpawner = FindObjectOfType<MonsterSpawner>();
+        itemDataBase = FindObjectOfType<ItemDataBase>();
 
         mRedSnailState = RedSnailState.Stand;
 
@@ -217,9 +222,33 @@ public class RedSnailController : MonoBehaviour
         mAnimator.SetBool("IsStanding", true);
         mRedSnailState = RedSnailState.Stand;
         currentHealth = maxHealth; // 초기 체력을 최대 체력으로 설정
+        DropItems(); // 아이템 드랍 로직 추가
         monsterSpawner.DespawnMonster(gameObject); // 몬스터를 풀로 반환
 
     }
+
+    private void DropItems()
+    {
+        if (itemDataBase == null) return;
+
+        foreach (var dropItem in dropTable)
+        {
+            if (Random.value <= dropItem.dropChance)
+            {
+                Item item = itemDataBase.FetchItemByID(dropItem.itemId);
+                if (item != null)
+                {
+                    GameObject droppedItem = Instantiate(itemPrefab, transform.position, Quaternion.identity);
+                    DropItemData dropItemData = droppedItem.GetComponent<DropItemData>();
+                    if (dropItemData != null)
+                    {
+                        dropItemData.Initialize(item);
+                    }
+                }
+            }
+        }
+    }
+
     private void SetMoveDir()
     {
         moveDir = Random.Range(-1f, 1f);
