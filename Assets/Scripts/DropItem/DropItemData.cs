@@ -7,7 +7,7 @@ public class DropItemData : MonoBehaviour
     public Item item; // 드랍된 아이템의 데이터
 
     private SpriteRenderer spriteRenderer;
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
 
     private void Awake()
     {

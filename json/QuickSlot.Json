@@ -1,26 +1,62 @@
 [
   {
     "slotNum": 0,
-    "iconPath": "LuckySeven"
+    "iconPath": "Key.Jump",
+    "itemAmount": 0
   },
   {
-    "slotNum": 2,
-    "iconPath": "Elixir"
+    "slotNum": 3,
+    "iconPath": "Key.Stat",
+    "itemAmount": 0
   },
   {
     "slotNum": 4,
-    "iconPath": "Mana Elixir"
+    "iconPath": "White Potion",
+    "itemAmount": 17
   },
   {
     "slotNum": 5,
-    "iconPath": "Orange Potion"
+    "iconPath": "Mana Elixir",
+    "itemAmount": 8
+  },
+  {
+    "slotNum": 9,
+    "iconPath": "Key.Skill",
+    "itemAmount": 0
   },
   {
     "slotNum": 16,
-    "iconPath": "Heist"
+    "iconPath": "LuckySeven",
+    "itemAmount": 0
   },
   {
-    "slotNum": 18,
-    "iconPath": "Red Potion"
+    "slotNum": 17,
+    "iconPath": "Key.PickUp",
+    "itemAmount": 0
+  },
+  {
+    "slotNum": 21,
+    "iconPath": "Key.Attack",
+    "itemAmount": 0
+  },
+  {
+    "slotNum": 22,
+    "iconPath": "FlashJump",
+    "itemAmount": 0
+  },
+  {
+    "slotNum": 26,
+    "iconPath": "Key.Item",
+    "itemAmount": 0
+  },
+  {
+    "slotNum": 29,
+    "iconPath": "Heist",
+    "itemAmount": 0
+  },
+  {
+    "slotNum": 30,
+    "iconPath": "WindBooster",
+    "itemAmount": 0
   }
 ]

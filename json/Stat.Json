@@ -1,13 +1,13 @@
 {
-    "minAttackPower": 126,
-    "maxAttackPower": 189,
-    "hp": 145,
-    "maxHp": 145,
-    "mp": 95,
-    "maxMp": 95,
+    "minAttackPower": 124,
+    "maxAttackPower": 194,
+    "hp": 150,
+    "maxHp": 150,
+    "mp": 75,
+    "maxMp": 75,
     "strength": 4,
     "dexterity": 4,
     "intelligence": 4,
-    "luck": 5,
-    "AbilityPoint": 19
+    "luck": 54,
+    "AbilityPoint": 30
 }

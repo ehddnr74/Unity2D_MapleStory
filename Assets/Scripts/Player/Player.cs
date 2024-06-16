@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
@@ -315,13 +316,14 @@ public class Player : MonoBehaviour
                     DataManager.instance.AddMeso(UnityEngine.Random.Range(100, 300));
                 }
             }
-
             // 아이템 오브젝트 삭제
             Destroy(itemObject);
         }
     }
 
-        private void hit()
+
+
+private void hit()
     {
         if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) // HitAnimation 재생중에 Animation을 바꿔서 움직일 수 있도록
         {

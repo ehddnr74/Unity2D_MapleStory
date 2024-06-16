@@ -8,6 +8,7 @@
       "price": 50,
       "sellPrice": 35,
       "iconPath": "Red Potion",
+      "toolTipPath": "빨간포션",
       "stackable": true
     },
     {
@@ -18,6 +19,7 @@
       "price": 150,
       "sellPrice": 105,
       "iconPath": "Orange Potion",
+      "toolTipPath": "주황포션",
       "stackable": true
     },
     {
@@ -28,6 +30,7 @@
       "price": 300,
       "sellPrice": 210,
       "iconPath": "White Potion",
+      "toolTipPath": "하얀포션",
       "stackable": true
     },
     {
@@ -38,6 +41,7 @@
       "price": 300,
       "sellPrice": 210,
       "iconPath": "Mana Elixir",
+      "toolTipPath": "마나엘릭서",
       "stackable": true
     },
     {
@@ -48,6 +52,7 @@
       "price": 1000,
       "sellPrice": 700,
       "iconPath": "Elixir",
+      "toolTipPath": "엘릭서",
       "stackable": true
     },
     {
@@ -58,26 +63,40 @@
       "price": 3000,
       "sellPrice": 2100,
       "iconPath": "Power Elixir",
+      "toolTipPath": "파워엘릭서",
       "stackable": true
     },
     {
       "id": 6,
       "name": "일비 표창",
-      "type": "consumable",
+      "type": "suriken",
       "description": "공격력 : + 27",
       "price": 10000,
       "sellPrice": 7000,
       "iconPath": "Ilbe Ninja Stars",
+      "toolTipPath": "일비표창",
       "stackable": false
     },
     {
       "id": 7,
       "name": "플레임 표창",
-      "type": "consumable",
+      "type": "suriken",
       "description": "공격력 : + 29",
       "price": 50000,
       "sellPrice": 35000,
       "iconPath": "Flame Ninja Stars",
+      "toolTipPath": "플레임표창",
+      "stackable": false
+    },
+    {
+      "id": 8,
+      "name": "메소",
+      "type": "Meso",
+      "description": "메소",
+      "price": 0,
+      "sellPrice": 0,
+      "iconPath": "메소",
+      "toolTipPath": null,
       "stackable": false
     }
   ]
