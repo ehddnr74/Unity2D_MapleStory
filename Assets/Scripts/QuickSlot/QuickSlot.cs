@@ -18,7 +18,7 @@ public class QuickSlot : MonoBehaviour
     private StatManager statManager;
     private Player player;
 
-    int slotAmount;
+    public int slotAmount;
     GameObject quickSlotPanel;
     private Inventory inv;
     ItemDataBase itemdataBase;
@@ -224,6 +224,16 @@ public class QuickSlot : MonoBehaviour
             slotDT.itemAmount = 0;
             slotDT.GetComponentInChildren<TextMeshProUGUI>().text = String.Empty;
         }
+
+        itemsChanged = true;
+    }
+
+    public void AddAmountQuicktSlotItem(int slotIndex, int amount)
+    {
+        QuickSlotDT slotDT = slots[slotIndex].GetComponentInChildren<QuickSlotDT>();
+
+        slotDT.itemAmount += amount;
+        slotDT.GetComponentInChildren<TextMeshProUGUI>().text = slotDT.itemAmount.ToString();
 
         itemsChanged = true;
     }
@@ -435,9 +445,12 @@ public class QuickSlot : MonoBehaviour
                     buffManager.ActivateBuff("WindBooster", quickSlotDT.itemIcon, skillManager.skillCollection.skills[3].levelEffects[level].duration);
                 }
             }
-
-            // 퀵슬롯 인벤토리,스탯창 등 Icon 사용 로직
-            if (quickSlotDT.iconPath == "Key.Item")
+            if (quickSlotDT.iconPath == "Key.PickUp" && player.attachDroppedItem)
+            {
+                player.pickable = true;
+            }
+                // 퀵슬롯 인벤토리,스탯창 등 Icon 사용 로직
+                if (quickSlotDT.iconPath == "Key.Item")
             {
                 inv.activeInventory = !inv.activeInventory;
                 inv.inventoryPanel.SetActive(inv.activeInventory);

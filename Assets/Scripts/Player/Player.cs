@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     private ShurikenManager surikenManager;
     private QuickSlot quickSlot; 
 
+
     public enum PlayerState
     {
         Idle,
@@ -44,6 +45,9 @@ public class Player : MonoBehaviour
     public bool isLadder;
     public bool isLaddering;
     private bool LadderPosition; // 캐릭터가 사다리 탈 때 Ladder기준 포지션 정렬
+
+    public bool attachDroppedItem; // 아이템과 닿았는지 여부
+    public bool pickable; //아이템을 주울 수 있는 상태 전환 변수 
 
     float AttackTime = 0f;
     float JumpAttackTime = 0f;
@@ -83,6 +87,7 @@ public class Player : MonoBehaviour
     public bool luckySeven; // 럭키세븐 사용여부
 
     public bool SecondSuriken;
+
 
 
 
@@ -248,6 +253,16 @@ public class Player : MonoBehaviour
             }
         }
 
+        if (collision.CompareTag("DroppedItem"))
+        {
+            attachDroppedItem = true;
+            if (pickable)
+            {
+                pickable = false;
+                PickupItem(collision.gameObject);
+            }
+        }
+
         if (!invincibel && collision.gameObject.CompareTag("Enemy"))
         {
             int damageAmount = CalculateDamageFromEnemy(collision.gameObject); // 적으로부터 입는 데미지 계산
@@ -273,9 +288,40 @@ public class Player : MonoBehaviour
         //        isGround = false; // 착지 상태 해제
         //        Debug.Log("착지해제");
         //    }
+
+        if (collision.CompareTag("DroppedItem"))
+        {
+            attachDroppedItem = false;
+        }
     }
 
-    private void hit()
+    private void PickupItem(GameObject itemObject)
+    {
+        DropItemData dropItemData = itemObject.GetComponent<DropItemData>();
+        if (dropItemData != null)
+        {
+            Item item = dropItemData.item;
+
+            Inventory inventory = FindObjectOfType<Inventory>(); // 인벤토리 매니저를 찾아서 사용
+
+            if (inventory != null)
+            {
+                if (item.Type != "Meso")
+                {
+                    inventory.AddItem(item.ID); // 인벤토리에 아이템 추가
+                }
+                else
+                {
+                    DataManager.instance.AddMeso(UnityEngine.Random.Range(100, 300));
+                }
+            }
+
+            // 아이템 오브젝트 삭제
+            Destroy(itemObject);
+        }
+    }
+
+        private void hit()
     {
         if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) // HitAnimation 재생중에 Animation을 바꿔서 움직일 수 있도록
         {

@@ -10,6 +10,7 @@ TagManager:
   - Slot
   - QuickSlot
   - Enemy
+  - DroppedItem
   layers:
   - Default
   - TransparentFX

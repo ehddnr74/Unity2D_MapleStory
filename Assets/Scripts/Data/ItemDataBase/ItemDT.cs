@@ -57,6 +57,7 @@ public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
                 {
                     if (item.ID != 6 && item.ID != 7)
                     {
+                        inv.items[slot].ID = item.ID;
                         quickSlot.itemIcon = item.Icon;
                         quickSlot.iconPath = item.IconPath;
                         quickSlot.itemAmount = amount;
@@ -67,6 +68,7 @@ public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
                 }
             }
         }
+        inv.items[slot].ID = item.ID;
         this.transform.SetParent(inv.slots[slot].transform); // 원래의 부모로 되돌림
         this.transform.position = inv.slots[slot].transform.position; // 원래의 위치로 이동  
         GetComponent<CanvasGroup>().blocksRaycasts = true;

@@ -31,6 +31,7 @@ public class Shop : MonoBehaviour
     private GameObject SlotPanel;
     public GameObject Slot;
 
+    private QuickSlot quickSlot;
     private ItemDataBase itemdataBase;
 
     public List<GameObject> slots = new List<GameObject>();
@@ -66,6 +67,7 @@ public class Shop : MonoBehaviour
         }
 
         inv = GameObject.Find("Inventory").GetComponent<Inventory>();
+        quickSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
         itemdataBase = inv.GetComponent<ItemDataBase>();
 
         slotAmount = 8;
@@ -216,11 +218,33 @@ public class Shop : MonoBehaviour
             {
                 DataManager.instance.AddMeso(currentShopInv[isInvSelectedBoxIndex].SellPrice);
                 inv.RemoveItem(currentShopInv[isInvSelectedBoxIndex].ID);
+
+                Item SellItem = itemdataBase.FetchItemByID(currentShopInv[isInvSelectedBoxIndex].ID);
+                for (int i = 0; i < quickSlot.slotAmount; i++)
+                {
+                    QuickSlotDT qSlotDT = quickSlot.slots[i].GetComponentInChildren<QuickSlotDT>();
+                    if (qSlotDT != null && qSlotDT.iconPath == SellItem.IconPath)
+                    {
+                        quickSlot.RemoveQuicktSlotItem(qSlotDT.iconPath,qSlotDT.slotNum, 1);
+                        break;
+                    }
+                }
             }
             else
             {
                 DataManager.instance.AddMeso(currentShopInv[isInvSelectedBoxIndex].SellPrice);
                 inv.RemoveItem(currentShopInv[isInvSelectedBoxIndex].ID);
+
+                Item SellItem = itemdataBase.FetchItemByID(currentShopInv[isInvSelectedBoxIndex].ID);
+                for (int i = 0; i < quickSlot.slotAmount; i++)
+                {
+                    QuickSlotDT qSlotDT = quickSlot.slots[i].GetComponentInChildren<QuickSlotDT>();
+                    if (qSlotDT != null && qSlotDT.iconPath == SellItem.IconPath)
+                    {
+                        quickSlot.RemoveQuicktSlotItem(qSlotDT.iconPath, qSlotDT.slotNum, 1);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -237,9 +261,20 @@ public class Shop : MonoBehaviour
         if (0 <= isSelectedBoxIndex && isSelectedBoxIndex < slotAmount)
         {
             if (playerData.meso - itemdataBase.dataBase[isSelectedBoxIndex].Price > 0)
-            {
+            {   
                 inv.AddItem(isSelectedBoxIndex);
                 DataManager.instance.LoseMeso(itemdataBase.dataBase[isSelectedBoxIndex].Price);
+
+                Item buyItem = itemdataBase.FetchItemByID(isSelectedBoxIndex);
+                for (int i = 0; i < quickSlot.slotAmount; i++) 
+                {
+                    QuickSlotDT qSlotDT = quickSlot.slots[i].GetComponentInChildren<QuickSlotDT>();
+                    if(qSlotDT != null && qSlotDT.iconPath == buyItem.IconPath)
+                    {
+                        quickSlot.AddAmountQuicktSlotItem(qSlotDT.slotNum, 1);
+                        break;
+                    }
+                }
             }
         }
     }

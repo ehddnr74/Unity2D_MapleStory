@@ -58,7 +58,26 @@ public class DropItemData : MonoBehaviour
             rb.velocity = Vector2.zero; // 아이템의 속도를 0으로 설정
             rb.isKinematic = true; // 아이템을 바닥에 고정
 
-            // 필요한 추가 작업을 여기에 추가
+            StartCoroutine(BounceAnimation());
+        }
+    }
+    private IEnumerator BounceAnimation()
+    {
+        float bounceHeight = 0.1f; // 위아래로 움직일 높이
+        Vector3 initialPosition = transform.position;
+
+        while (true)
+        {
+            float elapsedTime = 0f;
+
+            while (elapsedTime < 3.0f)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = Mathf.Sin(elapsedTime * Mathf.PI); // 1초에 1번 왕복
+
+                transform.position = new Vector3(initialPosition.x, initialPosition.y + t * bounceHeight, initialPosition.z);
+                yield return null;
+            }
         }
     }
 }

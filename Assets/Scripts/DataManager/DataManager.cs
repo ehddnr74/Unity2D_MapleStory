@@ -248,7 +248,10 @@ public class DataManager : MonoBehaviour
     {
         nowPlayer.meso += meso;
         inv.UpdateMesoUI(nowPlayer);
+
+        if(shop.visibleShop)
         shop.UpdateShopMesoText(nowPlayer);
+
         SaveData();
     }
     public void LoseMeso(int meso)
@@ -259,7 +262,10 @@ public class DataManager : MonoBehaviour
         }
         nowPlayer.meso -= meso;
         inv.UpdateMesoUI(nowPlayer);
+
+        if(shop.visibleShop)
         shop.UpdateShopMesoText(nowPlayer);
+
         SaveData();
     }
 

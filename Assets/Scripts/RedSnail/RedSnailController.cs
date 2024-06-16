@@ -229,16 +229,19 @@ public class RedSnailController : MonoBehaviour
 
     private void DropItems()
     {
+        int cnt = 0; // 아이템 개수별로 드랍포지션을 다르게 하기 위한 변수 
         if (itemDataBase == null) return;
 
         foreach (var dropItem in dropTable)
         {
             if (Random.value <= dropItem.dropChance)
             {
+                cnt++;
                 Item item = itemDataBase.FetchItemByID(dropItem.itemId);
+                Debug.Log(item.Name);
                 if (item != null)
                 {
-                    GameObject droppedItem = Instantiate(itemPrefab, transform.position, Quaternion.identity);
+                    GameObject droppedItem = Instantiate(itemPrefab, transform.position + new Vector3(cnt * 1.6f, 0f, 0f), Quaternion.identity);
                     DropItemData dropItemData = droppedItem.GetComponent<DropItemData>();
                     if (dropItemData != null)
                     {

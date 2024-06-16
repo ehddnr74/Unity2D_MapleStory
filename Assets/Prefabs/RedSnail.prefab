@@ -127,10 +127,24 @@ MonoBehaviour:
   moveSpeed: 3
   maxHealth: 500
   dropTable:
-  - itemId: 0
+  - itemId: 8
     dropChance: 1
+  - itemId: 0
+    dropChance: 0.1
   - itemId: 1
     dropChance: 0.1
+  - itemId: 2
+    dropChance: 0.1
+  - itemId: 3
+    dropChance: 0.1
+  - itemId: 4
+    dropChance: 0.1
+  - itemId: 5
+    dropChance: 0.1
+  - itemId: 6
+    dropChance: 0.01
+  - itemId: 7
+    dropChance: 0.01
   itemPrefab: {fileID: 609508688080498782, guid: 68149df13cdd4d644a25fda212192b0a, type: 3}
 --- !u!50 &3117988261446164208
 Rigidbody2D:
