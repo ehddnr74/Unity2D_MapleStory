@@ -5087,8 +5087,8 @@ Transform:
   m_GameObject: {fileID: 582023913}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30.84, y: -7.5, z: 0}
-  m_LocalScale: {x: 2.370141, y: 11.651625, z: 1}
+  m_LocalPosition: {x: 30.78, y: -7.5, z: 0}
+  m_LocalScale: {x: 0.5920408, y: 10.164325, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -8879,6 +8879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67709616376f5e145b7b541cb92009c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slotAmount: 0
   quickSlot: {fileID: 7715936068947083266, guid: 501ea1cfa833b0b4d896f1b6635d34b6, type: 3}
   quickSlotItem: {fileID: 5441086044273817261, guid: e7c11738d1b0ed84b880bff364a3e133, type: 3}
   itemsChanged: 0

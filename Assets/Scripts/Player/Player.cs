@@ -248,7 +248,7 @@ public class Player : MonoBehaviour
     {
         if (collision.CompareTag("Ladder"))
         {
-            if (mPlayerState == PlayerState.Idle)
+            if (mPlayerState == PlayerState.Walk ||mPlayerState == PlayerState.Idle || mPlayerState == PlayerState.Jump)
             {
                 isLadder = true;
             }
@@ -266,15 +266,28 @@ public class Player : MonoBehaviour
 
         if (!invincibel && collision.gameObject.CompareTag("Enemy"))
         {
-            int damageAmount = CalculateDamageFromEnemy(collision.gameObject); // 적으로부터 입는 데미지 계산
-            ShowPlayerDamage(damageAmount, collision.transform.position); // 데미지 텍스트 표시
+            if(isLaddering || mPlayerState == PlayerState.Jump || mPlayerState == PlayerState.ProneStab)
+            {
+                int damageAmount = CalculateDamageFromEnemy(collision.gameObject); // 적으로부터 입는 데미지 계산
+                ShowPlayerDamage(damageAmount, collision.transform.position); // 데미지 텍스트 표시
 
-            mPlayerState = PlayerState.Hit;
-            mAnimator.SetBool("IsHitting",true);
-            invincibel = true;
-            StartCoroutine(Hitting());
-            Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
-            StartCoroutine(ApplyKnockback(knockbackDirection));
+                invincibel = true;
+                StartCoroutine(Hitting());
+            }
+            else
+            {
+                int damageAmount = CalculateDamageFromEnemy(collision.gameObject); // 적으로부터 입는 데미지 계산
+                ShowPlayerDamage(damageAmount, collision.transform.position); // 데미지 텍스트 표시
+
+
+                mPlayerState = PlayerState.Hit;
+                mAnimator.SetBool("IsHitting", true);
+                invincibel = true;
+                StartCoroutine(Hitting());
+
+                Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
+                StartCoroutine(ApplyKnockback(knockbackDirection));
+            }
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -325,20 +338,20 @@ public class Player : MonoBehaviour
 
 private void hit()
     {
-        if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) // HitAnimation 재생중에 Animation을 바꿔서 움직일 수 있도록
-        {
-            mPlayerState = PlayerState.Walk;
-            mAnimator.SetBool("IsHitting", false);
-            hitTime = 0f;
-        }
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) // HitAnimation 재생중에 Animation을 바꿔서 움직일 수 있도록
+            {
+                mPlayerState = PlayerState.Walk;
+                mAnimator.SetBool("IsHitting", false);
+                hitTime = 0f;
+            }
 
-        if(hitTime >= 2.0f) // 2초 동안 HitAnimation 재생 
-        {
-            mPlayerState = PlayerState.Idle;
-            mAnimator.SetBool("IsHitting", false);
-            hitTime = 0f;
-        }
-        hitTime += Time.deltaTime;
+            if (hitTime >= 2.0f) // 2초 동안 HitAnimation 재생 
+            {
+                mPlayerState = PlayerState.Idle;
+                mAnimator.SetBool("IsHitting", false);
+                hitTime = 0f;
+            }
+            hitTime += Time.deltaTime;
     }
 
     // Player Fsm Funtion
@@ -415,8 +428,17 @@ private void hit()
         {
             isGround = false;
             mRigidBody.velocity = new Vector2(mRigidBody.velocity.x, jumpForce);
+            mAnimator.SetBool("IsWalking", false);
             mAnimator.SetBool("IsJumping", true);
             mPlayerState = PlayerState.Jump;
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow)) // To Prone
+        {
+            mRigidBody.velocity = Vector2.zero;
+           mPlayerState = PlayerState.ProneStab;
+            mAnimator.SetBool("IsWalking", false);
+            mAnimator.SetBool("IsProne", true);
         }
 
         if (toAttack) // To Attack
@@ -438,10 +460,35 @@ private void hit()
             mPlayerState = PlayerState.Attack;
             StartCoroutine(AttackCooldown());
         }
+
+        if (isLadder) // 아래에서 위로 올라가기
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                isLaddering = true;
+                mAnimator.SetBool("IsWalking", false);
+                mPlayerState = PlayerState.Ladder;
+            }
+        }
     }
 
     private void jump()
     {
+        if (isLadder) // 아래에서 위로 올라가기
+        {
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                JumpAttackTime = 0f;
+                //jumpTime = 0f;
+
+                toJump = false;
+                doubleJumping = false;
+                isLaddering = true;
+                mAnimator.SetBool("IsJumping", false);
+                mPlayerState = PlayerState.Ladder;
+            }
+        }
+
         if (isGround)
         {
             if (dir != 0)
@@ -593,6 +640,11 @@ private void hit()
             mAnimator.SetTrigger("IsProneAttack");
         }
 
+        if(toJump && !IsGroundBelow())
+        {
+            toJump = false;
+        }
+
         if (toJump && IsGroundBelow())
         {
             toJump = false;
@@ -613,6 +665,15 @@ private void hit()
 
             mRigidBody.velocity = Vector2.zero;
             mRigidBody.gravityScale = 0;
+
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                dir = -1;
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                dir = 1;
+            }
 
             if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow))
             {

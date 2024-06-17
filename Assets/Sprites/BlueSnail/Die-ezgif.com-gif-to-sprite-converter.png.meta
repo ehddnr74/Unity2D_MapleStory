@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 05450fbfa2d8e784f922b2fa0da3f88c
+guid: 7973b7882b23bab47a6269c435348bac
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: DieGif-ezgif.com-gif-to-sprite-converter_0
+      name: Die-ezgif.com-gif-to-sprite-converter_0
       rect:
         serializedVersion: 2
         x: 11
@@ -118,20 +118,20 @@ TextureImporter:
         width: 39
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 75bda9e980360954e9541dc56f6112b0
-      internalID: 1276971699
+      spriteID: 57e15fb6177284c4a85b92464e5fc10f
+      internalID: 1426042598
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DieGif-ezgif.com-gif-to-sprite-converter_1
+      name: Die-ezgif.com-gif-to-sprite-converter_1
       rect:
         serializedVersion: 2
         x: 63
@@ -139,41 +139,41 @@ TextureImporter:
         width: 47
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 77c92898ab1339b4982a287dc908881a
-      internalID: -2094392968
+      spriteID: a264a43a5a3bc6346a2a128374337552
+      internalID: -632518626
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DieGif-ezgif.com-gif-to-sprite-converter_2
+      name: Die-ezgif.com-gif-to-sprite-converter_3
       rect:
         serializedVersion: 2
         x: 112
         y: 0
-        width: 55
+        width: 56
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e036ff7b90852104a8fc4f20488d2e55
-      internalID: 885886305
+      spriteID: 975fcd9823d2225438207b188ab71d8b
+      internalID: -729510368
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DieGif-ezgif.com-gif-to-sprite-converter_3
+      name: Die-ezgif.com-gif-to-sprite-converter_5
       rect:
         serializedVersion: 2
         x: 168
@@ -181,20 +181,20 @@ TextureImporter:
         width: 56
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 130e27ac7e73bb84189b2cd0cc6f7c53
-      internalID: 1127769851
+      spriteID: 25e147c08a24d744087e84440a27b1cb
+      internalID: 1492893170
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DieGif-ezgif.com-gif-to-sprite-converter_4
+      name: Die-ezgif.com-gif-to-sprite-converter_7
       rect:
         serializedVersion: 2
         x: 224
@@ -202,20 +202,20 @@ TextureImporter:
         width: 56
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b902a48f1f472604296157c13571cbe0
-      internalID: -1473174745
+      spriteID: f8d7f00e917647444adc28e40283fd63
+      internalID: 2082696222
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DieGif-ezgif.com-gif-to-sprite-converter_5
+      name: Die-ezgif.com-gif-to-sprite-converter_8
       rect:
         serializedVersion: 2
         x: 280
@@ -223,41 +223,41 @@ TextureImporter:
         width: 56
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c9cde55975d91ef4cb6fab52909f12b2
-      internalID: -2089243666
+      spriteID: 92bc66137f4a916429cc8f3ebe58a130
+      internalID: -1465509981
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DieGif-ezgif.com-gif-to-sprite-converter_6
+      name: Die-ezgif.com-gif-to-sprite-converter_10
       rect:
         serializedVersion: 2
         x: 336
         y: 0
-        width: 56
+        width: 54
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 47631befe83cb1d4493f99b4d5c61bc0
-      internalID: 1831197219
+      spriteID: f36cd66dd2a0c474598a3c6e26887801
+      internalID: -686784107
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DieGif-ezgif.com-gif-to-sprite-converter_7
+      name: Die-ezgif.com-gif-to-sprite-converter_11
       rect:
         serializedVersion: 2
         x: 392
@@ -265,20 +265,20 @@ TextureImporter:
         width: 56
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5ed72b7b3fdd2c7429c4aa7bd027b3fe
-      internalID: 602525397
+      spriteID: a6710954181cd5c4fa61ace663dda89e
+      internalID: 1637177790
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DieGif-ezgif.com-gif-to-sprite-converter_8
+      name: Die-ezgif.com-gif-to-sprite-converter_13
       rect:
         serializedVersion: 2
         x: 448
@@ -286,20 +286,20 @@ TextureImporter:
         width: 56
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2eee47c7479f6a242887d4419d40d7ee
-      internalID: -114075011
+      spriteID: ff7b0ba1c4f0dfc408f27837872b1f44
+      internalID: -419744145
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DieGif-ezgif.com-gif-to-sprite-converter_9
+      name: Die-ezgif.com-gif-to-sprite-converter_14
       rect:
         serializedVersion: 2
         x: 504
@@ -307,20 +307,20 @@ TextureImporter:
         width: 56
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bee79a445502ef24fbb56d81025b27d3
-      internalID: 1596439113
+      spriteID: 3ab654589630c224894277caec7ab25e
+      internalID: -992112072
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DieGif-ezgif.com-gif-to-sprite-converter_10
+      name: Die-ezgif.com-gif-to-sprite-converter_15
       rect:
         serializedVersion: 2
         x: 560
@@ -328,20 +328,20 @@ TextureImporter:
         width: 56
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 19a86c3e8183e694fb76b5e5e09c23c8
-      internalID: 1239219496
+      spriteID: b796c83664202b142ba049397cf17632
+      internalID: 930129132
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DieGif-ezgif.com-gif-to-sprite-converter_11
+      name: Die-ezgif.com-gif-to-sprite-converter_18
       rect:
         serializedVersion: 2
         x: 616
@@ -349,14 +349,14 @@ TextureImporter:
         width: 56
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ce8e5ca854a855a4dbd2ea030d23834f
-      internalID: 1597171368
+      spriteID: da58841e74fabac4da18c9891d8cca32
+      internalID: -224454898
       vertices: []
       indices: 
       edges: []
@@ -372,20 +372,25 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      DieGif-ezgif.com-gif-to-sprite-converter_0: 1276971699
-      DieGif-ezgif.com-gif-to-sprite-converter_1: -2094392968
-      DieGif-ezgif.com-gif-to-sprite-converter_10: 1239219496
-      DieGif-ezgif.com-gif-to-sprite-converter_11: 1597171368
-      DieGif-ezgif.com-gif-to-sprite-converter_2: 885886305
-      DieGif-ezgif.com-gif-to-sprite-converter_3: 1127769851
-      DieGif-ezgif.com-gif-to-sprite-converter_4: -1473174745
-      DieGif-ezgif.com-gif-to-sprite-converter_5: -2089243666
-      DieGif-ezgif.com-gif-to-sprite-converter_6: 1831197219
-      DieGif-ezgif.com-gif-to-sprite-converter_7: 602525397
-      DieGif-ezgif.com-gif-to-sprite-converter_8: -114075011
-      DieGif-ezgif.com-gif-to-sprite-converter_9: 1596439113
-      "\uBE68\uAC04\uB2EC\uD33D\uC774Die_0": 1865491621
-      "\uBE68\uAC04\uB2EC\uD33D\uC774Die_1": 71301657
+      Die-ezgif.com-gif-to-sprite-converter_0: 1426042598
+      Die-ezgif.com-gif-to-sprite-converter_1: -632518626
+      Die-ezgif.com-gif-to-sprite-converter_10: -686784107
+      Die-ezgif.com-gif-to-sprite-converter_11: 1637177790
+      Die-ezgif.com-gif-to-sprite-converter_12: -557333902
+      Die-ezgif.com-gif-to-sprite-converter_13: -419744145
+      Die-ezgif.com-gif-to-sprite-converter_14: -992112072
+      Die-ezgif.com-gif-to-sprite-converter_15: 930129132
+      Die-ezgif.com-gif-to-sprite-converter_16: 339578309
+      Die-ezgif.com-gif-to-sprite-converter_17: -173322753
+      Die-ezgif.com-gif-to-sprite-converter_18: -224454898
+      Die-ezgif.com-gif-to-sprite-converter_2: -90439523
+      Die-ezgif.com-gif-to-sprite-converter_3: -729510368
+      Die-ezgif.com-gif-to-sprite-converter_4: 933436793
+      Die-ezgif.com-gif-to-sprite-converter_5: 1492893170
+      Die-ezgif.com-gif-to-sprite-converter_6: 1286846257
+      Die-ezgif.com-gif-to-sprite-converter_7: 2082696222
+      Die-ezgif.com-gif-to-sprite-converter_8: -1465509981
+      Die-ezgif.com-gif-to-sprite-converter_9: 1589236861
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

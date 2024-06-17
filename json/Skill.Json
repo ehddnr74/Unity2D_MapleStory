@@ -404,7 +404,7 @@
     },
     {
       "skillName": "크리티컬 샷",
-      "skillLevel": 6,
+      "skillLevel": 7,
       "levelEffects": {
         "1": {
           "hpReduction": 0,
@@ -689,5 +689,5 @@
       }
     }
   ],
-  "skillPoint": 104
+  "skillPoint": 112
 }

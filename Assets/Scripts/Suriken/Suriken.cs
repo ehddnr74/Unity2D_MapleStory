@@ -117,18 +117,64 @@ public class Shuriken : MonoBehaviour
             int damage = CalculateDamage(); // 예: 데미지를 계산하는 함수
 
             // 충돌한 객체가 RedSnailController를 가지고 있는지 확인하고 데미지를 줍니다.
-            RedSnailController enemy = collision.GetComponent<RedSnailController>();
-            if (enemy != null)
+            RedSnailController redSnail = collision.GetComponent<RedSnailController>();
+            BlueSnailController blueSnail = collision.GetComponent<BlueSnailController>();
+            GreenMushRoomController greenMushRoom = collision.GetComponent<GreenMushRoomController>();
+            if (redSnail != null)
             {
                 if (!secondSuriken)
                 {
                     Vector3 displayPosition = collision.transform.position + new Vector3(-1.5f, 3.0f, 0);
-                    enemy.TakeDamage(displayPosition, damage, isCritical, luckySeven, secondSuriken);
+                    redSnail.TakeDamage(displayPosition, damage, isCritical, luckySeven, secondSuriken);
                 }
                 else
                 {
                     Vector3 secondPoisition = collision.transform.position + new Vector3(-1.5f, 6.0f, 0);
-                    enemy.TakeDamage(secondPoisition, damage, isCritical, luckySeven, secondSuriken);
+                    redSnail.TakeDamage(secondPoisition, damage, isCritical, luckySeven, secondSuriken);
+                }
+                Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
+
+                if (luckySeven)
+                    luckySeven = false;
+                if (secondSuriken)
+                    secondSuriken = false;
+
+                Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
+            }
+
+            if (blueSnail != null)
+            {
+                if (!secondSuriken)
+                {
+                    Vector3 displayPosition = collision.transform.position + new Vector3(-1.5f, 3.0f, 0);
+                    blueSnail.TakeDamage(displayPosition, damage, isCritical, luckySeven, secondSuriken);
+                }
+                else
+                {
+                    Vector3 secondPoisition = collision.transform.position + new Vector3(-1.5f, 6.0f, 0);
+                    blueSnail.TakeDamage(secondPoisition, damage, isCritical, luckySeven, secondSuriken);
+                }
+                Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
+
+                if (luckySeven)
+                    luckySeven = false;
+                if (secondSuriken)
+                    secondSuriken = false;
+
+                Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
+            }
+
+            if (greenMushRoom != null)
+            {
+                if (!secondSuriken)
+                {
+                    Vector3 displayPosition = collision.transform.position + new Vector3(-1.5f, 3.0f, 0);
+                    greenMushRoom.TakeDamage(displayPosition, damage, isCritical, luckySeven, secondSuriken);
+                }
+                else
+                {
+                    Vector3 secondPoisition = collision.transform.position + new Vector3(-1.5f, 6.0f, 0);
+                    greenMushRoom.TakeDamage(secondPoisition, damage, isCritical, luckySeven, secondSuriken);
                 }
                 Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
 

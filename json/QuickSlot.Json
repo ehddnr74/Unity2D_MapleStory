@@ -10,14 +10,9 @@
     "itemAmount": 0
   },
   {
-    "slotNum": 4,
-    "iconPath": "White Potion",
-    "itemAmount": 17
-  },
-  {
     "slotNum": 5,
     "iconPath": "Mana Elixir",
-    "itemAmount": 8
+    "itemAmount": 18
   },
   {
     "slotNum": 9,

@@ -465,6 +465,14 @@ public class QuickSlot : MonoBehaviour
                 skillManager.activeUI = !skillManager.activeUI;
                 skillManager.SkillUIPanel.SetActive(skillManager.activeUI);
             }
+            if (player.isLaddering)
+            {
+                if (quickSlotDT.iconPath == "Key.Jump")
+                {
+                    return;
+                }
+            }
+
             if (!player.isAttacking && quickSlotDT.iconPath == "Key.Jump" && player.isGround)
             {
                 playerJumping = true;
