@@ -193,14 +193,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6db2661188fbe14ab519ebfe38571b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemPool: {fileID: 0}
   mGreenMushRoomState: 0
   moveTime: 5
   idleTime: 0.2
   moveSpeed: 6
-  maxHealth: 500
+  maxHealth: 125
   dropTable:
   - itemId: 8
-    dropChance: 1
+    dropChance: 0.8
+  - itemId: 0
+    dropChance: 0.35
+  - itemId: 1
+    dropChance: 0.35
+  - itemId: 2
+    dropChance: 0.25
+  - itemId: 3
+    dropChance: 0.35
+  - itemId: 4
+    dropChance: 0.16
+  - itemId: 5
+    dropChance: 0.12
+  - itemId: 6
+    dropChance: 0.04
+  - itemId: 7
+    dropChance: 0.04
   itemPrefab: {fileID: 609508688080498782, guid: 68149df13cdd4d644a25fda212192b0a, type: 3}
   leftBoundary: {fileID: 0}
   rightBoundary: {fileID: 0}
+  onceAddExperience: 1

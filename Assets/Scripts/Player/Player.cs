@@ -324,6 +324,15 @@ public class Player : MonoBehaviour
                 if (item.Type != "Meso")
                 {
                     inventory.AddItem(item.ID); // 인벤토리에 아이템 추가
+                    for (int i = 0; i < quickSlot.slotAmount; i++)
+                    {
+                        QuickSlotDT qSlotDT = quickSlot.slots[i].GetComponentInChildren<QuickSlotDT>();
+                        if (qSlotDT != null && qSlotDT.iconPath == item.IconPath)
+                        {
+                            quickSlot.AddAmountQuicktSlotItem(qSlotDT.slotNum, 1);
+                            break;
+                        }
+                    }
                 }
                 else
                 {

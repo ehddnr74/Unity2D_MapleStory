@@ -193,15 +193,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1edf0cfe8f1d6ba48ad89be412d9db99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemPool: {fileID: 0}
   mOrangeMushRoomState: 0
   moveTime: 5
   idleTime: 0.1
   moveSpeed: 8
-  maxHealth: 500
+  maxHealth: 65
   dropTable:
   - itemId: 8
-    dropChance: 1
+    dropChance: 0.7
+  - itemId: 0
+    dropChance: 0.3
+  - itemId: 1
+    dropChance: 0.3
+  - itemId: 2
+    dropChance: 0.2
+  - itemId: 3
+    dropChance: 0.3
+  - itemId: 4
+    dropChance: 0.12
+  - itemId: 5
+    dropChance: 0.08
+  - itemId: 6
+    dropChance: 0.03
+  - itemId: 7
+    dropChance: 0.03
   itemPrefab: {fileID: 609508688080498782, guid: 68149df13cdd4d644a25fda212192b0a, type: 3}
   leftBoundary: {fileID: 0}
   rightBoundary: {fileID: 0}
   jumpForce: 18
+  onceAddExperience: 1

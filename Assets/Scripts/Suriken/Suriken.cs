@@ -68,7 +68,7 @@ public class Shuriken : MonoBehaviour
         Vector2 boxSize = new Vector2(trackingRange, trackingRange / 3); // 반 높이로 시야 범위 설정
 
         // 플레이어 위치에서 살짝 오른쪽 또는 왼쪽에 탐지 범위의 시작점 계산
-        Vector2 offset = direction ? Vector2.right * 10f : Vector2.left * 10f;
+        Vector2 offset = direction ? new Vector2(10f, -2f): new Vector2(-10f, -2f);
         Vector2 startPosition = (Vector2)player.transform.position + offset;
 
         // 사각형 범위 내의 적을 감지
@@ -121,6 +121,7 @@ public class Shuriken : MonoBehaviour
             BlueSnailController blueSnail = collision.GetComponent<BlueSnailController>();
             GreenMushRoomController greenMushRoom = collision.GetComponent<GreenMushRoomController>();
             OrangeMushRoomController orangeMushRoom = collision.GetComponent<OrangeMushRoomController>();
+            StumpController stump = collision.GetComponent<StumpController>();
             if (redSnail != null)
             {
                 if (!secondSuriken)
@@ -208,6 +209,28 @@ public class Shuriken : MonoBehaviour
 
                 Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
             }
+
+            if (stump != null)
+            {
+                if (!secondSuriken)
+                {
+                    Vector3 displayPosition = collision.transform.position + new Vector3(-1.5f, 3.0f, 0);
+                    stump.TakeDamage(displayPosition, damage, isCritical, luckySeven, secondSuriken);
+                }
+                else
+                {
+                    Vector3 secondPoisition = collision.transform.position + new Vector3(-1.5f, 6.0f, 0);
+                    stump.TakeDamage(secondPoisition, damage, isCritical, luckySeven, secondSuriken);
+                }
+                Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
+
+                if (luckySeven)
+                    luckySeven = false;
+                if (secondSuriken)
+                    secondSuriken = false;
+
+                Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
+            }
             // 수리검을 풀에 반환
             shurikenManager.ReturnShurikenToPool(gameObject, shurikenType);
             Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
@@ -275,7 +298,7 @@ public class Shuriken : MonoBehaviour
         Vector2 directionVector = direction ? Vector2.right : Vector2.left;
 
         // 플레이어 위치에서 살짝 오른쪽 또는 왼쪽에 탐지 범위의 시작점 계산
-        Vector2 offset = direction ? Vector2.right * 10f : Vector2.left * 10f;
+        Vector2 offset = direction ? new Vector2(10f, -2f) : new Vector2(-10f, -2f);
         Vector3 startPosition = (Vector3)player.transform.position + new Vector3(offset.x,offset.y,0f);
         Vector2 boxSize = new Vector2(trackingRange, trackingRange / 3);
         Gizmos.DrawWireCube(startPosition + (Vector3)directionVector * trackingRange / 3, boxSize);

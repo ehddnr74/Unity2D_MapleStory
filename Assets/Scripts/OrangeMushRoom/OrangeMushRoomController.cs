@@ -40,7 +40,7 @@ public class OrangeMushRoomController : MonoBehaviour
 
     private bool isGround;
 
-    private int experience = 50; // È¹µæ °æÇèÄ¡·®
+    private int experience = 10; // È¹µæ °æÇèÄ¡·®
 
     public bool onceAddExperience = true;
 

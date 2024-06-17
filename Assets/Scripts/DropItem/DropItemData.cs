@@ -23,7 +23,10 @@ public class DropItemData : MonoBehaviour
         spriteRenderer.sprite = item.Icon;
 
         // 아이템 드랍 애니메이션 시작
-        StartCoroutine(DropAnimation());
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine(DropAnimation());
+        }
     }
     private IEnumerator DropAnimation()
     {
@@ -54,7 +57,7 @@ public class DropItemData : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("MonsterGround"))
+        if (collision.CompareTag("MonsterGround") && gameObject.activeInHierarchy)
         {
             // 아이템이 Ground에 닿았을 때의 로직
             rb.velocity = Vector2.zero; // 아이템의 속도를 0으로 설정

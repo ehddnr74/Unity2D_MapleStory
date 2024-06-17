@@ -48,15 +48,13 @@ public class DamageTextManager : MonoBehaviour
         {
             DamageText damageText = damageTextPool.Dequeue();
             damageText.gameObject.SetActive(true);
-            damageText.transform.position = Camera.main.WorldToScreenPoint(position);
-            damageText.SetDamage(damage, isCritical, normalDigits, criticalDigits);
+            damageText.Initialize(position, damage, isCritical, normalDigits, criticalDigits);
         }
         else
         {
             GameObject instance = Instantiate(damageTextPrefab, canvasTransform);
             DamageText damageText = instance.GetComponent<DamageText>();
-            damageText.SetDamage(damage, isCritical, normalDigits, criticalDigits);
-            instance.transform.position = Camera.main.WorldToScreenPoint(position);
+            damageText.Initialize(position, damage, isCritical, normalDigits, criticalDigits);
         }
     }
 
@@ -66,15 +64,13 @@ public class DamageTextManager : MonoBehaviour
         {
             DamageText damageText = damageTextPool.Dequeue();
             damageText.gameObject.SetActive(true);
-            damageText.transform.position = Camera.main.WorldToScreenPoint(position);
-            damageText.SetPlayerDamage(damage, playerTakeDamageDigits);
+            damageText.Initialize(position, damage, false, playerTakeDamageDigits, null);
         }
         else
         {
             GameObject instance = Instantiate(damageTextPrefab, canvasTransform);
             DamageText damageText = instance.GetComponent<DamageText>();
-            damageText.SetPlayerDamage(damage, playerTakeDamageDigits);
-            instance.transform.position = Camera.main.WorldToScreenPoint(position);
+            damageText.Initialize(position, damage, false, playerTakeDamageDigits, null);
         }
     }
 

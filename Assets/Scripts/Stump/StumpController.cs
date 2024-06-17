@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-
-public class BlueSnailController : MonoBehaviour
+public class StumpController : MonoBehaviour
 {
-    public enum BlueSnailState
+    public enum StumpState
     {
         Stand,
         Move,
@@ -16,9 +14,8 @@ public class BlueSnailController : MonoBehaviour
 
     private DamageTextManager damageTextManager;
 
-
     public ItemPool itemPool; // 아이템 풀 참조
-    public BlueSnailState mBlueSnailState;
+    public StumpState mStumpState;
     private MonsterSpawner monsterSpawner; // 몬스터 스포너 참조
     private ItemDataBase itemDataBase; // 아이템 데이터베이스 참조
 
@@ -44,7 +41,10 @@ public class BlueSnailController : MonoBehaviour
     public List<DropItem> dropTable; // 드랍 테이블 추가
     public GameObject itemPrefab; // 아이템 프리팹
 
-    private int experience = 4; // 획득 경험치량
+    public Transform leftBoundary; // 왼쪽 경계
+    public Transform rightBoundary; // 오른쪽 경계
+
+    private int experience = 6; // 획득 경험치량
 
     public bool onceAddExperience = true;
 
@@ -55,16 +55,20 @@ public class BlueSnailController : MonoBehaviour
         mAnimator = GetComponent<Animator>();
 
         damageTextManager = FindObjectOfType<DamageTextManager>();
-        monsterSpawner = GameObject.Find("BlueSnailSpawner").GetComponent<MonsterSpawner>();
+        monsterSpawner = GameObject.Find("StumpSpawner").GetComponent<MonsterSpawner>();
         itemDataBase = FindObjectOfType<ItemDataBase>();
         itemPool = GameObject.Find("ItemPoolManager").GetComponent<ItemPool>();
 
-        mBlueSnailState = BlueSnailState.Stand;
+        mStumpState = StumpState.Stand;
 
         currentHealth = maxHealth;
 
         hitCheck = false;
         dieCheck = false;
+
+        // 경계 오브젝트를 동적으로 참조
+        leftBoundary = GameObject.Find("StumpLeftBoundary").transform;
+        rightBoundary = GameObject.Find("StumpRightBoundary").transform;
 
         SetMoveDir();
         stateChangeTime = Time.time;
@@ -92,21 +96,21 @@ public class BlueSnailController : MonoBehaviour
     {
         SetSpriteDir(moveDir);
 
-        switch (mBlueSnailState)
+        switch (mStumpState)
         {
-            case BlueSnailState.Stand:
+            case StumpState.Stand:
                 stand();
                 break;
 
-            case BlueSnailState.Move:
+            case StumpState.Move:
                 move();
                 break;
 
-            case BlueSnailState.Hit:
+            case StumpState.Hit:
                 hit();
                 break;
 
-            case BlueSnailState.Die:
+            case StumpState.Die:
                 die();
                 break;
         }
@@ -114,7 +118,12 @@ public class BlueSnailController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (mBlueSnailState == BlueSnailState.Move)
+        if (mStumpState == StumpState.Stand)
+        {
+            mRigidBody.velocity = Vector2.zero;
+        }
+
+        if (mStumpState == StumpState.Move)
         {
             mRigidBody.velocity = new Vector2(moveDir * moveSpeed, mRigidBody.velocity.y);
         }
@@ -127,7 +136,7 @@ public class BlueSnailController : MonoBehaviour
         {
             mAnimator.SetBool("IsStanding", false);
             mAnimator.SetBool("IsMoving", true);
-            mBlueSnailState = BlueSnailState.Move;
+            mStumpState = StumpState.Move;
             SetMoveDir();
             stateChangeTime = Time.time;
         }
@@ -137,7 +146,7 @@ public class BlueSnailController : MonoBehaviour
             hitCheck = false;
             mAnimator.SetBool("IsStanding", false);
             mAnimator.SetTrigger("IsHitting");
-            mBlueSnailState = BlueSnailState.Hit;
+            mStumpState = StumpState.Hit;
         }
 
         if (dieCheck)
@@ -145,7 +154,7 @@ public class BlueSnailController : MonoBehaviour
             dieCheck = false;
             mAnimator.SetBool("IsStanding", false);
             mAnimator.SetBool("IsDying", true);
-            mBlueSnailState = BlueSnailState.Die;
+            mStumpState = StumpState.Die;
         }
     }
 
@@ -156,30 +165,33 @@ public class BlueSnailController : MonoBehaviour
         {
             mAnimator.SetBool("IsMoving", false);
             mAnimator.SetBool("IsStanding", true);
-            mBlueSnailState = BlueSnailState.Stand;
+            mStumpState = StumpState.Stand;
             stateChangeTime = Time.time;
         }
-
-        // 몬스터의 현재 위치가 x 좌표 46.2를 넘어가면 반대 방향으로 이동
-        if (transform.position.x > 46.2f || transform.position.x < -76.17f)
+        // 몬스터의 현재 위치가 경계를 넘어가면 반대 방향으로 이동
+        if (!isChangingDirection)
         {
-            moveDir *= -1f; // 이동 방향을 반대로 변경
-            SetSpriteDir(moveDir);
-            isChangingDirection = true; // 방향 변경 중 플래그를 설정
+            if (transform.position.x > rightBoundary.position.x || transform.position.x < leftBoundary.position.x)
+            {
+                moveDir *= -1f; // 이동 방향을 반대로 변경
+                SetSpriteDir(moveDir);
+                isChangingDirection = true; // 방향 변경 중 플래그를 설정
+            }
         }
 
         // 방향 변경 중이고, 몬스터의 x 좌표가 다시 일정 범위 안으로 들어올 때 플래그를 리셋
-        if (isChangingDirection && transform.position.x <= 46.2f && transform.position.x >= -76.17f)
+        if (isChangingDirection && transform.position.x <= (rightBoundary.position.x - 1f) && transform.position.x >= (leftBoundary.position.x + 1f))
         {
             isChangingDirection = false;
         }
+
 
         if (hitCheck)
         {
             hitCheck = false;
             mAnimator.SetBool("IsMoving", false);
             mAnimator.SetTrigger("IsHitting");
-            mBlueSnailState = BlueSnailState.Hit;
+            mStumpState = StumpState.Hit;
         }
 
         if (dieCheck)
@@ -187,7 +199,7 @@ public class BlueSnailController : MonoBehaviour
             dieCheck = false;
             mAnimator.SetBool("IsMoving", false);
             mAnimator.SetBool("IsDying", true);
-            mBlueSnailState = BlueSnailState.Die;
+            mStumpState = StumpState.Die;
         }
     }
     private void hit()
@@ -203,12 +215,12 @@ public class BlueSnailController : MonoBehaviour
         {
             mAnimator.ResetTrigger("IsHitting"); // 트리거 재설정
             mAnimator.SetBool("IsStanding", true);
-            mBlueSnailState = BlueSnailState.Stand;
+            mStumpState = StumpState.Stand;
         }
         else
         {
             mAnimator.SetBool("IsDying", true);
-            mBlueSnailState = BlueSnailState.Die;
+            mStumpState = StumpState.Die;
         }
     }
     private void die()
@@ -230,7 +242,7 @@ public class BlueSnailController : MonoBehaviour
         onceAddExperience = true;
         mAnimator.SetBool("IsDying", false);
         mAnimator.SetBool("IsStanding", true);
-        mBlueSnailState = BlueSnailState.Stand;
+        mStumpState = StumpState.Stand;
         currentHealth = maxHealth; // 초기 체력을 최대 체력으로 설정
         DropItems(); // 아이템 드랍 로직 추가
         monsterSpawner.DespawnMonster(gameObject); // 몬스터를 풀로 반환
@@ -239,29 +251,29 @@ public class BlueSnailController : MonoBehaviour
 
     private void DropItems()
     {
-            int cnt = 0; // 아이템 개수별로 드랍포지션을 다르게 하기 위한 변수 
-            if (itemDataBase == null) return;
+        int cnt = 0; // 아이템 개수별로 드랍포지션을 다르게 하기 위한 변수 
+        if (itemDataBase == null) return;
 
-            foreach (var dropItem in dropTable)
+        foreach (var dropItem in dropTable)
+        {
+            if (Random.value <= dropItem.dropChance)
             {
-                if (Random.value <= dropItem.dropChance)
+                cnt++;
+                Item item = itemDataBase.FetchItemByID(dropItem.itemId);
+                Debug.Log(item.Name);
+                if (item != null)
                 {
-                    cnt++;
-                    Item item = itemDataBase.FetchItemByID(dropItem.itemId);
-                    Debug.Log(item.Name);
-                    if (item != null)
+                    Vector3 dropPosition = transform.position + new Vector3(cnt * 1.6f, 0f, 0f);
+                    GameObject droppedItem = itemPool.GetItem(dropPosition, Quaternion.identity);
+                    DropItemData dropItemData = droppedItem.GetComponent<DropItemData>();
+                    if (dropItemData != null)
                     {
-                        Vector3 dropPosition = transform.position + new Vector3(cnt * 1.6f, 0f, 0f);
-                        GameObject droppedItem = itemPool.GetItem(dropPosition, Quaternion.identity);
-                        DropItemData dropItemData = droppedItem.GetComponent<DropItemData>();
-                        if (dropItemData != null)
-                        {
-                            dropItemData.Initialize(item, itemPool);
-                        }
+                        dropItemData.Initialize(item, itemPool);
                     }
                 }
             }
         }
+    }
 
     private void SetMoveDir()
     {

@@ -44,6 +44,10 @@ public class GreenMushRoomController : MonoBehaviour
     public Transform leftBoundary; // 왼쪽 경계
     public Transform rightBoundary; // 오른쪽 경계
 
+    private int experience = 17; // 획득 경험치량
+
+    public bool onceAddExperience = true;
+
     private void OnEnable()
     {
         col = GetComponent<Collider2D>();
@@ -216,6 +220,11 @@ public class GreenMushRoomController : MonoBehaviour
     }
     private void die()
     {
+        if (onceAddExperience)
+        {
+            onceAddExperience = false;
+            DataManager.instance.AddExperience(experience);
+        }
         StartCoroutine(DieCoroutine());
     }
 
@@ -225,6 +234,7 @@ public class GreenMushRoomController : MonoBehaviour
         mRigidBody.velocity = Vector2.zero; // 속도 초기화
         yield return new WaitForSeconds(1.0f);
         col.enabled = true;
+        onceAddExperience = true;
         mAnimator.SetBool("IsDying", false);
         mAnimator.SetBool("IsStanding", true);
         mGreenMushRoomState = GreenMushRoomState.Stand;

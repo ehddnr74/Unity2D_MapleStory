@@ -142,4 +142,4 @@ MonoBehaviour:
   lifetime: 0.5
   shurikenType: 
   direction: 0
-  trackingRange: 30
+  trackingRange: 40

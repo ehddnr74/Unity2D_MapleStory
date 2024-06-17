@@ -14,10 +14,17 @@ public class MonsterSpawner : MonoBehaviour
 
     void Start()
     {
-        // 시작 시에 스폰 포인트에 초기 몬스터 스폰
-        for (int i = 0; i < spawnPoints.Length; i++)
+        // 시작 시에 스폰 포인트에 초기 몬스터 스폰을 분산
+        StartCoroutine(SpawnMonstersWithDelay());
+    }
+
+    private IEnumerator SpawnMonstersWithDelay()
+    {
+        while (currentMonsterCount < maxMonsters)
         {
-            SpawnMonster(spawnPoints[i]);
+            Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            SpawnMonster(spawnPoint);
+            yield return new WaitForSeconds(Random.Range(0.01f, 0.05f)); // 3~4초의 랜덤 간격으로 몬스터 스폰
         }
     }
 

@@ -47,6 +47,10 @@ public class RedSnailController : MonoBehaviour
     public List<DropItem> dropTable; // 드랍 테이블 추가
     public GameObject itemPrefab; // 아이템 프리팹
 
+    private int experience = 8; // 획득 경험치량
+
+    public bool onceAddExperience = true;
+
     private void OnEnable()
     {
         col = GetComponent<Collider2D>();
@@ -212,6 +216,11 @@ public class RedSnailController : MonoBehaviour
     }
     private void die()
     {
+        if (onceAddExperience)
+        {
+            onceAddExperience = false;
+            DataManager.instance.AddExperience(experience);
+        }
         StartCoroutine(DieCoroutine());
     }
 
@@ -221,6 +230,7 @@ public class RedSnailController : MonoBehaviour
         mRigidBody.velocity = Vector2.zero; // 속도 초기화
         yield return new WaitForSeconds(1.0f);
         col.enabled = true;
+        onceAddExperience = true;
         mAnimator.SetBool("IsDying", false);
         mAnimator.SetBool("IsStanding", true);
         mRedSnailState = RedSnailState.Stand;

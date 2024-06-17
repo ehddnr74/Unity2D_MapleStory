@@ -10,6 +10,9 @@ public class DamageText : MonoBehaviour
     public float fadeDuration = 0.5f; // 알파값이 줄어드는 시간
 
     private CanvasGroup canvasGroup;
+    private DamageTextManager manager;
+    private Vector3 worldPosition;
+    private bool isInitialized = false;
 
     private void Awake()
     {
@@ -19,6 +22,14 @@ public class DamageText : MonoBehaviour
     {
         // 애니메이션 코루틴 시작
         StartCoroutine(FloatAndFade());
+    }
+
+    private void Update()
+    {
+        if (isInitialized)
+        {
+            transform.position = Camera.main.WorldToScreenPoint(worldPosition);
+        }
     }
 
     private IEnumerator FloatAndFade()
@@ -49,11 +60,20 @@ public class DamageText : MonoBehaviour
 
     private void Deactivate()
     {
+        isInitialized = false;
         gameObject.SetActive(false);
+        if (manager != null)
+        {
+            manager.ReturnToPool(this);
+        }
     }
 
-    public void SetDamage(int damage, bool isCritical, Sprite[] normalDigits, Sprite[] criticalDigits)
+    public void Initialize(Vector3 position, int damage, bool isCritical, Sprite[] normalDigits, Sprite[] criticalDigits)
     {
+        worldPosition = position;
+        transform.position = Camera.main.WorldToScreenPoint(worldPosition);
+        isInitialized = true;
+
         string damageStr = damage.ToString();
         Sprite[] digits = isCritical ? criticalDigits : normalDigits;
 
