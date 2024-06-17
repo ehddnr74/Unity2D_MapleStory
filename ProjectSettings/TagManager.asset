@@ -11,6 +11,7 @@ TagManager:
   - QuickSlot
   - Enemy
   - DroppedItem
+  - MonsterGround
   layers:
   - Default
   - TransparentFX

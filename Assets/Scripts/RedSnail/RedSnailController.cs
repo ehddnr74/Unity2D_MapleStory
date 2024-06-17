@@ -19,6 +19,8 @@ public class RedSnailController : MonoBehaviour
 
     private DamageTextManager damageTextManager;
 
+
+    public ItemPool itemPool; // 아이템 풀 참조
     public RedSnailState mRedSnailState;
     private MonsterSpawner monsterSpawner; // 몬스터 스포너 참조
     private ItemDataBase itemDataBase; // 아이템 데이터베이스 참조
@@ -52,8 +54,9 @@ public class RedSnailController : MonoBehaviour
         mAnimator = GetComponent<Animator>();
 
         damageTextManager = FindObjectOfType<DamageTextManager>();
-        monsterSpawner = FindObjectOfType<MonsterSpawner>();
+        monsterSpawner = GameObject.Find("RedSnailSpawner").GetComponent<MonsterSpawner>();
         itemDataBase = FindObjectOfType<ItemDataBase>();
+        itemPool = GameObject.Find("ItemPoolManager").GetComponent<ItemPool>();
 
         mRedSnailState = RedSnailState.Stand;
 
@@ -229,28 +232,29 @@ public class RedSnailController : MonoBehaviour
 
     private void DropItems()
     {
-        int cnt = 0; // 아이템 개수별로 드랍포지션을 다르게 하기 위한 변수 
-        if (itemDataBase == null) return;
+            int cnt = 0; // 아이템 개수별로 드랍포지션을 다르게 하기 위한 변수 
+            if (itemDataBase == null) return;
 
-        foreach (var dropItem in dropTable)
-        {
-            if (Random.value <= dropItem.dropChance)
+            foreach (var dropItem in dropTable)
             {
-                cnt++;
-                Item item = itemDataBase.FetchItemByID(dropItem.itemId);
-                Debug.Log(item.Name);
-                if (item != null)
+                if (Random.value <= dropItem.dropChance)
                 {
-                    GameObject droppedItem = Instantiate(itemPrefab, transform.position + new Vector3(cnt * 1.6f, 0f, 0f), Quaternion.identity);
-                    DropItemData dropItemData = droppedItem.GetComponent<DropItemData>();
-                    if (dropItemData != null)
+                    cnt++;
+                    Item item = itemDataBase.FetchItemByID(dropItem.itemId);
+                    Debug.Log(item.Name);
+                    if (item != null)
                     {
-                        dropItemData.Initialize(item);
+                        Vector3 dropPosition = transform.position + new Vector3(cnt * 1.6f, 0f, 0f);
+                        GameObject droppedItem = itemPool.GetItem(dropPosition, Quaternion.identity);
+                        DropItemData dropItemData = droppedItem.GetComponent<DropItemData>();
+                        if (dropItemData != null)
+                        {
+                            dropItemData.Initialize(item, itemPool);
+                        }
                     }
                 }
             }
         }
-    }
 
     private void SetMoveDir()
     {

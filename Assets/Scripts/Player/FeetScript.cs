@@ -40,7 +40,7 @@ public class FeetScript : MonoBehaviour
         //{
         //    lowerGroundCol = true;
         //}
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("MonsterGround"))
         {
             if (player != null)
             {
@@ -55,7 +55,7 @@ public class FeetScript : MonoBehaviour
     private void OnCollisionExit2D(Collision2D collision)
     {
 
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("MonsterGround"))
         {
             if (player != null)
             {

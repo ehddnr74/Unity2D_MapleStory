@@ -478,7 +478,7 @@ public class QuickSlot : MonoBehaviour
                 playerJumping = true;
                 player.toJump = true;
             }
-            if(playerJumping && !player.isGround && quickSlotDT.iconPath == "Key.Jump")
+            if (player.mRigidBody.velocity.x != 0 && playerJumping && !player.isGround && quickSlotDT.iconPath == "Key.Jump") 
             {
                 int level = skillManager.skillCollection.skills[2].skillLevel;
                 if (level > 0 && DataManager.instance.GetMP() >= skillManager.skillCollection.skills[2].levelEffects[level].mpReduction)

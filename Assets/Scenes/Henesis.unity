@@ -2883,6 +2883,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 287291736}
   m_CullTransparentMesh: 1
+--- !u!1 &301254169
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 301254171}
+  - component: {fileID: 301254170}
+  m_Layer: 0
+  m_Name: ItemPoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &301254170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301254169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a03f9e84e3b0ae4ba0e12bc710386f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 609508688080498782, guid: 68149df13cdd4d644a25fda212192b0a, type: 3}
+  poolSize: 10
+--- !u!4 &301254171
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301254169}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.782495, y: 14.224912, z: -0.48733228}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &302305241
 GameObject:
   m_ObjectHideFlags: 0
@@ -12029,6 +12075,7 @@ GameObject:
   - component: {fileID: 1373414810}
   - component: {fileID: 1373414812}
   - component: {fileID: 1373414811}
+  - component: {fileID: 1373414813}
   m_Layer: 0
   m_Name: Shop
   m_TagString: Untagged
@@ -12089,6 +12136,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 33680917157db4c4daf496277ffe5f36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1373414813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373414809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caf19d1bb00fe594985f16e5bcb7bbc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1381413596
@@ -16158,6 +16217,7 @@ GameObject:
   - component: {fileID: 2026845886}
   - component: {fileID: 2026845885}
   - component: {fileID: 2026845884}
+  - component: {fileID: 2026845888}
   m_Layer: 5
   m_Name: ShopUI
   m_TagString: Untagged
@@ -16248,6 +16308,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2026845888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026845883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 866efbe3908704f46832de8253e92285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2055097070
 GameObject:
   m_ObjectHideFlags: 0
@@ -16749,3 +16821,4 @@ SceneRoots:
   - {fileID: 1709785183}
   - {fileID: 142025261}
   - {fileID: 1118742712}
+  - {fileID: 301254171}

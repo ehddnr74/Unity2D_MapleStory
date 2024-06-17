@@ -6,7 +6,7 @@ public class MonsterManager : MonoBehaviour
 {
 
     public GameObject[] MonsterPrefabs;
-    public int poolSize = 10; // 풀 크기
+    public int poolSize = 50; // 풀 크기
 
     private Dictionary<GameObject, Queue<GameObject>> monsterPools = new Dictionary<GameObject, Queue<GameObject>>();
     //public List<Transform> points = new List<Transform>();

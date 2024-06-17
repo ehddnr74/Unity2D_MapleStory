@@ -5,6 +5,7 @@ using UnityEngine;
 public class DropItemData : MonoBehaviour
 {
     public Item item; // 드랍된 아이템의 데이터
+    private ItemPool itemPool;
 
     private SpriteRenderer spriteRenderer;
     public Rigidbody2D rb;
@@ -15,9 +16,10 @@ public class DropItemData : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Initialize(Item newItem)
+    public void Initialize(Item newItem, ItemPool pool)
     {
         item = newItem;
+        itemPool = pool;
         spriteRenderer.sprite = item.Icon;
 
         // 아이템 드랍 애니메이션 시작
@@ -52,7 +54,7 @@ public class DropItemData : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Ground"))
+        if (collision.CompareTag("MonsterGround"))
         {
             // 아이템이 Ground에 닿았을 때의 로직
             rb.velocity = Vector2.zero; // 아이템의 속도를 0으로 설정
@@ -78,6 +80,14 @@ public class DropItemData : MonoBehaviour
                 transform.position = new Vector3(initialPosition.x, initialPosition.y + t * bounceHeight, initialPosition.z);
                 yield return null;
             }
+        }
+    }
+
+    public void ReturnToPool()
+    {
+        if (itemPool != null)
+        {
+            itemPool.ReturnItem(gameObject);
         }
     }
 }

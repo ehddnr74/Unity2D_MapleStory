@@ -14,6 +14,7 @@ public class GreenMushRoomController : MonoBehaviour
 
     private DamageTextManager damageTextManager;
 
+    public ItemPool itemPool; // 아이템 풀 참조
     public GreenMushRoomState mGreenMushRoomState;
     private MonsterSpawner monsterSpawner; // 몬스터 스포너 참조
     private ItemDataBase itemDataBase; // 아이템 데이터베이스 참조
@@ -50,8 +51,9 @@ public class GreenMushRoomController : MonoBehaviour
         mAnimator = GetComponent<Animator>();
 
         damageTextManager = FindObjectOfType<DamageTextManager>();
-        monsterSpawner = FindObjectOfType<MonsterSpawner>();
+        monsterSpawner = GameObject.Find("GreenMushRoomSpawner").GetComponent<MonsterSpawner>();
         itemDataBase = FindObjectOfType<ItemDataBase>();
+        itemPool = GameObject.Find("ItemPoolManager").GetComponent<ItemPool>();
 
         mGreenMushRoomState = GreenMushRoomState.Stand;
 
@@ -157,9 +159,8 @@ public class GreenMushRoomController : MonoBehaviour
             mGreenMushRoomState = GreenMushRoomState.Stand;
             stateChangeTime = Time.time;
         }
-
-        // 몬스터의 현재 위치가 경계를 넘어가면 반대 방향으로 이동
-        if (!isChangingDirection)
+            // 몬스터의 현재 위치가 경계를 넘어가면 반대 방향으로 이동
+            if (!isChangingDirection)
         {
             if (transform.position.x > rightBoundary.position.x || transform.position.x < leftBoundary.position.x)
             {
@@ -170,7 +171,7 @@ public class GreenMushRoomController : MonoBehaviour
         }
 
         // 방향 변경 중이고, 몬스터의 x 좌표가 다시 일정 범위 안으로 들어올 때 플래그를 리셋
-        if (isChangingDirection && transform.position.x <= (rightBoundary.position.x - 5f) && transform.position.x >= (leftBoundary.position.x + 5f))
+        if (isChangingDirection && transform.position.x <= (rightBoundary.position.x - 1f) && transform.position.x >= (leftBoundary.position.x + 1f))
         {
             isChangingDirection = false;
         }
@@ -235,32 +236,33 @@ public class GreenMushRoomController : MonoBehaviour
 
     private void DropItems()
     {
-        int cnt = 0; // 아이템 개수별로 드랍포지션을 다르게 하기 위한 변수 
-        if (itemDataBase == null) return;
+            int cnt = 0; // 아이템 개수별로 드랍포지션을 다르게 하기 위한 변수 
+            if (itemDataBase == null) return;
 
-        foreach (var dropItem in dropTable)
-        {
-            if (Random.value <= dropItem.dropChance)
+            foreach (var dropItem in dropTable)
             {
-                cnt++;
-                Item item = itemDataBase.FetchItemByID(dropItem.itemId);
-                Debug.Log(item.Name);
-                if (item != null)
+                if (Random.value <= dropItem.dropChance)
                 {
-                    GameObject droppedItem = Instantiate(itemPrefab, transform.position + new Vector3(cnt * 1.6f, 0f, 0f), Quaternion.identity);
-                    DropItemData dropItemData = droppedItem.GetComponent<DropItemData>();
-                    if (dropItemData != null)
+                    cnt++;
+                    Item item = itemDataBase.FetchItemByID(dropItem.itemId);
+                    Debug.Log(item.Name);
+                    if (item != null)
                     {
-                        dropItemData.Initialize(item);
+                        Vector3 dropPosition = transform.position + new Vector3(cnt * 1.6f, 0f, 0f);
+                        GameObject droppedItem = itemPool.GetItem(dropPosition, Quaternion.identity);
+                        DropItemData dropItemData = droppedItem.GetComponent<DropItemData>();
+                        if (dropItemData != null)
+                        {
+                            dropItemData.Initialize(item, itemPool);
+                        }
                     }
                 }
             }
         }
-    }
 
     private void SetMoveDir()
     {
-        moveDir = Random.Range(-1f, 1f);
+        moveDir = Random.value < 0.5f ? -1f : 1f;
         SetSpriteDir(moveDir);
     }
 

@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
     public PlayerState mPlayerState;
 
     Collider2D col;
-    Rigidbody2D mRigidBody;
+    public Rigidbody2D mRigidBody;
     Animator mAnimator;
 
     public float dir;
@@ -248,7 +248,7 @@ public class Player : MonoBehaviour
     {
         if (collision.CompareTag("Ladder"))
         {
-            if (mPlayerState == PlayerState.Walk ||mPlayerState == PlayerState.Idle || mPlayerState == PlayerState.Jump)
+            if (mPlayerState == PlayerState.Walk || mPlayerState == PlayerState.Idle || mPlayerState == PlayerState.Jump)
             {
                 isLadder = true;
             }
@@ -266,7 +266,8 @@ public class Player : MonoBehaviour
 
         if (!invincibel && collision.gameObject.CompareTag("Enemy"))
         {
-            if(isLaddering || mPlayerState == PlayerState.Jump || mPlayerState == PlayerState.ProneStab)
+            if (isLaddering || mPlayerState == PlayerState.Jump || mPlayerState == PlayerState.ProneStab
+                || mPlayerState == PlayerState.Attack || mPlayerState == PlayerState.JumpAttack || mPlayerState == PlayerState.Walk)
             {
                 int damageAmount = CalculateDamageFromEnemy(collision.gameObject); // 적으로부터 입는 데미지 계산
                 ShowPlayerDamage(damageAmount, collision.transform.position); // 데미지 텍스트 표시
@@ -329,8 +330,9 @@ public class Player : MonoBehaviour
                     DataManager.instance.AddMeso(UnityEngine.Random.Range(100, 300));
                 }
             }
-            // 아이템 오브젝트 삭제
-            Destroy(itemObject);
+
+            // 아이템을 풀로 반환
+            dropItemData.ReturnToPool();
         }
     }
 
@@ -338,14 +340,23 @@ public class Player : MonoBehaviour
 
 private void hit()
     {
-            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) // HitAnimation 재생중에 Animation을 바꿔서 움직일 수 있도록
-            {
-                mPlayerState = PlayerState.Walk;
-                mAnimator.SetBool("IsHitting", false);
-                hitTime = 0f;
-            }
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) // HitAnimation 재생중에 Animation을 바꿔서 움직일 수 있도록
+        {
+            mPlayerState = PlayerState.Walk;
+            mAnimator.SetBool("IsHitting", false);
+            hitTime = 0f;
+        }
 
-            if (hitTime >= 2.0f) // 2초 동안 HitAnimation 재생 
+        if (toJump) // To Jump
+        {
+            isGround = false;
+            mRigidBody.velocity = new Vector2(mRigidBody.velocity.x, jumpForce);
+            mAnimator.SetBool("IsHitting", false);
+            mAnimator.SetBool("IsJumping", true);
+            mPlayerState = PlayerState.Jump;
+        }
+
+        if (hitTime >= 2.0f) // 2초 동안 HitAnimation 재생 
             {
                 mPlayerState = PlayerState.Idle;
                 mAnimator.SetBool("IsHitting", false);
@@ -516,7 +527,7 @@ private void hit()
 
             if (currentYVelocity < 0)
             {
-                adjustedDoubleJumpForce += currentYVelocity * doubleJumpFallMultiplier; // 필요에 따라 값을 조정하세요
+                adjustedDoubleJumpForce += currentYVelocity * doubleJumpFallMultiplier; 
             }
             canDoubleJump = false;
             mRigidBody.velocity = new Vector2(dir * doubleJumpVelocityX, adjustedDoubleJumpForce);
@@ -659,8 +670,11 @@ private void hit()
             if (!LadderPosition)
             {
                 LadderPosition = true;
-                Vector3 ladderPosition = currentLadder.GetLadderPosition();
-                transform.position = new Vector3(ladderPosition.x, transform.position.y +0.1f, transform.position.z);
+                if (currentLadder != null)
+                {
+                    Vector3 ladderPosition = currentLadder.GetLadderPosition();
+                    transform.position = new Vector3(ladderPosition.x, transform.position.y + 0.1f, transform.position.z);
+                }
             }
 
             mRigidBody.velocity = Vector2.zero;
