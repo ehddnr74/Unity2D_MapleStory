@@ -38,6 +38,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8488744980382748479}
+  - {fileID: 2463883900208614915}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1221899631310457308
@@ -125,14 +126,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9815008caff296418d6a72a962fe867, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  surikenManagerObject: {fileID: 0}
+  playerName: 
+  playerNameTagPrefab: {fileID: 8308145693846017770, guid: 3c07b327e2fb79f4f825503548585180, type: 3}
   mPlayerState: 0
+  mRigidBody: {fileID: 0}
   dir: 0
   moveSpeed: 10
   ladderMoveSpeed: 6
   jumpForce: 25
+  criticalProbability: 0
   isGround: 0
   isLadder: 0
   isLaddering: 0
+  attachDroppedItem: 0
+  pickable: 0
+  isAttacking: 0
+  canAttack: 1
+  attackCoolDown: 0.6
+  flipX: 0
+  knockbackForce: 5
+  knockbackDuration: 0.2
+  invincibel: 0
+  invincibilityPeriod: 2
+  toJump: 0
+  toAttack: 0
+  canDoubleJump: 0
+  doubleJumpForce: 5
+  jumpTime: 0
+  doubleJumping: 0
+  currentSuriken: 6
+  luckySeven: 0
+  SecondSuriken: 0
 --- !u!61 &1805266525255279487
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -233,6 +258,8 @@ MonoBehaviour:
   mpBar: {fileID: 0}
   hpBarText: {fileID: 0}
   mpBarText: {fileID: 0}
+  StatUIPanel: {fileID: 0}
+  activeUI: 0
 --- !u!114 &2809920395275818541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,6 +275,9 @@ MonoBehaviour:
   skillCollection:
     skills: []
     skillPoint: 0
+  SkillUIPanel: {fileID: 0}
+  activeUI: 0
+  itemChanged: 0
 --- !u!1 &7540701172728669439
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,3 +368,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3b9ad56ad159e844bdde656569d8dc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &8304922473223335333
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2463883900208614915}
+  m_Layer: 12
+  m_Name: NameTag
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2463883900208614915
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8304922473223335333}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.774, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7183620098307079217}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

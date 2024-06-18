@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +8,11 @@ using static GreenMushRoomController;
 
 public class OrangeMushRoomController : MonoBehaviour
 {
+    private string monsterName = "주황 버섯";
+    public Transform nameTagPosition; // 네임태그를 표시할 위치 (예: 몬스터의 머리 위)
+    private GameObject nameTagInstance; // 생성된 네임태그 인스턴스
+    private TextMeshProUGUI nameTagText; // 네임태그의 텍스트 컴포넌트
+    private NameTagPool nameTagPool; // 네임태그 풀링 시스템
 
     public Transform hpBarPosition; // HP 바를 표시할 위치 (예: 몬스터의 머리 위)
     private GameObject hpBarInstance; // 생성된 HP 바 인스턴스
@@ -76,6 +82,7 @@ public class OrangeMushRoomController : MonoBehaviour
         mOrangeMushRoomState = OrangeMushRoomState.Stand;
 
         hpBarPool = GameObject.Find("HpBarCanvas").GetComponent<HpBarPool>();
+        nameTagPool = GameObject.Find("NameTagCanvas").GetComponent<NameTagPool>();
         currentHealth = maxHealth;
 
         // HP 바 인스턴스 생성 및 캔버스에 추가
@@ -87,6 +94,11 @@ public class OrangeMushRoomController : MonoBehaviour
         // 경계 오브젝트를 동적으로 참조
         leftBoundary = GameObject.Find("GMRLeftBoundary").transform;
         rightBoundary = GameObject.Find("GMRRightBoundary").transform;
+
+        // 네임태그 풀링 시스템 초기화
+        nameTagInstance = nameTagPool.GetNameTag();
+        nameTagText = nameTagInstance.GetComponentInChildren<TextMeshProUGUI>();
+        nameTagText.text = monsterName; // 몬스터 이름 설정
 
         SetMoveDir();
         stateChangeTime = Time.time;
@@ -100,7 +112,11 @@ public class OrangeMushRoomController : MonoBehaviour
             hpBarInstance = null;
         }
 
-        Debug.Log($"OnDisable: {gameObject.name} - HP Bar Returned");
+        if (nameTagInstance != null)
+        {
+            nameTagPool.ReturnNameTag(nameTagInstance);
+            nameTagInstance = null;
+        }
     }
 
 
@@ -111,6 +127,13 @@ public class OrangeMushRoomController : MonoBehaviour
             // 몬스터 위치에 따라 HP 바 위치 업데이트
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(hpBarPosition.position);
             hpBarInstance.transform.position = screenPosition;
+        }
+
+        if (nameTagInstance != null)
+        {
+            // 몬스터 위치에 따라 네임태그 위치 업데이트
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(nameTagPosition.position);
+            nameTagInstance.transform.position = screenPosition;
         }
 
         SetSpriteDir(moveDir);
@@ -334,7 +357,7 @@ public class OrangeMushRoomController : MonoBehaviour
     {
         col.enabled = false; // 콜라이더 비활성화
         rb.velocity = Vector2.zero; // 속도 초기화
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         col.enabled = true;
         onceAddExperience = true;
         mAnimator.SetBool("IsDying", false);

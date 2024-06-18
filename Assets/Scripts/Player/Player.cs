@@ -13,7 +13,11 @@ public class Player : MonoBehaviour
 
     public GameObject surikenManagerObject;
     private ShurikenManager surikenManager;
-    private QuickSlot quickSlot; 
+    private QuickSlot quickSlot;
+
+    public string playerName; // 플레이어 이름
+    public PlayerNameTag playerNameTagPrefab; // 플레이어 네임태그 프리팹
+    private PlayerNameTag playerNameTag; // 플레이어 네임태그 스크립트
 
 
     public enum PlayerState
@@ -117,6 +121,16 @@ public class Player : MonoBehaviour
         surikenManager = surikenManagerObject.GetComponent<ShurikenManager>();
         quickSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
         damageTextManager = FindObjectOfType<DamageTextManager>();
+
+        // 캔버스 찾기
+        Canvas canvas = FindObjectOfType<Canvas>();
+
+        // 플레이어 네임태그 인스턴스 생성
+
+        playerNameTag = Instantiate(playerNameTagPrefab, canvas.transform);
+        playerNameTag.player = transform; // 플레이어 Transform 할당
+        playerName = DataManager.instance.nowPlayer.name;
+        playerNameTag.SetName(playerName);
         //feetCollider = transform.Find("FeetCollider").GetComponent<Collider2D>(); // 발 콜라이더를 찾음
     }
 

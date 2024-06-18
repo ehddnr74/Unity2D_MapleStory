@@ -1,10 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StumpController : MonoBehaviour
 {
+    private string monsterName = "스텀프";
+    public Transform nameTagPosition; // 네임태그를 표시할 위치 (예: 몬스터의 머리 위)
+    private GameObject nameTagInstance; // 생성된 네임태그 인스턴스
+    private TextMeshProUGUI nameTagText; // 네임태그의 텍스트 컴포넌트
+    private NameTagPool nameTagPool; // 네임태그 풀링 시스템
+
     public Transform hpBarPosition; // HP 바를 표시할 위치 (예: 몬스터의 머리 위)
     private GameObject hpBarInstance; // 생성된 HP 바 인스턴스
     private Slider hpSlider; // HP 바의 Slider 컴포넌트
@@ -68,6 +75,7 @@ public class StumpController : MonoBehaviour
         mStumpState = StumpState.Stand;
 
         hpBarPool = GameObject.Find("HpBarCanvas").GetComponent<HpBarPool>();
+        nameTagPool = GameObject.Find("NameTagCanvas").GetComponent<NameTagPool>();
         currentHealth = maxHealth;
 
         // HP 바 인스턴스 생성 및 캔버스에 추가
@@ -83,6 +91,12 @@ public class StumpController : MonoBehaviour
         leftBoundary = GameObject.Find("StumpLeftBoundary").transform;
         rightBoundary = GameObject.Find("StumpRightBoundary").transform;
 
+
+        // 네임태그 풀링 시스템 초기화
+        nameTagInstance = nameTagPool.GetNameTag();
+        nameTagText = nameTagInstance.GetComponentInChildren<TextMeshProUGUI>();
+        nameTagText.text = monsterName; // 몬스터 이름 설정
+
         SetMoveDir();
         stateChangeTime = Time.time;
     }
@@ -96,7 +110,11 @@ public class StumpController : MonoBehaviour
             hpBarInstance = null;
         }
 
-        Debug.Log($"OnDisable: {gameObject.name} - HP Bar Returned");
+        if (nameTagInstance != null)
+        {
+            nameTagPool.ReturnNameTag(nameTagInstance);
+            nameTagInstance = null;
+        }
     }
 
     public void TakeDamage(Vector3 Position, int damage, bool isCritical, bool luckySeven, bool secondSuriken)
@@ -125,6 +143,13 @@ public class StumpController : MonoBehaviour
             // 몬스터 위치에 따라 HP 바 위치 업데이트
             Vector3 screenPosition = Camera.main.WorldToScreenPoint(hpBarPosition.position);
             hpBarInstance.transform.position = screenPosition;
+        }
+
+        if (nameTagInstance != null)
+        {
+            // 몬스터 위치에 따라 네임태그 위치 업데이트
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(nameTagPosition.position);
+            nameTagInstance.transform.position = screenPosition;
         }
 
         SetSpriteDir(moveDir);
@@ -164,6 +189,23 @@ public class StumpController : MonoBehaviour
 
     private void stand()
     {
+        // 몬스터의 현재 위치가 경계를 넘어가면 반대 방향으로 이동
+        if (!isChangingDirection)
+        {
+            if (transform.position.x >= rightBoundary.position.x || transform.position.x <= leftBoundary.position.x)
+            {
+                moveDir *= -1f; // 이동 방향을 반대로 변경
+                SetSpriteDir(moveDir);
+                isChangingDirection = true; // 방향 변경 중 플래그를 설정
+            }
+        }
+
+        // 방향 변경 중이고, 몬스터의 x 좌표가 다시 일정 범위 안으로 들어올 때 플래그를 리셋
+        if (isChangingDirection && transform.position.x <= (rightBoundary.position.x - 1f) && transform.position.x >= (leftBoundary.position.x + 1f))
+        {
+            isChangingDirection = false;
+        }
+
         // 일정 시간 대기 후 이동 상태로 전환
         if (Time.time - stateChangeTime >= idleTime)
         {

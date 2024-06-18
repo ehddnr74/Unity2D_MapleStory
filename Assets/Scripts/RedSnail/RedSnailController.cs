@@ -92,7 +92,7 @@ public class RedSnailController : MonoBehaviour
 
         // 네임태그 풀링 시스템 초기화
         nameTagInstance = nameTagPool.GetNameTag();
-        nameTagText = nameTagInstance.GetComponent<TextMeshProUGUI>();
+        nameTagText = nameTagInstance.GetComponentInChildren<TextMeshProUGUI>();
         nameTagText.text = monsterName; // 몬스터 이름 설정
 
         hitCheck = false;
@@ -128,7 +128,7 @@ public class RedSnailController : MonoBehaviour
             if (!luckySeven || (luckySeven && !secondSuriken))
             {
                 dieCheck = true;
-            }
+           }
         }
         else
         {
@@ -185,6 +185,21 @@ public class RedSnailController : MonoBehaviour
 
     private void stand()
     {
+        // 몬스터의 현재 위치가 x 좌표 46.2를 넘어가면 반대 방향으로 이동
+        if (transform.position.x >= 46.2f || transform.position.x <= -76.17f)
+        {
+            moveDir *= -1f; // 이동 방향을 반대로 변경
+            SetSpriteDir(moveDir);
+            isChangingDirection = true; // 방향 변경 중 플래그를 설정
+        }
+
+        // 방향 변경 중이고, 몬스터의 x 좌표가 다시 일정 범위 안으로 들어올 때 플래그를 리셋
+        if (isChangingDirection && transform.position.x <= 45.2f && transform.position.x >= -75.17f)
+        {
+            isChangingDirection = false;
+        }
+
+
         // 일정 시간 대기 후 이동 상태로 전환
         if (Time.time - stateChangeTime >= idleTime)
         {
@@ -224,7 +239,7 @@ public class RedSnailController : MonoBehaviour
         }
 
         // 몬스터의 현재 위치가 x 좌표 46.2를 넘어가면 반대 방향으로 이동
-        if (transform.position.x > 46.2f || transform.position.x < -76.17f)
+        if (transform.position.x >= 46.2f || transform.position.x <= -76.17f)
         {
             moveDir *= -1f; // 이동 방향을 반대로 변경
             SetSpriteDir(moveDir);
@@ -232,7 +247,7 @@ public class RedSnailController : MonoBehaviour
         }
 
         // 방향 변경 중이고, 몬스터의 x 좌표가 다시 일정 범위 안으로 들어올 때 플래그를 리셋
-        if (isChangingDirection && transform.position.x <= 46.2f && transform.position.x >= -76.17f)
+        if (isChangingDirection && transform.position.x <= 45.2f && transform.position.x >= -75.17f)
         {
             isChangingDirection = false;
         }
@@ -288,7 +303,7 @@ public class RedSnailController : MonoBehaviour
     {
         col.enabled = false; // 콜라이더 비활성화
         mRigidBody.velocity = Vector2.zero; // 속도 초기화
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         col.enabled = true;
         onceAddExperience = true;
         mAnimator.SetBool("IsDying", false);
