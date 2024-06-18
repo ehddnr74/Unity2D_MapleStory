@@ -355,7 +355,8 @@ public class Player : MonoBehaviour
             }
 
             // 아이템을 풀로 반환
-            dropItemData.ReturnToPool();
+            //dropItemData.ReturnToPool();
+            dropItemData.pickUp = true;
         }
     }
 

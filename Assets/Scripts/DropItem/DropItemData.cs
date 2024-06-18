@@ -10,6 +10,11 @@ public class DropItemData : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public Rigidbody2D rb;
 
+    public bool pickUp = false;
+    private Transform playerTransform; // 플레이어의 트랜스폼
+
+    private Coroutine bounceCoroutine;
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -63,7 +68,7 @@ public class DropItemData : MonoBehaviour
             rb.velocity = Vector2.zero; // 아이템의 속도를 0으로 설정
             rb.isKinematic = true; // 아이템을 바닥에 고정
 
-            StartCoroutine(BounceAnimation());
+            bounceCoroutine = StartCoroutine(BounceAnimation());
         }
     }
     private IEnumerator BounceAnimation()
@@ -73,10 +78,21 @@ public class DropItemData : MonoBehaviour
 
         while (true)
         {
+            if (pickUp)
+            {
+                PickUpAnim();
+                yield break; // 코루틴 종료
+            }
+
             float elapsedTime = 0f;
 
             while (elapsedTime < 3.0f)
             {
+                if (pickUp)
+                {
+                    PickUpAnim();
+                    yield break; // 코루틴 종료
+                }
                 elapsedTime += Time.deltaTime;
                 float t = Mathf.Sin(elapsedTime * Mathf.PI); // 1초에 1번 왕복
 
@@ -86,7 +102,47 @@ public class DropItemData : MonoBehaviour
         }
     }
 
-    public void ReturnToPool()
+    public void PickUpAnim()
+    {
+        if (bounceCoroutine != null)
+        {
+            StopCoroutine(bounceCoroutine);
+            bounceCoroutine = null;
+        }
+
+        // 플레이어의 트랜스폼을 찾아 설정합니다.
+        playerTransform = FindObjectOfType<Player>().transform;
+
+        StartCoroutine(PickUpAnimation());
+    }
+
+    private IEnumerator PickUpAnimation()
+    {
+        float animationDuration = 0.2f; // 픽업 애니메이션 지속 시간
+        float elapsedTime = 0f;
+        Vector3 initialPosition = transform.position;
+        Vector3 targetPosition = playerTransform.position;//+ new Vector3(0f, 0.f, 0f); // 목표 위치를 플레이어 위치로 설정
+
+
+
+        while (elapsedTime < animationDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / animationDuration;
+
+            // 위로 올라가는 애니메이션
+            transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
+
+            yield return null;
+        }
+
+        pickUp = false;
+        // 풀로 반환
+        ReturnToPool();
+    
+}
+
+        public void ReturnToPool()
     {
         if (itemPool != null)
         {
