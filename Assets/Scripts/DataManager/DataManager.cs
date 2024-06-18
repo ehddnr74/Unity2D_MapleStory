@@ -19,11 +19,13 @@ public class DataManager : MonoBehaviour
     public StatData playerStat;
     public ItemData itemData; // ItemData 변수 추가
 
+    private Player player;
     private Shop shop;
     private Inventory inv;
     private PlayerManager playerManager;
     private SkillManager skillManager;
     private StatManager statManager;
+    private SkillEffectManager skillEffectManager;
 
 
     string path;
@@ -49,10 +51,12 @@ public class DataManager : MonoBehaviour
 
     void Start()
     {
+        player = GameObject.Find("Player").GetComponent<Player>();
         shop = GameObject.Find("Shop").GetComponent<Shop>();
         playerManager = FindObjectOfType<PlayerManager>();
         skillManager = FindObjectOfType<SkillManager>();
         statManager = FindObjectOfType<StatManager>();
+        skillEffectManager = GameObject.Find("EffectPoolManager").GetComponent<SkillEffectManager>();
         inv = GameObject.Find("Inventory").GetComponent<Inventory>();
         //SaveSkill();
         LoadData();
@@ -160,6 +164,8 @@ public class DataManager : MonoBehaviour
         nowPlayer.experience += amount;
         if (nowPlayer.experience >= nowPlayer.experienceTable[nowPlayer.level])
         {
+            // 스킬 이펙트 생성
+            skillEffectManager.ShowEffect("LevelUpEffect", player.transform, new Vector3(0f, 1.5f, 0f), Quaternion.identity, new Vector3(1.3f, 1.3f, 0f), 1.5f);
             nowPlayer.level++;
             LevelUpToStat(); //레벨업 시 스탯 성장
             playerManager.UpdateLevelUI(nowPlayer.level);

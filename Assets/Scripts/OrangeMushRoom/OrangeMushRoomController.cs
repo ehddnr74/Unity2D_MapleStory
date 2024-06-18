@@ -2,10 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 using static GreenMushRoomController;
 
 public class OrangeMushRoomController : MonoBehaviour
 {
+
+    public Transform hpBarPosition; // HP 바를 표시할 위치 (예: 몬스터의 머리 위)
+    private GameObject hpBarInstance; // 생성된 HP 바 인스턴스
+    private Slider hpSlider; // HP 바의 Slider 컴포넌트
+    private HpBarPool hpBarPool; // HP 바 풀링 시스템
+
     private Rigidbody2D rb;
     private Collider2D col;
     Animator mAnimator;
@@ -68,7 +75,14 @@ public class OrangeMushRoomController : MonoBehaviour
 
         mOrangeMushRoomState = OrangeMushRoomState.Stand;
 
+        hpBarPool = GameObject.Find("HpBarCanvas").GetComponent<HpBarPool>();
         currentHealth = maxHealth;
+
+        // HP 바 인스턴스 생성 및 캔버스에 추가
+        hpBarInstance = hpBarPool.GetHPBar();
+        hpSlider = hpBarInstance.GetComponent<Slider>();
+        hpSlider.maxValue = maxHealth;
+        hpSlider.value = currentHealth;
 
         // 경계 오브젝트를 동적으로 참조
         leftBoundary = GameObject.Find("GMRLeftBoundary").transform;
@@ -77,8 +91,28 @@ public class OrangeMushRoomController : MonoBehaviour
         SetMoveDir();
         stateChangeTime = Time.time;
     }
+
+    private void OnDisable()
+    {
+        if (hpBarInstance != null)
+        {
+            hpBarPool.ReturnHPBar(hpBarInstance);
+            hpBarInstance = null;
+        }
+
+        Debug.Log($"OnDisable: {gameObject.name} - HP Bar Returned");
+    }
+
+
     void Update()
     {
+        if (hpBarInstance != null)
+        {
+            // 몬스터 위치에 따라 HP 바 위치 업데이트
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(hpBarPosition.position);
+            hpBarInstance.transform.position = screenPosition;
+        }
+
         SetSpriteDir(moveDir);
 
         switch (mOrangeMushRoomState)
@@ -119,6 +153,7 @@ public class OrangeMushRoomController : MonoBehaviour
         {
             hitCheck = true;
         }
+        hpSlider.value = currentHealth;
     }
 
     private void FixedUpdate()

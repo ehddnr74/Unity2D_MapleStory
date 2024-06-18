@@ -1,9 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GreenMushRoomController : MonoBehaviour
 {
+    public Transform hpBarPosition; // HP 바를 표시할 위치 (예: 몬스터의 머리 위)
+    private GameObject hpBarInstance; // 생성된 HP 바 인스턴스
+    private Slider hpSlider; // HP 바의 Slider 컴포넌트
+    private HpBarPool hpBarPool; // HP 바 풀링 시스템
+
     public enum GreenMushRoomState
     {
         Stand,
@@ -61,7 +67,14 @@ public class GreenMushRoomController : MonoBehaviour
 
         mGreenMushRoomState = GreenMushRoomState.Stand;
 
+        hpBarPool = GameObject.Find("HpBarCanvas").GetComponent<HpBarPool>();
         currentHealth = maxHealth;
+
+        // HP 바 인스턴스 생성 및 캔버스에 추가
+        hpBarInstance = hpBarPool.GetHPBar();
+        hpSlider = hpBarInstance.GetComponent<Slider>();
+        hpSlider.maxValue = maxHealth;
+        hpSlider.value = currentHealth;
 
         hitCheck = false;
         dieCheck = false;
@@ -73,6 +86,17 @@ public class GreenMushRoomController : MonoBehaviour
         SetMoveDir();
         stateChangeTime = Time.time;
     }
+    private void OnDisable()
+    {
+        if (hpBarInstance != null)
+        {
+            hpBarPool.ReturnHPBar(hpBarInstance);
+            hpBarInstance = null;
+        }
+
+        Debug.Log($"OnDisable: {gameObject.name} - HP Bar Returned");
+    }
+
 
     public void TakeDamage(Vector3 Position, int damage, bool isCritical, bool luckySeven, bool secondSuriken)
     {
@@ -90,10 +114,18 @@ public class GreenMushRoomController : MonoBehaviour
         {
             hitCheck = true;
         }
+        hpSlider.value = currentHealth;
     }
 
     private void Update()
     {
+        if (hpBarInstance != null)
+        {
+            // 몬스터 위치에 따라 HP 바 위치 업데이트
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(hpBarPosition.position);
+            hpBarInstance.transform.position = screenPosition;
+        }
+
         SetSpriteDir(moveDir);
 
         switch (mGreenMushRoomState)

@@ -5,10 +5,25 @@ using UnityEngine;
 using static Player;
 using static RedSnailController;
 using Random = UnityEngine.Random;
+using UnityEngine.UI;
+using Unity.Mathematics;
+using TMPro;
 
 
 public class RedSnailController : MonoBehaviour
 {
+
+    private string monsterName = "빨간 달팽이";
+    public Transform nameTagPosition; // 네임태그를 표시할 위치 (예: 몬스터의 머리 위)
+    private GameObject nameTagInstance; // 생성된 네임태그 인스턴스
+    private TextMeshProUGUI nameTagText; // 네임태그의 텍스트 컴포넌트
+    private NameTagPool nameTagPool; // 네임태그 풀링 시스템
+
+    public Transform hpBarPosition; // HP 바를 표시할 위치 (예: 몬스터의 머리 위)
+    private GameObject hpBarInstance; // 생성된 HP 바 인스턴스
+    private Slider hpSlider; // HP 바의 Slider 컴포넌트
+    private HpBarPool hpBarPool; // HP 바 풀링 시스템
+
     public enum RedSnailState
     {
         Stand,
@@ -64,7 +79,21 @@ public class RedSnailController : MonoBehaviour
 
         mRedSnailState = RedSnailState.Stand;
 
+        hpBarPool = GameObject.Find("HpBarCanvas").GetComponent<HpBarPool>();
+        nameTagPool = GameObject.Find("NameTagCanvas").GetComponent<NameTagPool>();
+
         currentHealth = maxHealth;
+
+        // HP 바 인스턴스 생성 및 캔버스에 추가
+        hpBarInstance = hpBarPool.GetHPBar();
+        hpSlider = hpBarInstance.GetComponent<Slider>();
+        hpSlider.maxValue = maxHealth;
+        hpSlider.value = currentHealth;
+
+        // 네임태그 풀링 시스템 초기화
+        nameTagInstance = nameTagPool.GetNameTag();
+        nameTagText = nameTagInstance.GetComponent<TextMeshProUGUI>();
+        nameTagText.text = monsterName; // 몬스터 이름 설정
 
         hitCheck = false;
         dieCheck = false;
@@ -72,6 +101,22 @@ public class RedSnailController : MonoBehaviour
         SetMoveDir();
         stateChangeTime = Time.time;
     }
+    private void OnDisable()
+    {
+        if (hpBarInstance != null)
+        {
+            hpBarPool.ReturnHPBar(hpBarInstance);
+            hpBarInstance = null;
+        }
+
+        if (nameTagInstance != null)
+        {
+            nameTagPool.ReturnNameTag(nameTagInstance);
+            nameTagInstance = null;
+        }
+    }
+
+
 
     public void TakeDamage(Vector3 Position, int damage, bool isCritical, bool luckySeven, bool secondSuriken)
     {
@@ -89,10 +134,25 @@ public class RedSnailController : MonoBehaviour
         {
             hitCheck = true;
         }
+        hpSlider.value = currentHealth;
     }
 
     private void Update()
     {
+        if (hpBarInstance != null)
+        {
+            // 몬스터 위치에 따라 HP 바 위치 업데이트
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(hpBarPosition.position);
+            hpBarInstance.transform.position = screenPosition;
+        }
+
+        if (nameTagInstance != null)
+        {
+            // 몬스터 위치에 따라 네임태그 위치 업데이트
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(nameTagPosition.position);
+            nameTagInstance.transform.position = screenPosition;
+        }
+
         SetSpriteDir(moveDir);
 
         switch (mRedSnailState)

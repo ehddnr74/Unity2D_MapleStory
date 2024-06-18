@@ -42,6 +42,8 @@ public class QuickSlot : MonoBehaviour
     private bool playerJumping; //더블점프를 위함
 
     public BuffManager buffManager;
+    public SkillEffectManager skillEffectManager; // 스킬 이펙트 매니저 참조
+    public HitEffectManager hitEffectManager; // 히트 이펙트 매니저 참조
 
     private void Awake()
     {
@@ -61,6 +63,8 @@ public class QuickSlot : MonoBehaviour
         itemdataBase = inv.GetComponent<ItemDataBase>();
         skillManager = FindObjectOfType<SkillManager>();
         statManager = FindObjectOfType<StatManager>();
+        skillEffectManager = GameObject.Find("EffectPoolManager").GetComponent<SkillEffectManager>();
+        hitEffectManager = GameObject.Find("EffectPoolManager").GetComponent<HitEffectManager>();
         player = FindObjectOfType<Player>();
 
         buffManager = FindObjectOfType<BuffManager>(); // BuffManager 인스턴스 찾기
@@ -417,6 +421,9 @@ public class QuickSlot : MonoBehaviour
 
                     // 버프 활성화
                     buffManager.ActivateBuff("Heist", quickSlotDT.itemIcon, skillManager.skillCollection.skills[1].levelEffects[level].duration);
+
+                    // 스킬 이펙트 생성
+                    skillEffectManager.ShowEffect("HeistEffect", player.transform, Vector3.zero, Quaternion.identity, Vector3.one, 0.8f);
                 }
             }
 
@@ -443,6 +450,9 @@ public class QuickSlot : MonoBehaviour
 
                     // 버프 활성화
                     buffManager.ActivateBuff("WindBooster", quickSlotDT.itemIcon, skillManager.skillCollection.skills[3].levelEffects[level].duration);
+
+                    // 스킬 이펙트 생성
+                    skillEffectManager.ShowEffect("WindBoosterEffect", player.transform, new Vector3(-0.05f, 0.7f, 0f), Quaternion.identity, Vector3.one, 0.9f);
                 }
             }
             if (quickSlotDT.iconPath == "Key.PickUp" && player.attachDroppedItem)
