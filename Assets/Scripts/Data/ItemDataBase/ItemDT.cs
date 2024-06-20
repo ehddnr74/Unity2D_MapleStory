@@ -15,16 +15,22 @@ public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     private QuickSlot qSlot;
     private Vector2 offset;
 
+    private AudioSource audioSource;
+    public AudioClip itemDragStart;
+    public AudioClip itemDragEnd;
+
     void Start()
     {
         inv = GameObject.Find("Inventory").GetComponent<Inventory>();
         tooltip = inv.GetComponent<InventoryTooltip>();
         qSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if(item != null)
+        PlaySound(itemDragStart);
+        if (item != null)
         {
             inv.items[slot] = new Item();
             offset = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
@@ -44,6 +50,7 @@ public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        PlaySound(itemDragEnd);
         // Raycast를 사용하여 포인터가 어떤 UI 요소 위에 있는지 확인
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
@@ -82,6 +89,13 @@ public class ItemDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     public void OnPointerExit(PointerEventData eventData)
     {
         tooltip.Deactivate();
+    }
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 }
 

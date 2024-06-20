@@ -45,6 +45,14 @@ public class QuickSlot : MonoBehaviour
     public SkillEffectManager skillEffectManager; // 스킬 이펙트 매니저 참조
     public HitEffectManager hitEffectManager; // 히트 이펙트 매니저 참조
 
+    private AudioSource audioSource;
+    public AudioClip PotionUse;
+    public AudioClip uiTab;
+    public AudioClip luckySevenSound;
+    public AudioClip heistSound;
+    public AudioClip windBoosterSound;
+    public AudioClip flashJumpSound;
+
     private void Awake()
     {
         if (instance == null)
@@ -66,6 +74,7 @@ public class QuickSlot : MonoBehaviour
         skillEffectManager = GameObject.Find("EffectPoolManager").GetComponent<SkillEffectManager>();
         hitEffectManager = GameObject.Find("EffectPoolManager").GetComponent<HitEffectManager>();
         player = FindObjectOfType<Player>();
+        audioSource = gameObject.AddComponent<AudioSource>();
 
         buffManager = FindObjectOfType<BuffManager>(); // BuffManager 인스턴스 찾기
 
@@ -176,6 +185,10 @@ public class QuickSlot : MonoBehaviour
                 Image slotImage = quickSlotDT.GetComponent<Image>();
                 if (slotImage != null && slotImage.sprite != null && slotImage.sprite.name == icon.name)
                 {
+                   QuickSlotDT qSlotDT = slots[quickSlotID].GetComponentInChildren<QuickSlotDT>();
+                    qSlotDT.itemIcon = null;
+                    qSlotDT.iconPath = null;
+                    qSlotDT.itemAmount = 0;
                     // 이미 해당 아이콘이 있는 경우 리턴
                     return;
                 }
@@ -223,6 +236,7 @@ public class QuickSlot : MonoBehaviour
         {
             // 마우스 오른쪽 클릭 시 아이템 아이콘을 지우고, 해당 슬롯의 정보를 초기화
             slotDT.itemIcon = null;
+            slotDT.iconPath = null;
             slotDT.GetComponent<Image>().sprite = null;
             slotDT.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f); // 투명하게 설정
             slotDT.itemAmount = 0;
@@ -236,10 +250,13 @@ public class QuickSlot : MonoBehaviour
     {
         QuickSlotDT slotDT = slots[slotIndex].GetComponentInChildren<QuickSlotDT>();
 
-        slotDT.itemAmount += amount;
-        slotDT.GetComponentInChildren<TextMeshProUGUI>().text = slotDT.itemAmount.ToString();
+        if (slotDT.itemAmount > 0)
+        {
+            slotDT.itemAmount += amount;
+            slotDT.GetComponentInChildren<TextMeshProUGUI>().text = slotDT.itemAmount.ToString();
 
-        itemsChanged = true;
+            itemsChanged = true;
+        }
     }
 
     // 두 퀵슬롯 간의 아이템 정보를 교환하는 메서드
@@ -325,6 +342,7 @@ public class QuickSlot : MonoBehaviour
             {
                 if (quickSlotDT.itemAmount > 0)
                 {
+                    PlaySound(PotionUse, 0.2f);
                     Item redPotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
                     DataManager.instance.AddHP(50);
                     inv.RemoveItem(redPotion.ID);
@@ -337,6 +355,7 @@ public class QuickSlot : MonoBehaviour
             {
                 if (quickSlotDT.itemAmount > 0)
                 {
+                    PlaySound(PotionUse, 0.2f);
                     Item orangePotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
                     DataManager.instance.AddHP(150);
                     inv.RemoveItem(orangePotion.ID);
@@ -348,6 +367,7 @@ public class QuickSlot : MonoBehaviour
             {
                 if (quickSlotDT.itemAmount > 0)
                 {
+                    PlaySound(PotionUse, 0.2f);
                     Item whitePotion = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
                     DataManager.instance.AddHP(300);
                     inv.RemoveItem(whitePotion.ID);
@@ -359,6 +379,7 @@ public class QuickSlot : MonoBehaviour
             {
                 if (quickSlotDT.itemAmount > 0)
                 {
+                    PlaySound(PotionUse, 0.2f);
                     Item manaElixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
                     DataManager.instance.AddMP(300);
                     inv.RemoveItem(manaElixir.ID);
@@ -370,6 +391,7 @@ public class QuickSlot : MonoBehaviour
             {
                 if (quickSlotDT.itemAmount > 0)
                 {
+                    PlaySound(PotionUse, 0.2f);
                     Item elixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
                     DataManager.instance.UseElixer();
                     inv.RemoveItem(elixir.ID);
@@ -381,6 +403,7 @@ public class QuickSlot : MonoBehaviour
             {
                 if (quickSlotDT.itemAmount > 0)
                 {
+                    PlaySound(PotionUse, 0.2f);
                     Item powerElixir = itemdataBase.FetchItemByIconPath(quickSlotDT.iconPath);
                     DataManager.instance.UsePowerElixer();
                     inv.RemoveItem(powerElixir.ID);
@@ -391,10 +414,12 @@ public class QuickSlot : MonoBehaviour
             // 스킬 사용 로직 
             if (quickSlotDT.iconPath == "LuckySeven" && player.canAttack)
             {
+
                 int level = skillManager.skillCollection.skills[0].skillLevel;
 
                 if (level > 0 && DataManager.instance.GetMP() >= skillManager.skillCollection.skills[0].levelEffects[level].mpReduction)
                 {
+                    PlaySound(luckySevenSound, 0.1f);
                     DataManager.instance.RemoveMP(skillManager.skillCollection.skills[0].levelEffects[level].mpReduction);
 
                     if (!player.doubleJumping)
@@ -416,6 +441,7 @@ public class QuickSlot : MonoBehaviour
 
                 if (level > 0)
                 {
+                    PlaySound(heistSound, 0.2f);
                     player.moveSpeed = playerOriginMoveSpeed + skillManager.skillCollection.skills[1].levelEffects[level].speedIncrease;
                     player.jumpForce = playerOriginJumpForce + skillManager.skillCollection.skills[1].levelEffects[level].jumpDistanceIncrease;
 
@@ -432,6 +458,7 @@ public class QuickSlot : MonoBehaviour
                 int level = skillManager.skillCollection.skills[2].skillLevel;
                 if (level > 0 && DataManager.instance.GetMP() >= skillManager.skillCollection.skills[2].levelEffects[level].mpReduction)
                 {
+                    PlaySound(flashJumpSound, 0.05f);
                     DataManager.instance.RemoveMP(skillManager.skillCollection.skills[2].levelEffects[level].mpReduction);
                     player.canDoubleJump = true;
                 }
@@ -444,6 +471,7 @@ public class QuickSlot : MonoBehaviour
                 if (level > 0 && DataManager.instance.GetMP() >= skillManager.skillCollection.skills[3].levelEffects[level].mpReduction
                     && level > 0 && DataManager.instance.GetHP() >= skillManager.skillCollection.skills[3].levelEffects[level].mpReduction)
                 {
+                    PlaySound(windBoosterSound, 0.2f);
                     DataManager.instance.RemoveHP(skillManager.skillCollection.skills[3].levelEffects[level].mpReduction);
                     DataManager.instance.RemoveMP(skillManager.skillCollection.skills[3].levelEffects[level].mpReduction);
                     player.attackCoolDown = playerOriginAttackSpeed / skillManager.skillCollection.skills[3].levelEffects[level].attackSpeedIncrease;
@@ -462,16 +490,21 @@ public class QuickSlot : MonoBehaviour
                 // 퀵슬롯 인벤토리,스탯창 등 Icon 사용 로직
                 if (quickSlotDT.iconPath == "Key.Item")
             {
+                PlaySound(uiTab, 0.2f);
+                audioSource.volume = 0.2f;
                 inv.activeInventory = !inv.activeInventory;
                 inv.inventoryPanel.SetActive(inv.activeInventory);
             }
             if (quickSlotDT.iconPath == "Key.Stat")
             {
+                PlaySound(uiTab, 0.2f);
+                audioSource.volume = 0.2f;
                 statManager.activeUI = !statManager.activeUI;
                 statManager.StatUIPanel.SetActive(statManager.activeUI);
             }
             if (quickSlotDT.iconPath == "Key.Skill")
             {
+                PlaySound(uiTab, 0.2f);
                 skillManager.activeUI = !skillManager.activeUI;
                 skillManager.SkillUIPanel.SetActive(skillManager.activeUI);
             }
@@ -493,6 +526,7 @@ public class QuickSlot : MonoBehaviour
                 int level = skillManager.skillCollection.skills[2].skillLevel;
                 if (level > 0 && DataManager.instance.GetMP() >= skillManager.skillCollection.skills[2].levelEffects[level].mpReduction)
                 {
+                    PlaySound(flashJumpSound,0.05f);
                     DataManager.instance.RemoveMP(skillManager.skillCollection.skills[2].levelEffects[level].mpReduction);
 
                     player.doubleJumping = true;
@@ -502,13 +536,22 @@ public class QuickSlot : MonoBehaviour
             }
 
             if (quickSlotDT.iconPath == "Key.Attack" && player.canAttack )
-            { 
-                if(!player.doubleJumping)
+            {
+                if (!player.doubleJumping)
                 player.toAttack = true;
 
                 if(ExistSuriken)
                 inv.UpdatesurikenAmountText(1); //표창 개수 1개 감소 
             }
+        }
+    }
+
+    private void PlaySound(AudioClip clip, float volume)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+            audioSource.volume = volume;
         }
     }
 }

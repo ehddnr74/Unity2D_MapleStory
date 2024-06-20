@@ -18,6 +18,11 @@ public class BlueSnailController : MonoBehaviour
     private GameObject hpBarInstance; // 생성된 HP 바 인스턴스
     private Slider hpSlider; // HP 바의 Slider 컴포넌트
     private HpBarPool hpBarPool; // HP 바 풀링 시스템
+
+    private AudioSource audioSource;
+    public AudioClip HitSound;
+    public AudioClip DieSound;
+
     public enum BlueSnailState
     {
         Stand,
@@ -59,6 +64,12 @@ public class BlueSnailController : MonoBehaviour
     private int experience = 4; // 획득 경험치량
 
     public bool onceAddExperience = true;
+
+    private void Awake()
+    {
+        audioSource = gameObject.AddComponent<AudioSource>();
+    }
+
 
     private void OnEnable()
     {
@@ -110,8 +121,6 @@ public class BlueSnailController : MonoBehaviour
         }
     }
 
-
-
     public void TakeDamage(Vector3 Position, int damage, bool isCritical, bool luckySeven, bool secondSuriken)
     {
         damageTextManager.ShowDamage(Position, damage, isCritical);
@@ -119,18 +128,51 @@ public class BlueSnailController : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            if (!luckySeven || (luckySeven && !secondSuriken))
+            if (luckySeven)
             {
+                if (!secondSuriken)
+                {
+                    // 첫 번째 표창에 맞았을 때 죽이지 않도록 변경
+                    StartCoroutine(WaitForSecondShuriken());
+                    PlaySound(DieSound, 0.2f);
+                }
+                else
+                {
+                    // 두 번째 표창에 맞았을 때도 적이 죽도록 처리
+                    StartCoroutine(LateDie());
+                    PlaySound(DieSound, 0.2f);
+                }
+            }
+            else
+            {
+                // 럭키세븐이 아닌 경우에는 첫 번째 표창에 맞았을 때 죽도록 처리
                 dieCheck = true;
+                PlaySound(DieSound, 0.2f);
             }
         }
         else
         {
             hitCheck = true;
+            PlaySound(HitSound, 0.2f);
         }
         hpSlider.value = currentHealth;
     }
 
+    private IEnumerator WaitForSecondShuriken()
+    {
+        yield return new WaitForSeconds(0.2f); // 두 번째 표창이 맞을 시간을 기다림
+        if (currentHealth <= 0)
+        {
+            dieCheck = true;
+        }
+    }
+
+    private IEnumerator LateDie()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        dieCheck = true;
+    }
     private void Update()
     {
         if (hpBarInstance != null)
@@ -351,6 +393,15 @@ public class BlueSnailController : MonoBehaviour
         else if (dir > 0) // 오른쪽 이동
         {
             spriteRenderer.flipX = true;
+        }
+    }
+
+    private void PlaySound(AudioClip clip, float volume)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+            audioSource.volume = volume;
         }
     }
 }

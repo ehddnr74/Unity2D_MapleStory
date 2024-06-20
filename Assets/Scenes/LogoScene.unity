@@ -495,7 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e3b608db4058c944b79e70cdfdc0c8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextScene: SampleScene
+  nextScene: Henesis
   animationLength: 4.7
 --- !u!82 &1764621744
 AudioSource:

@@ -17,13 +17,24 @@ public class QuickSlotDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public int itemAmount; // 아이템 수량 
 
+    private AudioSource audioSource;
+    public AudioClip itemDragStart;
+    public AudioClip itemDragEnd;
+
     void Start()
     {
         quickSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        PlaySound(itemDragStart);
+        if (itemDragStart != null)
+        {
+            audioSource.clip = itemDragStart;
+            audioSource.Play();
+        }
         if (itemIcon != null)
         {
             offset = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
@@ -44,6 +55,7 @@ public class QuickSlotDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        PlaySound(itemDragEnd);
         GameObject pointerEnterObject = eventData.pointerEnter;
 
         if (pointerEnterObject != null && pointerEnterObject.CompareTag("QuickSlot"))
@@ -78,5 +90,12 @@ public class QuickSlotDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             GetComponentInChildren<TextMeshProUGUI>().text = string.Empty;
         }
         quickSlot.itemsChanged = true;
+    }
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 }

@@ -38,6 +38,9 @@ public class StatManager : MonoBehaviour
     public GameObject StatUIPanel;
     public bool activeUI = false;
 
+    private AudioSource audioSource;
+    public AudioClip BtnClickSound;
+
     private void Start()
     {
         // 데이터 매니저를 통해 플레이어 데이터 로드
@@ -47,6 +50,7 @@ public class StatManager : MonoBehaviour
             DataManager.instance.LoadStatData();
             playerData = DataManager.instance.nowPlayer;
             statData = DataManager.instance.playerStat;
+            audioSource = gameObject.AddComponent<AudioSource>();
 
 
             Sprite activityButton = Resources.Load<Sprite>("StatButton/ActivityButton");
@@ -166,6 +170,8 @@ public class StatManager : MonoBehaviour
 
     private void OnStrengthButtonClick()
     {
+        PlaySound(BtnClickSound);
+        audioSource.volume = 0.2f;
         DataManager.instance.playerStat.AbilityPoint--;
         DataManager.instance.playerStat.strength++;
         UpdateStatUI(playerData, DataManager.instance.playerStat);
@@ -174,6 +180,8 @@ public class StatManager : MonoBehaviour
 
     private void OnDexterityButtonClick()
     {
+        PlaySound(BtnClickSound);
+        audioSource.volume = 0.2f;
         DataManager.instance.playerStat.AbilityPoint--;
         DataManager.instance.playerStat.dexterity++;
         UpdateStatUI(playerData, DataManager.instance.playerStat);
@@ -182,6 +190,8 @@ public class StatManager : MonoBehaviour
 
     private void OnIntelligenceButtonClick()
     {
+        PlaySound(BtnClickSound);
+        audioSource.volume = 0.2f;
         DataManager.instance.playerStat.AbilityPoint--;
         DataManager.instance.playerStat.intelligence++;
         UpdateStatUI(playerData, DataManager.instance.playerStat);
@@ -190,11 +200,21 @@ public class StatManager : MonoBehaviour
 
     private void OnLuckButtonClick()
     {
+        PlaySound(BtnClickSound);
+        audioSource.volume = 0.2f;
         DataManager.instance.playerStat.AbilityPoint--;
         DataManager.instance.playerStat.luck++;
         DataManager.instance.playerStat.minAttackPower = (int)Math.Round(DataManager.instance.playerStat.luck * 2.3);
         DataManager.instance.playerStat.maxAttackPower = (int)Math.Round(DataManager.instance.playerStat.luck * 3.6);
         UpdateStatUI(playerData, DataManager.instance.playerStat);
         DataManager.instance.SaveStat();
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 }

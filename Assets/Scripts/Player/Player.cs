@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
@@ -18,6 +20,7 @@ public class Player : MonoBehaviour
     public string playerName; // 플레이어 이름
     public PlayerNameTag playerNameTagPrefab; // 플레이어 네임태그 프리팹
     private PlayerNameTag playerNameTag; // 플레이어 네임태그 스크립트
+    public Canvas playerNameTagCanvas; // 플레이어 네임태그를 위한 캔버스
 
 
     public enum PlayerState
@@ -89,11 +92,18 @@ public class Player : MonoBehaviour
 
     public int currentSuriken = 6;
 
+    public bool basicAttack; // 기본공격 (적이 가까이 있을 경우)
+
     public bool luckySeven; // 럭키세븐 사용여부
 
     public bool SecondSuriken;
 
+    public float boundaryRadius = 5f; // 경계 반경 설정
 
+    //Audio
+    public AudioClip jumpSound; // 점프 사운드 클립
+    public AudioClip itemPickUp;
+    private AudioSource audioSource;
 
 
 
@@ -108,6 +118,7 @@ public class Player : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Start()
@@ -123,11 +134,14 @@ public class Player : MonoBehaviour
         damageTextManager = FindObjectOfType<DamageTextManager>();
 
         // 캔버스 찾기
-        Canvas canvas = FindObjectOfType<Canvas>();
+        if (playerNameTagCanvas == null)
+        {
+            playerNameTagCanvas = GameObject.Find("PlayerNameTag").GetComponent<Canvas>();
+        }
 
         // 플레이어 네임태그 인스턴스 생성
 
-        playerNameTag = Instantiate(playerNameTagPrefab, canvas.transform);
+        playerNameTag = Instantiate(playerNameTagPrefab, playerNameTagCanvas.transform);
         playerNameTag.player = transform; // 플레이어 Transform 할당
         playerName = DataManager.instance.nowPlayer.name;
         playerNameTag.SetName(playerName);
@@ -268,15 +282,15 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (collision.CompareTag("DroppedItem"))
-        {
-            attachDroppedItem = true;
-            if (pickable)
-            {
-                pickable = false;
-                PickupItem(collision.gameObject);
-            }
-        }
+        //if (collision.CompareTag("DroppedItem"))
+        //{
+        //    attachDroppedItem = true;
+        //    if (pickable)
+        //    {
+        //        pickable = false;
+        //        PickupItem(collision.gameObject);
+        //    }
+        //}
 
         if (!invincibel && collision.gameObject.CompareTag("Enemy"))
         {
@@ -318,13 +332,13 @@ public class Player : MonoBehaviour
         //        Debug.Log("착지해제");
         //    }
 
-        if (collision.CompareTag("DroppedItem"))
-        {
-            attachDroppedItem = false;
-        }
+        ///if (collision.CompareTag("DroppedItem"))
+        //{
+        //attachDroppedItem = false;
+        //}
     }
 
-    private void PickupItem(GameObject itemObject)
+    public void PickupItem(GameObject itemObject)
     {
         DropItemData dropItemData = itemObject.GetComponent<DropItemData>();
         if (dropItemData != null)
@@ -357,12 +371,18 @@ public class Player : MonoBehaviour
             // 아이템을 풀로 반환
             //dropItemData.ReturnToPool();
             dropItemData.pickUp = true;
+            if (itemPickUp != null)
+            {
+                audioSource.clip = itemPickUp;
+                audioSource.Play();
+                audioSource.volume = 0.2f;
+            }
         }
     }
 
 
 
-private void hit()
+    private void hit()
     {
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow)) // HitAnimation 재생중에 Animation을 바꿔서 움직일 수 있도록
         {
@@ -381,12 +401,33 @@ private void hit()
         }
 
         if (hitTime >= 2.0f) // 2초 동안 HitAnimation 재생 
+        {
+            mPlayerState = PlayerState.Idle;
+            mAnimator.SetBool("IsHitting", false);
+            hitTime = 0f;
+        }
+        hitTime += Time.deltaTime;
+
+        if (toAttack)
+        {
+            toAttack = false;
+
+            if (quickSlot.ExistSuriken && !luckySeven)
             {
-                mPlayerState = PlayerState.Idle;
-                mAnimator.SetBool("IsHitting", false);
-                hitTime = 0f;
+                NormalAttack();
             }
-            hitTime += Time.deltaTime;
+            else if (quickSlot.ExistSuriken && luckySeven)
+            {
+                luckySeven = false;
+                StartCoroutine(LuckySeven());
+            }
+
+            isAttacking = true;
+            mAnimator.SetBool("IsHitting", false);
+            mAnimator.SetTrigger("IsAttack");
+            mPlayerState = PlayerState.Attack;
+            StartCoroutine(AttackCooldown());
+        }
     }
 
     // Player Fsm Funtion
@@ -399,6 +440,12 @@ private void hit()
 
         if (toJump)
         {
+            if (jumpSound != null)
+            {
+                audioSource.clip = jumpSound;
+                audioSource.volume = 0.2f;
+                audioSource.Play();
+            }
             isGround = false;
             mRigidBody.velocity = Vector2.up * jumpForce;
             mAnimator.SetBool("IsJumping", true);
@@ -411,7 +458,7 @@ private void hit()
             mAnimator.SetBool("IsProne", true);
         }
 
-        if(toAttack)
+        if (toAttack) // To Attack
         {
             toAttack = false;
 
@@ -431,7 +478,7 @@ private void hit()
             StartCoroutine(AttackCooldown());
         }
 
-        if(isLadder) // 아래에서 위로 올라가기
+        if (isLadder) // 아래에서 위로 올라가기
         {
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -461,6 +508,12 @@ private void hit()
 
         if (toJump) // To Jump
         {
+            if (jumpSound != null)
+            {
+                audioSource.clip = jumpSound;
+                audioSource.volume = 0.2f;
+                audioSource.Play();
+            }
             isGround = false;
             mRigidBody.velocity = new Vector2(mRigidBody.velocity.x, jumpForce);
             mAnimator.SetBool("IsWalking", false);
@@ -476,7 +529,7 @@ private void hit()
             mAnimator.SetBool("IsProne", true);
         }
 
-        if (toAttack) // To Attack
+     if (toAttack) // To Attack
         {
             toAttack = false;
 
@@ -569,9 +622,8 @@ private void hit()
             else if (quickSlot.ExistSuriken && luckySeven)
             {
                 luckySeven = false;
-                StartCoroutine(LuckySeven());               
+                StartCoroutine(LuckySeven());
             }
-
 
             isAttacking = true;
             mAnimator.SetTrigger("IsAttack");
@@ -619,30 +671,32 @@ private void hit()
 
     public void AttackSurken()
     {
-        StartCoroutine(AttackSurikenCoroutine(currentSuriken));
-    }
-    private IEnumerator AttackSurikenCoroutine(int itemId)
-    {
-        yield return new WaitForSeconds(0.3f); // Wait for 1 second
-        GameObject suriken = surikenManager.GetShurikenFromPool(itemId,transform.position + Vector3.right * (GetComponent<SpriteRenderer>().flipX ? 4 : -4));
-        suriken.SetActive(true); // 수리검 활성화
-        Shuriken shurikenScript = suriken.GetComponent<Shuriken>();
-        shurikenScript.luckySeven = true;
+        StartCoroutine(AttackSurikenCoroutine(currentSuriken, false));
     }
 
     public void SecondAttackSuriken() // 럭키세븐을 쓰기 위한 코루틴 (SecondSuriken)
     {
-        StartCoroutine(SecondSurikenCoroutine(currentSuriken));
+        StartCoroutine(AttackSurikenCoroutine(currentSuriken, true));
     }
-    private IEnumerator SecondSurikenCoroutine(int itemId)
+
+    private IEnumerator AttackSurikenCoroutine(int itemId, bool isSecond)
     {
-        yield return new WaitForSeconds(0.00001f);
+        yield return new WaitForSeconds(0.3f); // Wait for 1 second
         GameObject suriken = surikenManager.GetShurikenFromPool(itemId, transform.position + Vector3.right * (GetComponent<SpriteRenderer>().flipX ? 4 : -4));
         suriken.SetActive(true); // 수리검 활성화
         Shuriken shurikenScript = suriken.GetComponent<Shuriken>();
         shurikenScript.luckySeven = true;
-        shurikenScript.secondSuriken = true;
+        shurikenScript.secondSuriken = isSecond; // 첫 번째 표창과 두 번째 표창을 구분
     }
+    //private IEnumerator SecondSurikenCoroutine(int itemId, bool isSecond)
+    //{
+    //    yield return new WaitForSeconds(0.00001f);
+    //    GameObject suriken = surikenManager.GetShurikenFromPool(itemId, transform.position + Vector3.right * (GetComponent<SpriteRenderer>().flipX ? 4 : -4));
+    //    suriken.SetActive(true); // 수리검 활성화
+    //    Shuriken shurikenScript = suriken.GetComponent<Shuriken>();
+    //    shurikenScript.luckySeven = true;
+    //    shurikenScript.secondSuriken = true;
+    //}
 
     private IEnumerator AttackCooldown()
     {
@@ -682,6 +736,12 @@ private void hit()
 
         if (toJump && IsGroundBelow())
         {
+            if (jumpSound != null)
+            {
+                audioSource.clip = jumpSound;
+                audioSource.volume = 0.2f;
+                audioSource.Play();
+            }
             toJump = false;
             StartCoroutine(FallThroughPlatform());
         }
@@ -776,6 +836,19 @@ private void hit()
     {
         return UnityEngine.Random.Range(10,99);
     }
+
+    //public bool IsEnemyNearby()
+    //{
+    //    Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, boundaryRadius);
+    //    foreach (var collider in colliders)
+    //    {
+    //        if (collider.CompareTag("Enemy"))
+    //        {
+    //            return true;
+    //        }
+    //    }
+    //    return false;
+    //}
 
     // Get Set
     public bool GetIsLaddering() { return isLaddering; }

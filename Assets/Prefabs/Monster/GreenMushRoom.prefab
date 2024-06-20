@@ -228,6 +228,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameTagPosition: {fileID: 2776601437959849411}
   hpBarPosition: {fileID: 2986113039393964699}
+  HitSound: {fileID: 8300000, guid: a06584ba67d90764cbc91dc724ac25ed, type: 3}
+  DieSound: {fileID: 8300000, guid: 5a592d25a865a1b4bbd3b7a703aa4af5, type: 3}
   itemPool: {fileID: 0}
   mGreenMushRoomState: 0
   moveTime: 5

@@ -12,6 +12,7 @@ TagManager:
   - Enemy
   - DroppedItem
   - MonsterGround
+  - PickableCol
   layers:
   - Default
   - TransparentFX

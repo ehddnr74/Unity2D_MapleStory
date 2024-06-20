@@ -56,6 +56,11 @@ public class Shop : MonoBehaviour
 
     public List<Item> currentShopInv = new List<Item>();
 
+    private AudioSource audioSource;
+    public AudioClip BuySound;
+    public AudioClip SellSound;
+    public AudioClip TabSound;
+
 
     private void Start()
     {
@@ -69,6 +74,7 @@ public class Shop : MonoBehaviour
         inv = GameObject.Find("Inventory").GetComponent<Inventory>();
         quickSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
         itemdataBase = inv.GetComponent<ItemDataBase>();
+        audioSource = gameObject.AddComponent<AudioSource>();
 
         slotAmount = 8;
         SlotPanel = GameObject.Find("SlotPanel");
@@ -216,6 +222,8 @@ public class Shop : MonoBehaviour
         {
             if (iti[isInvSelectedBoxIndex].amount > 1)
             {
+                PlaySound(SellSound);
+                audioSource.volume = 0.2f;
                 DataManager.instance.AddMeso(currentShopInv[isInvSelectedBoxIndex].SellPrice);
                 inv.RemoveItem(currentShopInv[isInvSelectedBoxIndex].ID);
 
@@ -232,6 +240,7 @@ public class Shop : MonoBehaviour
             }
             else
             {
+
                 DataManager.instance.AddMeso(currentShopInv[isInvSelectedBoxIndex].SellPrice);
                 inv.RemoveItem(currentShopInv[isInvSelectedBoxIndex].ID);
 
@@ -252,6 +261,8 @@ public class Shop : MonoBehaviour
 
     private void OnExitButtonClicked()
     {
+        PlaySound(TabSound);
+        audioSource.volume = 0.2f;
         visibleShop = false;
         shopParentPanel.SetActive(visibleShop);
     }
@@ -261,7 +272,9 @@ public class Shop : MonoBehaviour
         if (0 <= isSelectedBoxIndex && isSelectedBoxIndex < slotAmount)
         {
             if (playerData.meso - itemdataBase.dataBase[isSelectedBoxIndex].Price > 0)
-            {   
+            {
+                PlaySound(BuySound);
+                audioSource.volume = 0.2f;
                 inv.AddItem(isSelectedBoxIndex);
                 DataManager.instance.LoseMeso(itemdataBase.dataBase[isSelectedBoxIndex].Price);
 
@@ -481,6 +494,14 @@ public class Shop : MonoBehaviour
             Color tempColor = selectBtnImage.color;
             tempColor.a = 0f; // 투명하게 설정
             selectBtnImage.color = tempColor;
+        }
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
         }
     }
 }

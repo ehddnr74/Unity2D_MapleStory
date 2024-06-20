@@ -38,12 +38,7 @@ public class SceneFader : MonoBehaviour
     {
         StartCoroutine(FadeIn());
     }
-    public void FadeToScene(string sceneName)
-    {
-        StartCoroutine(FadeOut(sceneName));
-    }
-
-    private IEnumerator FadeIn()
+    public IEnumerator FadeIn()
     {
         float elapsedTime = 0f;
         Color color = fadeImage.color;
@@ -57,7 +52,7 @@ public class SceneFader : MonoBehaviour
         }
     }
 
-    private IEnumerator FadeOut(string sceneName)
+    public IEnumerator FadeOut()
     {
         float elapsedTime = 0f;
         Color color = fadeImage.color;
@@ -69,7 +64,5 @@ public class SceneFader : MonoBehaviour
             fadeImage.color = color;
             yield return null;
         }
-
-        SceneManager.LoadScene(sceneName);
     }
 }

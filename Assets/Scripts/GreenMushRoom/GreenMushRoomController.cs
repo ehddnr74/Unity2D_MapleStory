@@ -17,6 +17,10 @@ public class GreenMushRoomController : MonoBehaviour
     private Slider hpSlider; // HP 바의 Slider 컴포넌트
     private HpBarPool hpBarPool; // HP 바 풀링 시스템
 
+    private AudioSource audioSource;
+    public AudioClip HitSound;
+    public AudioClip DieSound;
+
     public enum GreenMushRoomState
     {
         Stand,
@@ -60,6 +64,11 @@ public class GreenMushRoomController : MonoBehaviour
     private int experience = 17; // 획득 경험치량
 
     public bool onceAddExperience = true;
+
+    private void Awake()
+    {
+        audioSource = gameObject.AddComponent<AudioSource>();
+    }
 
     private void OnEnable()
     {
@@ -122,16 +131,50 @@ public class GreenMushRoomController : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            if (!luckySeven || (luckySeven && !secondSuriken))
+            if (luckySeven)
             {
+                if (!secondSuriken)
+                {
+                    // 첫 번째 표창에 맞았을 때 죽이지 않도록 변경
+                    StartCoroutine(WaitForSecondShuriken());
+                    PlaySound(DieSound, 0.2f);
+                }
+                else
+                {
+                    // 두 번째 표창에 맞았을 때도 적이 죽도록 처리
+                    StartCoroutine(LateDie());
+                    PlaySound(DieSound, 0.2f);
+                }
+            }
+            else
+            {
+                // 럭키세븐이 아닌 경우에는 첫 번째 표창에 맞았을 때 죽도록 처리
                 dieCheck = true;
+                PlaySound(DieSound, 0.2f);
             }
         }
         else
         {
             hitCheck = true;
+            PlaySound(HitSound, 0.2f);
         }
         hpSlider.value = currentHealth;
+    }
+
+    private IEnumerator WaitForSecondShuriken()
+    {
+        yield return new WaitForSeconds(0.2f); // 두 번째 표창이 맞을 시간을 기다림
+        if (currentHealth <= 0)
+        {
+            dieCheck = true;
+        }
+    }
+
+    private IEnumerator LateDie()
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        dieCheck = true;
     }
 
     private void Update()
@@ -207,6 +250,23 @@ public class GreenMushRoomController : MonoBehaviour
             mAnimator.SetBool("IsDying", true);
             mGreenMushRoomState = GreenMushRoomState.Die;
         }
+
+        // 몬스터의 현재 위치가 경계를 넘어가면 반대 방향으로 이동
+        if (!isChangingDirection)
+        {
+            if (transform.position.x > rightBoundary.position.x || transform.position.x < leftBoundary.position.x)
+            {
+                moveDir *= -1f; // 이동 방향을 반대로 변경
+                SetSpriteDir(moveDir);
+                isChangingDirection = true; // 방향 변경 중 플래그를 설정
+            }
+        }
+
+        // 방향 변경 중이고, 몬스터의 x 좌표가 다시 일정 범위 안으로 들어올 때 플래그를 리셋
+        if (isChangingDirection && transform.position.x <= (rightBoundary.position.x - 1f) && transform.position.x >= (leftBoundary.position.x + 1f))
+        {
+            isChangingDirection = false;
+        }
     }
 
     private void move()
@@ -255,6 +315,23 @@ public class GreenMushRoomController : MonoBehaviour
     }
     private void hit()
     {
+        // 몬스터의 현재 위치가 경계를 넘어가면 반대 방향으로 이동
+        if (!isChangingDirection)
+        {
+            if (transform.position.x > rightBoundary.position.x || transform.position.x < leftBoundary.position.x)
+            {
+                moveDir *= -1f; // 이동 방향을 반대로 변경
+                SetSpriteDir(moveDir);
+                isChangingDirection = true; // 방향 변경 중 플래그를 설정
+            }
+        }
+
+        // 방향 변경 중이고, 몬스터의 x 좌표가 다시 일정 범위 안으로 들어올 때 플래그를 리셋
+        if (isChangingDirection && transform.position.x <= (rightBoundary.position.x - 1f) && transform.position.x >= (leftBoundary.position.x + 1f))
+        {
+            isChangingDirection = false;
+        }
+
         StartCoroutine(HitCoroutine());
     }
 
@@ -270,6 +347,7 @@ public class GreenMushRoomController : MonoBehaviour
         }
         else
         {
+            mAnimator.ResetTrigger("IsHitting"); // 트리거 재설정
             mAnimator.SetBool("IsDying", true);
             mGreenMushRoomState = GreenMushRoomState.Die;
         }
@@ -342,6 +420,15 @@ public class GreenMushRoomController : MonoBehaviour
         else if (dir > 0) // 오른쪽 이동
         {
             spriteRenderer.flipX = true;
+        }
+    }
+
+    private void PlaySound(AudioClip clip, float volume)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+            audioSource.volume = volume;
         }
     }
 }

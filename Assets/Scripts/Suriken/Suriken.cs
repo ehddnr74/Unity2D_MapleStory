@@ -23,9 +23,19 @@ public class Shuriken : MonoBehaviour
     public bool direction;  // false가 왼쪽으로 나아감
 
     private Transform target; // 추적할 몬스터의 위치
+    public static Transform firstTarget; // 첫 번째 표창의 타겟 저장
     public float trackingRange; // 추적 범위
 
     private bool isCriticalHit; //크리티컬 여부 
+    private bool hasHit; // 적과 충돌했는지 여부
+
+    private AudioSource audioSource;
+    public AudioClip luckySevenHitSound;
+
+    private void Awake()
+    {
+        audioSource = gameObject.AddComponent<AudioSource>();
+    }
 
     private void OnEnable()
     {
@@ -33,9 +43,22 @@ public class Shuriken : MonoBehaviour
         shurikenManager = FindObjectOfType<ShurikenManager>();
 
         direction = player.flipX;
+        hasHit = false; // 충돌 초기화
+
+        if (!secondSuriken)
+        {
+            // 첫 번째 표창 발사 시 범위 내 적 감지
+            CheckForEnemiesInRange();
+            firstTarget = target; // 첫 번째 표창의 타겟 저장
+        }
+        else
+        {
+            // 두 번째 표창은 첫 번째 표창의 타겟을 사용
+            target = firstTarget;
+        }
 
         // 표창 발사 시 범위 내 적 감지
-        CheckForEnemiesInRange();
+       // CheckForEnemiesInRange();
 
         // 일정 시간이 지난 후 수리검을 풀에 반환하는 코루틴 시작
         StartCoroutine(ReturnToPoolAfterDelay());
@@ -44,6 +67,10 @@ public class Shuriken : MonoBehaviour
     void OnDisable()
     {
         target = null;
+        if (!secondSuriken)
+        {
+            firstTarget = null; // 첫 번째 표창이 비활성화되면 타겟 초기화
+        }
     }
 
     void Update()
@@ -68,7 +95,7 @@ public class Shuriken : MonoBehaviour
         Vector2 boxSize = new Vector2(trackingRange, trackingRange / 3); // 반 높이로 시야 범위 설정
 
         // 플레이어 위치에서 살짝 오른쪽 또는 왼쪽에 탐지 범위의 시작점 계산
-        Vector2 offset = direction ? new Vector2(10f, -2f): new Vector2(-10f, -2f);
+        Vector2 offset = direction ? new Vector2(8f, -2f): new Vector2(-8f, -2f);
         Vector2 startPosition = (Vector2)player.transform.position + offset;
 
         // 사각형 범위 내의 적을 감지
@@ -109,8 +136,13 @@ public class Shuriken : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (hasHit)
+            return; // 이미 충돌한 경우 추가 처리를 막음
+
         if (collision.CompareTag("Enemy"))
         {
+            hasHit = true;
+
             criticalProbability = DataManager.instance.nowPlayer.criticalProbability;
             bool isCritical = CheckForCriticalHit(); // 예: 크리티컬 히트를 확인하는 함수
             // 데미지 계산 로직 추가
@@ -232,9 +264,23 @@ public class Shuriken : MonoBehaviour
                 Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
             }
             // 수리검을 풀에 반환
-            shurikenManager.ReturnShurikenToPool(gameObject, shurikenType);
-            Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
+             shurikenManager.ReturnShurikenToPool(gameObject, shurikenType);
+            //Debug.Log($"Hit enemy with luckySeven: {luckySeven}, secondSuriken: {secondSuriken}");
+            // 수리검을 풀에 반환
+           // StartCoroutine(PlaySoundAndReturn(luckySevenHitSound));
         }
+    }
+
+    private IEnumerator PlaySoundAndReturn(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+            audioSource.volume = 0.2f;
+            yield return new WaitForSeconds(clip.length);
+        }
+        // 풀로 반환
+        shurikenManager.ReturnShurikenToPool(gameObject, shurikenType);
     }
 
     private int CalculateDamage()
@@ -298,9 +344,17 @@ public class Shuriken : MonoBehaviour
         Vector2 directionVector = direction ? Vector2.right : Vector2.left;
 
         // 플레이어 위치에서 살짝 오른쪽 또는 왼쪽에 탐지 범위의 시작점 계산
-        Vector2 offset = direction ? new Vector2(10f, -2f) : new Vector2(-10f, -2f);
+        Vector2 offset = direction ? new Vector2(8f, -2f) : new Vector2(-8f, -2f);
         Vector3 startPosition = (Vector3)player.transform.position + new Vector3(offset.x,offset.y,0f);
         Vector2 boxSize = new Vector2(trackingRange, trackingRange / 3);
         Gizmos.DrawWireCube(startPosition + (Vector3)directionVector * trackingRange / 3, boxSize);
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 }

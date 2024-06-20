@@ -18,15 +18,21 @@ public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
     public int skillLevel;
     public string skillToolTipPath;
 
+    private AudioSource audioSource;
+    public AudioClip itemDragStart;
+    public AudioClip itemDragEnd;
+
     void Start()
     {
         qSlot = GameObject.Find("QuickSlot").GetComponent<QuickSlot>();
         GameObject skill = GameObject.Find("Skill").gameObject;
         skillTooltip = skill.GetComponent<SkillToolTip>();
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        PlaySound(itemDragStart);
         if (skillName != "크리티컬 샷")
         {
             offset = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
@@ -46,6 +52,8 @@ public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        PlaySound(itemDragEnd);
+
         // Raycast를 사용하여 포인터가 어떤 UI 요소 위에 있는지 확인
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
@@ -85,5 +93,13 @@ public class SkillDT : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragH
     {
         if (skillLevel > 0)
             skillTooltip.Deactivate();
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
     }
 }

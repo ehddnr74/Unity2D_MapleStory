@@ -27,6 +27,9 @@ public class DataManager : MonoBehaviour
     private StatManager statManager;
     private SkillEffectManager skillEffectManager;
 
+    private AudioSource audioSource;
+    public AudioClip levelUpSound;
+
 
     string path;
     string filename = "save"; // 플레이어 데이터 파일명 
@@ -58,6 +61,7 @@ public class DataManager : MonoBehaviour
         statManager = FindObjectOfType<StatManager>();
         skillEffectManager = GameObject.Find("EffectPoolManager").GetComponent<SkillEffectManager>();
         inv = GameObject.Find("Inventory").GetComponent<Inventory>();
+        audioSource = gameObject.AddComponent<AudioSource>();
         //SaveSkill();
         LoadData();
         LoadStatData();
@@ -164,6 +168,8 @@ public class DataManager : MonoBehaviour
         nowPlayer.experience += amount;
         if (nowPlayer.experience >= nowPlayer.experienceTable[nowPlayer.level])
         {
+            PlaySound(levelUpSound);
+            audioSource.volume = 0.2f;
             // 스킬 이펙트 생성
             skillEffectManager.ShowEffect("LevelUpEffect", player.transform, new Vector3(0f, 1.5f, 0f), Quaternion.identity, new Vector3(1.3f, 1.3f, 0f), 1.5f);
             nowPlayer.level++;
@@ -301,12 +307,15 @@ public class DataManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
+
+    }
+
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
         {
-            RemoveHP(20);
-            RemoveMP(20);
-            statManager.UpdateStatUI(nowPlayer, playerStat);
-            SaveStat();
+            audioSource.PlayOneShot(clip);
         }
     }
 }

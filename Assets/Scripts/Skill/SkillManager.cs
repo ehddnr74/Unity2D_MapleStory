@@ -16,6 +16,9 @@ public class SkillManager : MonoBehaviour
     public SkillCollection skillCollection;
     private Player player;
 
+    private AudioSource audioSource;
+    public AudioClip BtnClickSound;
+
     private TextMeshProUGUI skillPointText;
     private TextMeshProUGUI luckySevenText;
     private TextMeshProUGUI luckySevenLevel;
@@ -82,6 +85,8 @@ public class SkillManager : MonoBehaviour
             skillCollection = new SkillCollection();
         }
 
+        audioSource = gameObject.AddComponent<AudioSource>();
+
         player = GameObject.Find("Player").GetComponent<Player>();
         playerOriginCriticalProbability = player.criticalProbability;
 
@@ -131,30 +136,40 @@ public class SkillManager : MonoBehaviour
 
     private void OnLuckySevenButtonClick()
     {
+        PlaySound(BtnClickSound);
+        audioSource.volume = 0.2f;
         skillCollection.skillPoint--;
         skillCollection.skills[0].skillLevel++;
         itemChanged = true;
     }
     private void OnHeistButtonClick()
     {
+        PlaySound(BtnClickSound);
+        audioSource.volume = 0.2f;
         skillCollection.skillPoint--;
         skillCollection.skills[1].skillLevel++;
         itemChanged = true;
     }
     private void OnFlashJumpButtonClick()
     {
+        PlaySound(BtnClickSound);
+        audioSource.volume = 0.2f;
         skillCollection.skillPoint--;
         skillCollection.skills[2].skillLevel++;
         itemChanged = true;
     }
     private void OnWindBoosterButtonClick()
     {
+        PlaySound(BtnClickSound);
+        audioSource.volume = 0.2f;
         skillCollection.skillPoint--;
         skillCollection.skills[3].skillLevel++;
         itemChanged = true;
     }
     private void OnCriticalShotButtonClick()
     {
+        PlaySound(BtnClickSound);
+        audioSource.volume = 0.2f;
         skillCollection.skillPoint--;
         skillCollection.skills[4].skillLevel++;
         DataManager.instance.SaveCriticalProbability(playerOriginCriticalProbability + skillCollection.skills[4].levelEffects[skillCollection.skills[4].skillLevel].criticalChanceIncrease);
@@ -342,6 +357,14 @@ public class SkillManager : MonoBehaviour
         else
         {
             return new SkillCollection(); // 데이터가 없으면 빈 SkillCollection 반환
+        }
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
         }
     }
 }

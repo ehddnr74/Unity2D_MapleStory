@@ -14,11 +14,16 @@ public class DropItemData : MonoBehaviour
     private Transform playerTransform; // 플레이어의 트랜스폼
 
     private Coroutine bounceCoroutine;
+    private Coroutine autoDestroyCoroutine; // 아이템 자동 소멸 코루틴
+
+    private AudioSource audioSource;
+    public AudioClip itemDrop;
 
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     public void Initialize(Item newItem, ItemPool pool)
@@ -30,11 +35,21 @@ public class DropItemData : MonoBehaviour
         // 아이템 드랍 애니메이션 시작
         if (gameObject.activeInHierarchy)
         {
+            PlaySound(itemDrop);
+            audioSource.volume = 0.2f;
             StartCoroutine(DropAnimation());
         }
+
+        // 아이템 자동 소멸 코루틴 시작
+        if (autoDestroyCoroutine != null)
+        {
+            StopCoroutine(autoDestroyCoroutine);
+        }
+        autoDestroyCoroutine = StartCoroutine(AutoDestroy());
     }
     private IEnumerator DropAnimation()
     {
+
         float animationDuration = 1.0f; // 애니메이션 지속 시간
         float elapsedTime = 0f;
 
@@ -118,20 +133,33 @@ public class DropItemData : MonoBehaviour
 
     private IEnumerator PickUpAnimation()
     {
-        float animationDuration = 0.2f; // 픽업 애니메이션 지속 시간
+        float firstPhaseDuration = 0.2f; // 첫 번째 단계 지속 시간 (빠르게 올라가는 애니메이션)
+        float secondPhaseDuration = 0.1f; // 두 번째 단계 지속 시간 (캐릭터 방향으로 빨려 들어가는 애니메이션)
         float elapsedTime = 0f;
         Vector3 initialPosition = transform.position;
-        Vector3 targetPosition = playerTransform.position;//+ new Vector3(0f, 0.f, 0f); // 목표 위치를 플레이어 위치로 설정
+        Vector3 upwardPosition = initialPosition + new Vector3(0f, 3f, 0f); // 위로 올라가는 목표 위치
 
-
-
-        while (elapsedTime < animationDuration)
+        // 첫 번째 단계: 위로 올라가는 애니메이션
+        while (elapsedTime < firstPhaseDuration)
         {
             elapsedTime += Time.deltaTime;
-            float t = elapsedTime / animationDuration;
+            float t = elapsedTime / firstPhaseDuration;
 
-            // 위로 올라가는 애니메이션
-            transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
+            transform.position = Vector3.Lerp(initialPosition, upwardPosition, t);
+
+            yield return null;
+        }
+
+        Vector3 initialPosition2 = transform.position;
+        Vector3 targetPosition = playerTransform.position; // 최종 목표 위치 (플레이어 위치)
+        // 두 번째 단계: 캐릭터 방향으로 빨려 들어가는 애니메이션
+        elapsedTime = 0f; // 경과 시간 초기화
+        while (elapsedTime < secondPhaseDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / secondPhaseDuration;
+
+            transform.position = Vector3.Lerp(initialPosition2, targetPosition, t);
 
             yield return null;
         }
@@ -139,14 +167,28 @@ public class DropItemData : MonoBehaviour
         pickUp = false;
         // 풀로 반환
         ReturnToPool();
-    
-}
 
-        public void ReturnToPool()
+    }
+
+    private IEnumerator AutoDestroy()
+    {
+        yield return new WaitForSeconds(20f); // 20초 대기
+        ReturnToPool(); // 아이템을 풀로 반환
+    }
+
+    public void ReturnToPool()
     {
         if (itemPool != null)
         {
             itemPool.ReturnItem(gameObject);
+        }
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            audioSource.PlayOneShot(clip);
         }
     }
 }

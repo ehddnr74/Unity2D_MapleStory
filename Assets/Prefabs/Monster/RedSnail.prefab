@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 594730365324805889}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2, z: 0}
+  m_LocalPosition: {x: 0, y: -2.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -156,6 +156,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameTagPosition: {fileID: 5307427653916334666}
   hpBarPosition: {fileID: 3469766137696889804}
+  HitSound: {fileID: 8300000, guid: a06584ba67d90764cbc91dc724ac25ed, type: 3}
+  DieSound: {fileID: 8300000, guid: 5a592d25a865a1b4bbd3b7a703aa4af5, type: 3}
   itemPool: {fileID: 0}
   mRedSnailState: 0
   moveTime: 3
