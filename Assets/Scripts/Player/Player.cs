@@ -1,12 +1,7 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Net;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
+using TMPro;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -145,7 +140,6 @@ public class Player : MonoBehaviour
         playerNameTag.player = transform; // 플레이어 Transform 할당
         playerName = DataManager.instance.nowPlayer.name;
         playerNameTag.SetName(playerName);
-        //feetCollider = transform.Find("FeetCollider").GetComponent<Collider2D>(); // 발 콜라이더를 찾음
     }
 
     // Update is called once per frame

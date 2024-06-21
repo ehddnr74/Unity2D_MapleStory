@@ -3,12 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 using System.IO;
 
 public class Shop : MonoBehaviour

@@ -1,14 +1,9 @@
 using Newtonsoft.Json;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
-using static UnityEditor.Progress;
-using UnityEditor.U2D.Aseprite;
-using Unity.VisualScripting;
-using UnityEditor.Search;
 
 
 public class Inventory : MonoBehaviour
