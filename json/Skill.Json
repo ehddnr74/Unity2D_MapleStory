@@ -2,7 +2,7 @@
   "skills": [
     {
       "skillName": "럭키 세븐",
-      "skillLevel": 15,
+      "skillLevel": 2,
       "levelEffects": {
         "1": {
           "hpReduction": 0,
@@ -218,7 +218,7 @@
     },
     {
       "skillName": "헤이스트",
-      "skillLevel": 2,
+      "skillLevel": 5,
       "levelEffects": {
         "1": {
           "hpReduction": 0,
@@ -404,7 +404,7 @@
     },
     {
       "skillName": "크리티컬 샷",
-      "skillLevel": 7,
+      "skillLevel": 0,
       "levelEffects": {
         "1": {
           "hpReduction": 0,
@@ -689,5 +689,5 @@
       }
     }
   ],
-  "skillPoint": 112
+  "skillPoint": 2
 }

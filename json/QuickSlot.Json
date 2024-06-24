@@ -12,7 +12,12 @@
   {
     "slotNum": 5,
     "iconPath": "Mana Elixir",
-    "itemAmount": 18
+    "itemAmount": 6
+  },
+  {
+    "slotNum": 7,
+    "iconPath": "Red Potion",
+    "itemAmount": 7
   },
   {
     "slotNum": 9,
@@ -35,9 +40,9 @@
     "itemAmount": 0
   },
   {
-    "slotNum": 22,
-    "iconPath": "FlashJump",
-    "itemAmount": 0
+    "slotNum": 24,
+    "iconPath": "Power Elixir",
+    "itemAmount": 1
   },
   {
     "slotNum": 26,

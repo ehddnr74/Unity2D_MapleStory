@@ -1,67 +1,52 @@
 [
   {
-    "ID": 7,
-    "amount": 420,
+    "ID": 6,
+    "amount": 829,
     "slotnum": 0
   },
   {
-    "ID": 6,
-    "amount": 1000,
-    "slotnum": 1
-  },
-  {
-    "ID": 6,
-    "amount": 1000,
+    "ID": 7,
+    "amount": 849,
     "slotnum": 2
   },
   {
-    "ID": 6,
-    "amount": 1000,
+    "ID": 0,
+    "amount": 7,
     "slotnum": 3
   },
   {
-    "ID": 3,
-    "amount": 18,
+    "ID": 4,
+    "amount": 2,
     "slotnum": 4
   },
   {
-    "ID": 1,
-    "amount": 24,
+    "ID": 3,
+    "amount": 6,
     "slotnum": 5
   },
   {
     "ID": 6,
-    "amount": 970,
-    "slotnum": 6
-  },
-  {
-    "ID": 5,
-    "amount": 11,
+    "amount": 995,
     "slotnum": 7
   },
   {
-    "ID": 4,
-    "amount": 1,
+    "ID": 6,
+    "amount": 1000,
+    "slotnum": 8
+  },
+  {
+    "ID": 6,
+    "amount": 1000,
     "slotnum": 9
   },
   {
-    "ID": 7,
-    "amount": 1000,
+    "ID": 5,
+    "amount": 1,
     "slotnum": 10
   },
   {
     "ID": 6,
-    "amount": 994,
-    "slotnum": 11
-  },
-  {
-    "ID": 6,
     "amount": 1000,
-    "slotnum": 12
-  },
-  {
-    "ID": 0,
-    "amount": 29,
-    "slotnum": 13
+    "slotnum": 11
   }
 ]

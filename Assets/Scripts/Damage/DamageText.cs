@@ -77,7 +77,6 @@ public class DamageText : MonoBehaviour
         string damageStr = damage.ToString();
         Sprite[] digits = isCritical ? criticalDigits : normalDigits;
 
-        // 이미지 배열 크기 조정 및 초기화
         for (int i = 0; i < digitImages.Length; i++)
         {
             if (i < damageStr.Length)
